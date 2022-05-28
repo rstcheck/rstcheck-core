@@ -19,7 +19,6 @@ NOTE: please use them in this order.
 
 [diff v1.0.0rc1...main](https://github.com/rstcheck/rstcheck-core/compare/v1.0.0rc1...main)
 
-
 ## v1.0.0rc1 (2022-05-28)
 
 [diff split...v1.0.0](https://github.com/rstcheck/rstcheck-core/compare/split...v1.0.0rc1)

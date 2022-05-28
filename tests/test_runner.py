@@ -118,7 +118,7 @@ class TestRstcheckMainRunnerFileListUpdater:
         test_file1.touch()
         test_file2 = test_dir_2 / "rst.rst"
         test_file2.touch()
-        file_list = [            test_file1,            test_file2        ]
+        file_list = [test_file1, test_file2]
         init_config = config.RstcheckConfig()
         _runner = runner.RstcheckMainRunner(file_list, init_config)
 
@@ -135,7 +135,7 @@ class TestRstcheckMainRunnerFileListUpdater:
         test_file2.touch()
         test_file3 = tmp_path / "rst.rst"
         test_file3.touch()
-        file_list = [            test_file1,            test_file2,            test_file3        ]
+        file_list = [test_file1, test_file2, test_file3]
         init_config = config.RstcheckConfig()
         _runner = runner.RstcheckMainRunner(file_list, init_config)
 
@@ -148,7 +148,6 @@ class TestRstcheckMainRunnerFileListUpdater:
         """Test directory without recusrive results in empty file list."""
         test_file = tmp_path / "rst.rst"
         test_file.touch()
-
         file_list = [tmp_path]
         init_config = config.RstcheckConfig()
         _runner = runner.RstcheckMainRunner(file_list, init_config)
@@ -216,7 +215,7 @@ def test__run_checks_sync_method(
     test_file1.touch()
     test_file2 = tmp_path / "rst2.rst"
     test_file2.touch()
-    file_list = [        test_file1,        test_file2    ]
+    file_list = [test_file1, test_file2]
     init_config = config.RstcheckConfig()
     _runner = runner.RstcheckMainRunner(file_list, init_config)
 
@@ -261,7 +260,7 @@ def test__run_checks_parallel_method(
     test_file1.touch()
     test_file2 = tmp_path / "rst2.rst"
     test_file2.touch()
-    file_list = [        test_file1,        test_file2    ]
+    file_list = [test_file1, test_file2]
     init_config = config.RstcheckConfig()
     _runner = runner.RstcheckMainRunner(file_list, init_config)
 
