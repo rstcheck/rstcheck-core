@@ -133,10 +133,10 @@ def _replace_ignored_substitutions(source: str, ignore_substitutions: t.List[str
 
 
 def _create_ignore_dict_from_config(rstcheck_config: config.RstcheckConfig) -> types.IgnoreDict:
-    """Extract ignore settings from config and create a :py:class:`rstcheck.types.IgnoreDict`.
+    """Extract ignore settings from config and create a :py:class:`rstcheck_core.types.IgnoreDict`.
 
     :param rstcheck_config: Config to extract ignore settings from
-    :return: :py:class:`rstcheck.types.IgnoreDict`
+    :return: :py:class:`rstcheck_core.types.IgnoreDict`
     """
     return types.IgnoreDict(
         messages=rstcheck_config.ignore_messages,
@@ -159,7 +159,8 @@ def check_source(
     :param source_file: Path to file the source comes from if it comes from a file;
         defaults to :py:obj:`None`
     :param ignores: Ignore information; defaults to :py:obj:`None`
-    :param report_level: Report level; defaults to :py:data:`rstcheck.config.DEFAULT_REPORT_LEVEL`
+    :param report_level: Report level; defaults to
+        :py:data:`rstcheck_core.config.DEFAULT_REPORT_LEVEL`
     :param warn_unknown_settings: If a warning should be logged for unknown settings in config file;
         defaults to :py:obj:`False`
     :return: :py:obj:`None`
@@ -236,13 +237,13 @@ def _run_code_checker_and_filter_errors(
     # NOTE: Pattern type-arg errors pydanic: https://github.com/samuelcolvin/pydantic/issues/2636
     ignore_messages: t.Optional[t.Pattern] = None,  # type: ignore[type-arg]
 ) -> types.YieldedLintError:
-    """Run each code block checker function and yield filtered :py:class:`rstcheck.types.LintError`.
+    """Run all code block checker functions.
 
     :param checker_list: List of code block checker functions
     :param ignore_messages: Regex for ignoring error messages;
         defaults to :py:obj:`None`
     :return: :py:obj:`None`
-    :yield: Filtered :py:class:`rstcheck.types.LintError` s from run checker function
+    :yield: Filtered :py:class:`rstcheck_core.types.LintError` s from run checker function
     """
     for checker in checker_list:
         for lint_error in checker():
@@ -257,14 +258,14 @@ def _parse_and_filter_rst_errors(
     source_origin: types.SourceFileOrString,
     ignore_messages: t.Optional[t.Pattern] = None,  # type: ignore[type-arg]
 ) -> types.YieldedLintError:
-    """Parse rst errors and yield filtered :py:class:`rstcheck.types.LintError`.
+    """Parse rst errors and yield filtered :py:class:`rstcheck_core.types.LintError`.
 
     :param rst_errors: String with rst errors
     :param source_origin: Origin of the source with the errors
     :param ignore_messages: Regex for ignoring error messages;
         defaults to :py:obj:`None`
     :return: :py:obj:`None`
-    :yield: Parsed and filtered :py:class:`rstcheck.types.LintError` s
+    :yield: Parsed and filtered :py:class:`rstcheck_core.types.LintError` s
     """
     for message in rst_errors.splitlines():
         with contextlib.suppress(ValueError):
@@ -292,7 +293,7 @@ class _CheckWriter(docutils.writers.Writer):
         :param source_origin: Path to file the source comes from
         :param ignores: Ignore information; defaults to :py:obj:`None`
         :param report_level: Report level;
-            defaults to :py:data:`rstcheck.config.DEFAULT_REPORT_LEVEL`
+            defaults to :py:data:`rstcheck_core.config.DEFAULT_REPORT_LEVEL`
         :param warn_unknown_settings: If a warning should be logged for unknown settings in config
             file;
             defaults to :py:obj:`False`
@@ -338,7 +339,7 @@ class _CheckTranslator(docutils.nodes.NodeVisitor):  # pylint: disable=too-many-
         :param source_origin: Path to file the source comes from
         :param ignores: Ignore information; defaults to :py:obj:`None`
         :param report_level: Report level;
-            defaults to :py:data:`rstcheck.config.DEFAULT_REPORT_LEVEL`
+            defaults to :py:data:`rstcheck_core.config.DEFAULT_REPORT_LEVEL`
         :param warn_unknown_settings: If a warning should be logged for unknown settings in config
             file;
             defaults to :py:obj:`False`
@@ -563,7 +564,7 @@ class CodeBlockChecker:
         :param source_origin: Path to file the source comes from
         :param ignores: Ignore information; defaults to :py:obj:`None`
         :param report_level: Report level;
-            defaults to :py:data:`rstcheck.config.DEFAULT_REPORT_LEVEL`
+            defaults to :py:data:`rstcheck_core.config.DEFAULT_REPORT_LEVEL`
         :param warn_unknown_settings: If a warning should be logged for unknown settings in config
             file;
             defaults to :py:obj:`False`

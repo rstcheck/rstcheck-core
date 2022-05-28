@@ -3,9 +3,9 @@
 Development
 ===========
 
-``rstcheck`` uses `Semantic Versioning`_.
+``rstcheck-core`` uses `Semantic Versioning`_.
 
-``rstcheck`` uses ``main`` as its single development branch. Therefore releases are
+``rstcheck-core`` uses ``main`` as its single development branch. Therefore releases are
 made from this branch. Only the current release is supported and bugfixes are released
 with a patch release for the current minor release.
 
@@ -32,7 +32,7 @@ step::
 
     $ poetry install
 
-This will install ``rstcheck`` along its main and development dependencies.
+This will install ``rstcheck-core`` along its main and development dependencies.
 
 
 Working with the Local Development Environment
@@ -41,7 +41,7 @@ Working with the Local Development Environment
 Dependency management and more with poetry
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-is used for dependency management, building and publishing ``rstcheck``.
+is used for dependency management, building and publishing ``rstcheck-core``.
 
 
 Testing with tox

@@ -35,7 +35,7 @@ class IgnoreDict(_t.TypedDict):
 CheckerRunFunction = t.Callable[..., YieldedLintError]
 """Function to run checks.
 
-Returned by :py:meth:`rstcheck.checker.CodeBlockChecker.create_checker`.
+Returned by :py:meth:`rstcheck_core.checker.CodeBlockChecker.create_checker`.
 """
 
 

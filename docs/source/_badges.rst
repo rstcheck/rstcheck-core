@@ -29,8 +29,8 @@
     :target: http://unmaintained.tech/
     :alt: Maintenance - intended
 
-.. |license| image:: https://img.shields.io/github/license/rstcheck/rstcheck.svg?style=flat-square&label=License
-    :target: https://github.com/rstcheck/rstcheck/blob/main/LICENSE
+.. |license| image:: https://img.shields.io/github/license/rstcheck/rstcheck-core.svg?style=flat-square&label=License
+    :target: https://github.com/rstcheck/rstcheck-core/blob/main/LICENSE
     :alt: License
 
 .. |semver| image:: https://img.shields.io/badge/Semantic%20Versioning-2.0.0-brightgreen.svg?style=flat-square
@@ -38,72 +38,72 @@
     :alt: Semantic Versioning - 2.0.0
 
 .. |rtd| image:: https://img.shields.io/readthedocs/rstcheck/latest.svg?style=flat-square&logo=read-the-docs&logoColor=white&label=Read%20the%20Docs
-    :target: https://rstcheck.readthedocs.io/en/latest/
+    :target: https://rstcheck-core.readthedocs.io/en/latest/
     :alt: Read the Docs - Build Status (latest)
 
 
 .. CI
 
 
-.. |gha_tests| image:: https://img.shields.io/github/workflow/status/rstcheck/rstcheck/Test%20code/main?style=flat-square&logo=github&label=Test%20code
-    :target: https://github.com/rstcheck/rstcheck/actions/workflows/test.yaml
+.. |gha_tests| image:: https://img.shields.io/github/workflow/status/rstcheck/rstcheck-core/Test%20code/main?style=flat-square&logo=github&label=Test%20code
+    :target: https://github.com/rstcheck/rstcheck-core/actions/workflows/test.yaml
     :alt: Test status
 
-.. |gha_docu| image:: https://img.shields.io/github/workflow/status/rstcheck/rstcheck/Test%20documentation/main?style=flat-square&logo=github&label=Test%20documentation
-    :target: https://github.com/rstcheck/rstcheck/actions/workflows/documentation.yaml
+.. |gha_docu| image:: https://img.shields.io/github/workflow/status/rstcheck/rstcheck-core/Test%20documentation/main?style=flat-square&logo=github&label=Test%20documentation
+    :target: https://github.com/rstcheck/rstcheck-core/actions/workflows/documentation.yaml
     :alt: Documentation status
 
-.. |gha_qa| image:: https://img.shields.io/github/workflow/status/rstcheck/rstcheck/QA/main?style=flat-square&logo=github&label=QA
-    :target: https://github.com/rstcheck/rstcheck/actions/workflows/qa.yaml
+.. |gha_qa| image:: https://img.shields.io/github/workflow/status/rstcheck/rstcheck-core/QA/main?style=flat-square&logo=github&label=QA
+    :target: https://github.com/rstcheck/rstcheck-core/actions/workflows/qa.yaml
     :alt: QA status
 
 
 .. PyPI
 
-.. |pypi_release| image:: https://img.shields.io/pypi/v/rstcheck.svg?style=flat-square&logo=pypi&logoColor=FBE072
-    :target: https://pypi.org/project/rstcheck/
+.. |pypi_release| image:: https://img.shields.io/pypi/v/rstcheck-core.svg?style=flat-square&logo=pypi&logoColor=FBE072
+    :target: https://pypi.org/project/rstcheck-core/
     :alt: PyPI - Package latest release
 
-.. |pypi_py_versions| image:: https://img.shields.io/pypi/pyversions/rstcheck.svg?style=flat-square&logo=python&logoColor=FBE072
-    :target: https://pypi.org/project/rstcheck/
+.. |pypi_py_versions| image:: https://img.shields.io/pypi/pyversions/rstcheck-core.svg?style=flat-square&logo=python&logoColor=FBE072
+    :target: https://pypi.org/project/rstcheck-core/
     :alt: PyPI - Supported Python Versions
 
-.. |pypi_implementations| image:: https://img.shields.io/pypi/implementation/rstcheck.svg?style=flat-square&logo=python&logoColor=FBE072
-    :target: https://pypi.org/project/rstcheck/
+.. |pypi_implementations| image:: https://img.shields.io/pypi/implementation/rstcheck-core.svg?style=flat-square&logo=python&logoColor=FBE072
+    :target: https://pypi.org/project/rstcheck-core/
     :alt: PyPI - Supported Implementations
 
-.. |pypi_format| image:: https://img.shields.io/pypi/format/rstcheck.svg?style=flat-square&logo=pypi&logoColor=FBE072
-    :target: https://pypi.org/project/rstcheck/
+.. |pypi_format| image:: https://img.shields.io/pypi/format/rstcheck-core.svg?style=flat-square&logo=pypi&logoColor=FBE072
+    :target: https://pypi.org/project/rstcheck-core/
     :alt: PyPI - Format
 
-.. |pypi_downloads| image:: https://img.shields.io/pypi/dm/rstcheck.svg?style=flat-square&logo=pypi&logoColor=FBE072
-    :target: https://pypi.org/project/rstcheck/
+.. |pypi_downloads| image:: https://img.shields.io/pypi/dm/rstcheck-core.svg?style=flat-square&logo=pypi&logoColor=FBE072
+    :target: https://pypi.org/project/rstcheck-core/
     :alt: PyPI - Monthly downloads
 
 
 
 .. GitHub
 
-.. |gh_tag| image:: https://img.shields.io/github/v/tag/rstcheck/rstcheck.svg?sort=semver&style=flat-square&logo=github
-    :target: https://github.com/rstcheck/rstcheck/tags
+.. |gh_tag| image:: https://img.shields.io/github/v/tag/rstcheck/rstcheck-core.svg?sort=semver&style=flat-square&logo=github
+    :target: https://github.com/rstcheck/rstcheck-core/tags
     :alt: Github - Latest Release
 
-.. |gh_last_commit| image:: https://img.shields.io/github/last-commit/rstcheck/rstcheck.svg?style=flat-square&logo=github
-    :target: https://github.com/rstcheck/rstcheck/commits/main
+.. |gh_last_commit| image:: https://img.shields.io/github/last-commit/rstcheck/rstcheck-core.svg?style=flat-square&logo=github
+    :target: https://github.com/rstcheck/rstcheck-core/commits/main
     :alt: GitHub - Last Commit
 
-.. |gh_stars| image:: https://img.shields.io/github/stars/rstcheck/rstcheck.svg?style=flat-square&logo=github
-    :target: https://github.com/rstcheck/rstcheck/stargazers
+.. |gh_stars| image:: https://img.shields.io/github/stars/rstcheck/rstcheck-core.svg?style=flat-square&logo=github
+    :target: https://github.com/rstcheck/rstcheck-core/stargazers
     :alt: Github - Stars
 
-.. |gh_forks| image:: https://img.shields.io/github/forks/rstcheck/rstcheck.svg?style=flat-square&logo=github
-    :target: https://github.com/rstcheck/rstcheck/network/members
+.. |gh_forks| image:: https://img.shields.io/github/forks/rstcheck/rstcheck-core.svg?style=flat-square&logo=github
+    :target: https://github.com/rstcheck/rstcheck-core/network/members
     :alt: Github - Forks
 
-.. |gh_contributors| image:: https://img.shields.io/github/contributors/rstcheck/rstcheck.svg?style=flat-square&logo=github
-    :target: https://github.com/rstcheck/rstcheck/graphs/contributors
+.. |gh_contributors| image:: https://img.shields.io/github/contributors/rstcheck/rstcheck-core.svg?style=flat-square&logo=github
+    :target: https://github.com/rstcheck/rstcheck-core/graphs/contributors
     :alt: Github - Contributors
 
-.. |gh_watchers| image:: https://img.shields.io/github/watchers/rstcheck/rstcheck.svg?style=flat-square&logo=github
-    :target: https://github.com/rstcheck/rstcheck/watchers/
+.. |gh_watchers| image:: https://img.shields.io/github/watchers/rstcheck/rstcheck-core.svg?style=flat-square&logo=github
+    :target: https://github.com/rstcheck/rstcheck-core/watchers/
     :alt: Github - Watchers

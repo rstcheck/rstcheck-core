@@ -3,7 +3,7 @@ Configuration
 
 .. contents::
 
-``rstcheck``'s config system knows three sources:
+``rstcheck-core``'s config system knows three sources:
 
 - Inline comments (*for config and flow control instructions*)
 - CLI options
@@ -61,16 +61,10 @@ Here is an example with both of them:
     .. rstcheck: ignore-languages=python
 
 
-CLI options
-~~~~~~~~~~~
-
-For information on the CLI options please see the :ref:`usage/cli:CLI` section.
-
-
 Configuration files
 ~~~~~~~~~~~~~~~~~~~
 
-``rstcheck`` has an automatic config file detection mechanic. This mechanic includes
+``rstcheck-core`` has an automatic config file detection mechanic. This mechanic includes
 the following config files sorted by priority:
 
 #. .rstcheck.cfg
@@ -91,7 +85,7 @@ If no config file is found, the default values for each setting apply.
 This whole mechanic is deactivated, when a config file or directory is explicitly set.
 See the `Configuration file`_ section for more information on setting a config file/directory.
 
-``rstcheck`` supports two types of config formats: **INI** and **TOML**.
+``rstcheck-core`` supports two types of config formats: **INI** and **TOML**.
 They are written pretty similar, but have some differences.
 The two following sections explain both formats.
 
@@ -104,7 +98,7 @@ If ``.rstcheck.cfg`` does not contain a valid section a warning is printed.
 INI format
 ^^^^^^^^^^
 
-In INI format all config related to ``rstcheck`` must go into a ``[rstcheck]`` section.
+In INI format all config related to ``rstcheck-core`` must go into a ``[rstcheck]`` section.
 
 The default INI format applies: ``key = value``.
 Lists are comma-separated strings, which can be multiline.
@@ -138,9 +132,9 @@ TOML format
     TOML format is only supported when the python library ``tomli`` is importable.
     See the :ref:`installation:Installation` section for more information.
 
-In TOML format all config related to ``rstcheck`` must go into the ``[tool.rstcheck]``
+In TOML format all config related to ``rstcheck-core`` must go into the ``[tool.rstcheck]``
 dictionary. This is due to the python convention for the ``pyproject.toml`` file, which
-``rstcheck`` uses for all TOML files.
+``rstcheck-core`` uses for all TOML files.
 
 The official TOML syntax applies here, so strings are strings and lists are lists for example.
 
@@ -352,7 +346,7 @@ The instruction **must** be placed in the line directly above the code block dir
 Examples with explanation
 -------------------------
 
-These examples are cases to show concepts of configuration in ``rstcheck``.
+These examples are cases to show concepts of configuration in ``rstcheck-core``.
 They don't always follow best practices.
 
 

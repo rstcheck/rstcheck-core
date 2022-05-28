@@ -3,7 +3,7 @@ import typing as t
 
 import pytest
 
-from rstcheck import _compat as _t, inline_config, types
+from rstcheck_core import _compat as _t, inline_config, types
 
 
 class TestInlineConfigGetter:

@@ -7,7 +7,7 @@ import typing as t
 
 import pytest
 
-from rstcheck import _extras, config
+from rstcheck_core import _extras, config
 
 
 def test_report_level_map_matches_numbers() -> None:  # noqa: AAA01

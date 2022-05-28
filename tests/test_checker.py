@@ -12,7 +12,7 @@ import docutils.nodes
 import docutils.utils
 import pytest
 
-from rstcheck import _extras, checker, config, types
+from rstcheck_core import _extras, checker, config, types
 
 
 def test_check_file(monkeypatch: pytest.MonkeyPatch) -> None:

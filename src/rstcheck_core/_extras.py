@@ -8,7 +8,7 @@ Example usage:
 
 .. code-block:: python
 
-    from rstcheck import _extras
+    from rstcheck_core import _extras
 
     if _extras.SPHINX_INSTALLED:
         import sphinx

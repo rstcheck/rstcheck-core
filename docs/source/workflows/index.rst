@@ -1,7 +1,7 @@
 Workflows
 =========
 
-Here is the documentation about different workflows for ``rstcheck``.
+Here is the documentation about different workflows for ``rstcheck-core``.
 
 .. toctree::
    :maxdepth: 1

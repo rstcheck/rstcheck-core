@@ -1,7 +1,7 @@
 """Tests for ``_extras`` module."""
 import pytest
 
-from rstcheck import _compat, _extras
+from rstcheck_core import _compat, _extras
 
 
 class TestInstallChecker:

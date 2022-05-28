@@ -1,4 +1,4 @@
-"""Runner of rstcheck."""
+"""Runner of rstcheck_core."""
 import logging
 import multiprocessing
 import os
@@ -14,7 +14,7 @@ logger = logging.getLogger(__name__)
 
 
 class RstcheckMainRunner:
-    """Main runner of rstcheck."""
+    """Main runner of rstcheck_core."""
 
     def __init__(
         self,

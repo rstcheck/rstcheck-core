@@ -1,11 +1,11 @@
-Welcome to rstcheck's documentation!
-====================================
+Welcome to rstcheck-core's documentation!
+=========================================
 
 .. include:: _badges.rst
 
 
-This a the documentation of ``rstcheck``. A library and CLI application for checking
-the syntax of reStructuredText and code blocks nested within it.
+This a the documentation of ``rstcheck-core``. The core library behind the CLI application
+``rstcheck`` for checking the syntax of reStructuredText and code blocks nested within it.
 
 
 .. toctree::

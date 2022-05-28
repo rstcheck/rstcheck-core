@@ -6,7 +6,7 @@ import docutils.parsers.rst.directives as docutils_directives
 import docutils.parsers.rst.roles as docutils_roles
 import pytest
 
-from rstcheck import _extras, _sphinx
+from rstcheck_core import _extras, _sphinx
 
 
 if _extras.SPHINX_INSTALLED:

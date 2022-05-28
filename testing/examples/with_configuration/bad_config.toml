@@ -1,4 +1,0 @@
-[tool.rstcheck]
-ignore_directives = ["foobar", "custom-directive"]
-report = "warning"
-unknown = true

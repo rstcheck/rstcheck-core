@@ -3,25 +3,22 @@ requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
 
 [tool.poetry]
-name = "rstcheck"
-version = "6.0.0rc2"
+name = "rstcheck-core"
+version = "1.0.0rc1"
 description = "Checks syntax of reStructuredText and code blocks nested within it"
 authors = ["Steven Myint <git@stevenmyint.com>"]
 maintainers = ["Christian Riedel <cielquan@protonmail.com>"]
 license = "MIT"
-repository = "https://github.com/rstcheck/rstcheck"
+repository = "https://github.com/rstcheck/rstcheck-core"
 readme = "README.rst"
 classifiers = ["Topic :: Software Development :: Quality Assurance"]
 keywords = ["restructuredtext", "rst", "linter", "static-analysis"]
 packages = [
-  { include = "rstcheck", from = "src" },
+  { include = "rstcheck_core", from = "src" },
   { include = "tests", format = "sdist" },
   { include = "AUTHORS.rst", format = "sdist" },
 ]
 include = ["testing"]
-
-[tool.poetry.scripts]
-rstcheck = "rstcheck._cli:main"
 
 [tool.poetry.dependencies]
 python = "^3.7"
@@ -49,14 +46,12 @@ sphinx-rtd-dark-mode = {version = "^1.2.4", optional = true}
 sphinx-autodoc-typehints = { version = ">=1.15", optional = true }
 sphinxcontrib-apidoc = { version = ">=0.3", optional = true }
 sphinxcontrib-spelling = { version = ">=7.3", optional = true }
-sphinx-click = "^4.0.3"
 # MAIN DEPENDENCIES
 importlib-metadata = {version = ">=1.6, <5.0", python = "<3.8"}
 typing-extensions = {version = ">=3.7.4, <5.0", python = "<3.8"}
 docutils = ">=0.7, <0.19"
 types-docutils = ">=0.18, <0.19"
 pydantic = ">=1.2, <2.0"
-typer = {extras = ["all"], version = ">=0.3.2, <0.5"}
 
 [tool.poetry.dev-dependencies]
 pre-commit = ">=2.17"
@@ -90,7 +85,6 @@ docs = [
   "sphinx-autodoc-typehints",
   "sphinxcontrib-apidoc",
   "sphinxcontrib-spelling",
-  "sphinx-click",
 ]
 
 
@@ -196,17 +190,17 @@ omit = [
 
 [tool.coverage.paths]
 tox_combine = [
-  "src/rstcheck",
-  "*/.tox/*/lib/python*/site-packages/rstcheck",
-  "*/.tox/pypy*/site-packages/rstcheck",
-  "*/.tox\\*\\Lib\\site-packages\\rstcheck",
+  "src/rstcheck_core",
+  "*/.tox/*/lib/python*/site-packages/rstcheck_core",
+  "*/.tox/pypy*/site-packages/rstcheck_core",
+  "*/.tox\\*\\Lib\\site-packages\\rstcheck_core",
 ]
 local_combine = [
-  "src/rstcheck",
-  "*/.venv/lib/python*/site-packages/rstcheck",
-  "*/.venv\\*\\Lib\\site-packages\\rstcheck",
-  "*/src/rstcheck",
-  "*\\src\\rstcheck",
+  "src/rstcheck_core",
+  "*/.venv/lib/python*/site-packages/rstcheck_core",
+  "*/.venv\\*\\Lib\\site-packages\\rstcheck_core",
+  "*/src/rstcheck_core",
+  "*\\src\\rstcheck_core",
 ]
 
 [tool.coverage.report]

@@ -1,13 +1,12 @@
 Usage
 =====
 
-``rstcheck`` is a library at heart but comes packed with a CLI application.
+``rstcheck-core`` is a library and the heart of ``rstcheck``.
+Here you can find how to use it.
 
 .. toctree::
    :maxdepth: 1
    :caption: Contents:
 
-   cli
    config
-   integration
    library

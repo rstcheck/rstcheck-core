@@ -9,15 +9,15 @@ Entry Points
 
 This library has two main entry points you can use:
 
-:py:class:`rstcheck.runner.RstcheckMainRunner` class
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+:py:class:`rstcheck_core.runner.RstcheckMainRunner` class
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The ``RstcheckMainRunner`` class the is main entry point. It manages the configuration state,
 runs the check on the files, caches the found linting issues and prints them.
 
 
-:py:func:`rstcheck.checker.check_file` function
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+:py:func:`rstcheck_core.checker.check_file` function
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The ``check_file`` function is a step deeper. It checks a single file and returns a list of
 the found linting issues. This would be the entry point if you don't need the additional
@@ -27,7 +27,7 @@ management capabilities of the ``RstcheckMainRunner`` class.
 Logging
 -------
 
-``rstcheck`` uses the standard library's ``logging`` module for its logging functionality.
+``rstcheck-core`` uses the standard library's ``logging`` module for its logging functionality.
 
 Each python module has its own logger named after the ``__file__`` variable's value.
 

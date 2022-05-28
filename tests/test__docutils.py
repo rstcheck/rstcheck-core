@@ -6,7 +6,7 @@ import docutils.parsers.rst.directives as docutils_directives
 import docutils.parsers.rst.roles as docutils_roles
 import pytest
 
-from rstcheck import _docutils, _extras
+from rstcheck_core import _docutils, _extras
 
 
 class TestIgnoreDirectivesAndRoles:

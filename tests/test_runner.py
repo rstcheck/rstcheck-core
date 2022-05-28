@@ -9,8 +9,7 @@ import typing as t
 import pytest
 import pytest_mock
 
-from rstcheck import checker, config, runner, types
-from tests.conftest import EXAMPLES_DIR
+from rstcheck_core import checker, config, runner, types
 
 
 class TestRstcheckMainRunnerInit:
@@ -96,9 +95,11 @@ class TestRstcheckMainRunnerFileListUpdater:
         assert not _runner.files_to_check
 
     @staticmethod
-    def test_single_file_in_list() -> None:
+    def test_single_file_in_list(tmp_path: pathlib.Path) -> None:
         """Test single file in list results in only this file in the list."""
-        file_list = [EXAMPLES_DIR / "good" / "rst.rst"]
+        test_file = tmp_path / "rst.rst"
+        test_file.touch()
+        file_list = [test_file]
         init_config = config.RstcheckConfig()
         _runner = runner.RstcheckMainRunner(file_list, init_config)
 
@@ -107,12 +108,17 @@ class TestRstcheckMainRunnerFileListUpdater:
         assert _runner.files_to_check == file_list
 
     @staticmethod
-    def test_multiple_files_in_list() -> None:
+    def test_multiple_files_in_list(tmp_path: pathlib.Path) -> None:
         """Test multiple files in list results in only these files in the list."""
-        file_list = [
-            EXAMPLES_DIR / "good" / "rst.rst",
-            EXAMPLES_DIR / "bad" / "rst.rst",
-        ]
+        test_dir_1 = tmp_path / "one"
+        test_dir_1.mkdir()
+        test_dir_2 = tmp_path / "two"
+        test_dir_2.mkdir()
+        test_file1 = test_dir_1 / "rst.rst"
+        test_file1.touch()
+        test_file2 = test_dir_2 / "rst.rst"
+        test_file2.touch()
+        file_list = [            test_file1,            test_file2        ]
         init_config = config.RstcheckConfig()
         _runner = runner.RstcheckMainRunner(file_list, init_config)
 
@@ -121,13 +127,15 @@ class TestRstcheckMainRunnerFileListUpdater:
         assert _runner.files_to_check == file_list
 
     @staticmethod
-    def test_non_rst_files() -> None:
+    def test_non_rst_files(tmp_path: pathlib.Path) -> None:
         """Test non rst files are filtered out."""
-        file_list = [
-            EXAMPLES_DIR / "good" / "rst.rst",
-            EXAMPLES_DIR / "good" / "foo.h",
-            EXAMPLES_DIR / "bad" / "rst.rst",
-        ]
+        test_file1 = tmp_path / "rst.rst"
+        test_file1.touch()
+        test_file2 = tmp_path / "foo.bar"
+        test_file2.touch()
+        test_file3 = tmp_path / "rst.rst"
+        test_file3.touch()
+        file_list = [            test_file1,            test_file2,            test_file3        ]
         init_config = config.RstcheckConfig()
         _runner = runner.RstcheckMainRunner(file_list, init_config)
 
@@ -136,9 +144,12 @@ class TestRstcheckMainRunnerFileListUpdater:
         assert len(_runner.files_to_check) == 2
 
     @staticmethod
-    def test_directory_without_recursive() -> None:
+    def test_directory_without_recursive(tmp_path: pathlib.Path) -> None:
         """Test directory without recusrive results in empty file list."""
-        file_list = [EXAMPLES_DIR / "good"]
+        test_file = tmp_path / "rst.rst"
+        test_file.touch()
+
+        file_list = [tmp_path]
         init_config = config.RstcheckConfig()
         _runner = runner.RstcheckMainRunner(file_list, init_config)
 
@@ -147,16 +158,21 @@ class TestRstcheckMainRunnerFileListUpdater:
         assert not _runner.files_to_check
 
     @staticmethod
-    def test_directory_with_recursive() -> None:
+    def test_directory_with_recursive(tmp_path: pathlib.Path) -> None:
         """Test directory with recusrive results in directories files in file list."""
-        file_list = [EXAMPLES_DIR / "good"]
+        test_file1 = tmp_path / "rst.rst"
+        test_file1.touch()
+        test_file2 = tmp_path / "rst2.rst"
+        test_file2.touch()
+        file_list = [tmp_path]
         init_config = config.RstcheckConfig(recursive=True)
         _runner = runner.RstcheckMainRunner(file_list, init_config)
 
         _runner.update_file_list()  # act
 
-        assert len(_runner.files_to_check) == 6
-        assert EXAMPLES_DIR / "good" / "rst.rst" in _runner.files_to_check
+        assert len(_runner.files_to_check) == 2
+        assert tmp_path / "rst.rst" in _runner.files_to_check
+        assert tmp_path / "rst2.rst" in _runner.files_to_check
 
     @staticmethod
     def test_dash_as_file() -> None:
@@ -170,16 +186,18 @@ class TestRstcheckMainRunnerFileListUpdater:
         assert file_list == _runner.files_to_check
 
     @staticmethod
-    def test_dash_as_file_with_others() -> None:
+    def test_dash_as_file_with_others(tmp_path: pathlib.Path) -> None:
         """Test dash as file with other files gets ignored."""
-        file_list = [pathlib.Path("-"), EXAMPLES_DIR / "good" / "rst.rst"]
+        test_file = tmp_path / "rst.rst"
+        test_file.touch()
+        file_list = [pathlib.Path("-"), test_file]
         init_config = config.RstcheckConfig()
         _runner = runner.RstcheckMainRunner(file_list, init_config)
 
         _runner.update_file_list()  # act
 
         assert len(_runner.files_to_check) == 1
-        assert EXAMPLES_DIR / "good" / "rst.rst" in _runner.files_to_check
+        assert test_file in _runner.files_to_check
 
 
 @pytest.mark.parametrize(
@@ -187,17 +205,18 @@ class TestRstcheckMainRunnerFileListUpdater:
     [[], [types.LintError(source_origin="<string>", line_number=0, message="message")]],
 )
 def test__run_checks_sync_method(
-    lint_errors: t.List[types.LintError], monkeypatch: pytest.MonkeyPatch
+    lint_errors: t.List[types.LintError], monkeypatch: pytest.MonkeyPatch, tmp_path: pathlib.Path
 ) -> None:
     """Test ``RstcheckMainRunner._run_checks_sync`` method.
 
     Test results are returned.
     """
     monkeypatch.setattr(checker, "check_file", lambda _0, _1, _2: lint_errors)
-    file_list = [
-        EXAMPLES_DIR / "good" / "rst.rst",
-        EXAMPLES_DIR / "bad" / "rst.rst",
-    ]
+    test_file1 = tmp_path / "rst.rst"
+    test_file1.touch()
+    test_file2 = tmp_path / "rst2.rst"
+    test_file2.touch()
+    file_list = [        test_file1,        test_file2    ]
     init_config = config.RstcheckConfig()
     _runner = runner.RstcheckMainRunner(file_list, init_config)
 
@@ -213,7 +232,7 @@ def test__run_checks_sync_method(
     [[], [types.LintError(source_origin="<string>", line_number=0, message="message")]],
 )
 def test__run_checks_parallel_method(
-    lint_errors: t.List[types.LintError], monkeypatch: pytest.MonkeyPatch
+    lint_errors: t.List[types.LintError], monkeypatch: pytest.MonkeyPatch, tmp_path: pathlib.Path
 ) -> None:  # noqa: AAA05
     """Test ``RstcheckMainRunner._run_checks_parallel`` method.
 
@@ -238,10 +257,11 @@ def test__run_checks_parallel_method(
 
     # noqa: AAA05
     monkeypatch.setattr(multiprocessing, "Pool", mock_pool)
-    file_list = [
-        EXAMPLES_DIR / "good" / "rst.rst",
-        EXAMPLES_DIR / "bad" / "rst.rst",
-    ]
+    test_file1 = tmp_path / "rst.rst"
+    test_file1.touch()
+    test_file2 = tmp_path / "rst2.rst"
+    test_file2.touch()
+    file_list = [        test_file1,        test_file2    ]
     init_config = config.RstcheckConfig()
     _runner = runner.RstcheckMainRunner(file_list, init_config)
 

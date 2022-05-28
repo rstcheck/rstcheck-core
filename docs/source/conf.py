@@ -26,17 +26,17 @@ NOT_LOADED_MSGS = []
 
 
 #: -- PROJECT INFORMATION --------------------------------------------------------------
-project = "rstcheck"
+project = "rstcheck_core"
 author = "Steven Myint <git@stevenmyint.com>"
-GH_REPO_LINK = "https://github.com/rstcheck/rstcheck"
+GH_REPO_LINK = "https://github.com/rstcheck/rstcheck-core"
 CREATION_YEAR = 2013
 CURRENT_YEAR = f"{date.today().year}"
 copyright = (  # noqa: VNE003 # pylint: disable=W0622
     f"{CREATION_YEAR}{('-' + CURRENT_YEAR) if CURRENT_YEAR != CREATION_YEAR else ''}, "
     + f"{author} and AUTHORS"
 )
-RSTCHECK_VERSION = metadata(project)["Version"]
-release = RSTCHECK_VERSION  #: The full version, including alpha/beta/rc tags
+RSTCHECK_CORE_VERSION = metadata(project)["Version"]
+release = RSTCHECK_CORE_VERSION  #: The full version, including alpha/beta/rc tags
 version_parts = re.search(r"^v?(?P<version>\d+\.\d+)\.\d+[-.]?(?P<tag>[a-z]*)[\.]?\d*", release)
 #: Major + Minor version like (X.Y)
 version = None if not version_parts else version_parts.group("version")
@@ -157,10 +157,6 @@ if find_spec("sphinx_autodoc_typehints") is not None:
     extensions.append("sphinx_autodoc_typehints")
 else:
     NOT_LOADED_MSGS.append("## 'sphinx-autodoc-typehints' extension not loaded - not installed")
-
-
-#: -- CLICK ----------------------------------------------------------------------------
-extensions.append("sphinx_click.ext")
 
 
 #: -- SPELLING -------------------------------------------------------------------------

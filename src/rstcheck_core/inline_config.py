@@ -98,7 +98,7 @@ def find_ignored_directives(
 
     .. testsetup::
 
-        from rstcheck.inline_config import find_ignored_directives
+        from rstcheck_core.inline_config import find_ignored_directives
 
     >>> list(find_ignored_directives('''
     ... Example
@@ -131,7 +131,7 @@ def find_ignored_roles(
 
     .. testsetup::
 
-        from rstcheck.inline_config import find_ignored_roles
+        from rstcheck_core.inline_config import find_ignored_roles
 
     >>> list(find_ignored_roles('''
     ... Example
@@ -164,7 +164,7 @@ def find_ignored_substitutions(
 
     .. testsetup::
 
-        from rstcheck.inline_config import find_ignored_substitutions
+        from rstcheck_core.inline_config import find_ignored_substitutions
 
     >>> list(find_ignored_substitutions('''
     ... Example
@@ -197,7 +197,7 @@ def find_ignored_languages(
 
     .. testsetup::
 
-        from rstcheck.inline_config import find_ignored_languages
+        from rstcheck_core.inline_config import find_ignored_languages
 
     >>> list(find_ignored_languages('''
     ... Example
