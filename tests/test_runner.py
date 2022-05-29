@@ -199,6 +199,116 @@ class TestRstcheckMainRunnerFileListUpdater:
         assert test_file in _runner._files_to_check
 
 
+class TestRstcheckMainRunnerFileListFilter:
+    """Test ``RstcheckMainRunner._filter_nonexisting`` method."""
+
+    @staticmethod
+    def test_empty_file_list() -> None:
+        """Test empty file list results in no changes."""
+        file_list: t.List[pathlib.Path] = []
+        init_config = config.RstcheckConfig()
+        _runner = runner.RstcheckMainRunner(file_list, init_config)
+
+        result = _runner._filter_nonexisting_paths(file_list)
+
+        assert not result
+        assert not _runner._nonexisting_paths
+
+    @staticmethod
+    def test_single_file_in_list(tmp_path: pathlib.Path) -> None:
+        """Test single file in list results in only this file in the list."""
+        test_file = tmp_path / "rst.rst"
+        test_file.touch()
+        file_list = [test_file]
+        init_config = config.RstcheckConfig()
+        _runner = runner.RstcheckMainRunner(file_list, init_config)
+
+        result = _runner._filter_nonexisting_paths(file_list)
+
+        assert result == file_list
+        assert not _runner._nonexisting_paths
+
+    @staticmethod
+    def test_multiple_files_in_list(tmp_path: pathlib.Path) -> None:
+        """Test multiple files in list results in only these files in the list."""
+        test_dir_1 = tmp_path / "one"
+        test_dir_1.mkdir()
+        test_dir_2 = tmp_path / "two"
+        test_dir_2.mkdir()
+        test_file1 = test_dir_1 / "rst.rst"
+        test_file1.touch()
+        test_file2 = test_dir_2 / "rst.rst"
+        test_file2.touch()
+        file_list = [test_file1, test_file2]
+        init_config = config.RstcheckConfig()
+        _runner = runner.RstcheckMainRunner(file_list, init_config)
+
+        result = _runner._filter_nonexisting_paths(file_list)
+
+        assert result == file_list
+        assert not _runner._nonexisting_paths
+
+    @staticmethod
+    def test_non_rst_files(tmp_path: pathlib.Path) -> None:
+        """Test non rst files are not filtered out."""
+        test_file1 = tmp_path / "rst.rst"
+        test_file1.touch()
+        test_file2 = tmp_path / "foo.bar"
+        test_file2.touch()
+        test_file3 = tmp_path / "rst.rst"
+        test_file3.touch()
+        file_list = [test_file1, test_file2, test_file3]
+        init_config = config.RstcheckConfig()
+        _runner = runner.RstcheckMainRunner(file_list, init_config)
+
+        result = _runner._filter_nonexisting_paths(file_list)
+
+        assert result == file_list
+        assert not _runner._nonexisting_paths
+
+    @staticmethod
+    def test_directory_without_recursive(tmp_path: pathlib.Path) -> None:
+        """Test directory without recusrive results in empty file list."""
+        test_file = tmp_path / "rst.rst"
+        test_file.touch()
+        file_list = [tmp_path]
+        init_config = config.RstcheckConfig()
+        _runner = runner.RstcheckMainRunner(file_list, init_config)
+
+        result = _runner._filter_nonexisting_paths(file_list)
+
+        assert not result
+        assert _runner._nonexisting_paths == file_list
+
+    @staticmethod
+    def test_directory_with_recursive(tmp_path: pathlib.Path) -> None:
+        """Test directory with recusrive results in directories files in file list."""
+        test_file1 = tmp_path / "rst.rst"
+        test_file1.touch()
+        test_file2 = tmp_path / "rst2.rst"
+        test_file2.touch()
+        file_list = [tmp_path]
+        init_config = config.RstcheckConfig(recursive=True)
+        _runner = runner.RstcheckMainRunner(file_list, init_config)
+
+        result = _runner._filter_nonexisting_paths(file_list)
+
+        assert result == file_list
+        assert not _runner._nonexisting_paths
+
+    @staticmethod
+    def test_dash_as_file() -> None:
+        """Test dash as file gets filtered out."""
+        file_list = [pathlib.Path("-")]
+        init_config = config.RstcheckConfig()
+        _runner = runner.RstcheckMainRunner(file_list, init_config)
+
+        result = _runner._filter_nonexisting_paths(file_list)
+
+        assert not result
+        assert _runner._nonexisting_paths == file_list
+
+
 @pytest.mark.parametrize(
     "lint_errors",
     [[], [types.LintError(source_origin="<string>", line_number=0, message="message")]],

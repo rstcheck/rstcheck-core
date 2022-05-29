@@ -19,6 +19,8 @@ NOTE: please use them in this order.
 
 [diff v1.0.0rc1...main](https://github.com/rstcheck/rstcheck-core/compare/v1.0.0rc1...main)
 
+- Non-existing paths are filtered out before checking and are logged as warning ([#10](https://github.com/rstcheck/rstcheck-core/pull/10))
+
 ## v1.0.0rc1 (2022-05-28)
 
 [diff split...v1.0.0](https://github.com/rstcheck/rstcheck-core/compare/split...v1.0.0rc1)

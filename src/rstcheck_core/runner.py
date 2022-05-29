@@ -37,6 +37,7 @@ class RstcheckMainRunner:
 
         self.check_paths = check_paths
         self._files_to_check: t.List[pathlib.Path] = []
+        self._nonexisting_paths: t.List[pathlib.Path] = []
         self.update_file_list()
 
         pool_size = multiprocessing.cpu_count()
@@ -52,6 +53,14 @@ class RstcheckMainRunner:
         This list is updated via the :py:meth:`RstcheckMainRunner.update_file_list` method.
         """
         return self._files_to_check
+
+    @property
+    def nonexisting_paths(self) -> t.List[pathlib.Path]:
+        """List of paths which do not exist.
+
+        This list is updated via the :py:meth:`RstcheckMainRunner.update_file_list` method.
+        """
+        return self._nonexisting_paths
 
     def load_config_file(
         self, config_path: pathlib.Path, warn_unknown_settings: bool = False
@@ -86,8 +95,11 @@ class RstcheckMainRunner:
     def update_file_list(self) -> None:  # noqa: CCR001
         """Update file path list with paths specified on initialization.
 
-        Uses paths from :py:attr:`RstcheckMainRunner.check_paths`, resolves all file paths and
+        Uses paths from ``RstcheckMainRunner.check_paths``, resolves all file paths and
         saves them in :py:attr:`RstcheckMainRunner.files_to_check`.
+
+        If a given path does not exist, it is filtered out and saved in
+        :py:attr:`RstcheckMainRunner.files_to_check`.
 
         Clear the current file list. Then get the file and directory paths specified with
         ``self.check_paths`` attribute set on initialization and search them for rst files
@@ -101,6 +113,8 @@ class RstcheckMainRunner:
             logger.info("'-' detected. Using stdin for input.'")
             self._files_to_check.append(paths[0])
             return
+
+        paths = self._filter_nonexisting_paths(paths)
 
         checkable_rst_file: t.Callable[[pathlib.Path], bool] = (
             lambda f: f.is_file() and not f.name.startswith(".") and f.suffix.casefold() == ".rst"
@@ -120,8 +134,41 @@ class RstcheckMainRunner:
                     directories[:] = [d for d in directories if not d.startswith(".")]
                 continue
 
-            if checkable_rst_file(resolved_path) and resolved_path.name != "-":
+            if checkable_rst_file(resolved_path):
                 self._files_to_check.append(path)
+
+    def _filter_nonexisting_paths(self, paths: t.List[pathlib.Path]) -> t.List[pathlib.Path]:
+        """Filter nonexisting paths out.
+
+        If recursive is not active only files are allowed, else directories are also allowed.
+
+        :param paths: List of paths to filter
+        :return: Filtered path list
+        """
+        self._nonexisting_paths = []
+        _paths = list(paths)
+
+        for path in _paths:
+            resolved_path = path.resolve()
+
+            if resolved_path.is_file():
+                continue
+
+            if self.config.recursive and resolved_path.is_dir():
+                continue
+
+            _paths.remove(path)
+            self._nonexisting_paths.append(path)
+
+            if self.config.recursive:
+                logger.warning(
+                    f"Path does not exist or is neither a file nor a directory: '{path}'."
+                )
+                continue
+
+            logger.warning(f"Path does not exist or is not a file: '{path}'.")
+
+        return _paths
 
     def _run_checks_sync(self) -> t.List[t.List[types.LintError]]:
         """Check all files from the file list syncronously and return the errors.
@@ -181,7 +228,7 @@ class RstcheckMainRunner:
         :param output_file: file to print to; defaults to sys.stderr (if ``None``)
         :return: exit code 0 if no error is printed; 1 if any error is printed
         """
-        if len(self.errors) == 0:
+        if len(self.errors) == 0 and len(self._nonexisting_paths) == 0:
             print("Success! No issues detected.", file=output_file or sys.stdout)
             return 0
 
