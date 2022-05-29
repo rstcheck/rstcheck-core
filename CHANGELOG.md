@@ -23,6 +23,7 @@ NOTE: please use them in this order.
 
 - Non-existing paths are filtered out before checking and are logged as warning ([#10](https://github.com/rstcheck/rstcheck-core/pull/10))
 - Use `<stdin>` for source in error messages instead of `-` ([#11](https://github.com/rstcheck/rstcheck-core/pull/11))
+- Add constructor function for `IgnoreDict` ([#12](https://github.com/rstcheck/rstcheck-core/pull/12))
 
 ## v1.0.0rc1 (2022-05-28)
 

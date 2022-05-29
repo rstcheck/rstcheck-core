@@ -138,12 +138,12 @@ def _create_ignore_dict_from_config(rstcheck_config: config.RstcheckConfig) -> t
     :param rstcheck_config: Config to extract ignore settings from
     :return: :py:class:`rstcheck_core.types.IgnoreDict`
     """
-    return types.IgnoreDict(
+    return types.construct_ignore_dict(
         messages=rstcheck_config.ignore_messages,
-        languages=rstcheck_config.ignore_languages or [],
-        directives=rstcheck_config.ignore_directives or [],
-        roles=rstcheck_config.ignore_roles or [],
-        substitutions=rstcheck_config.ignore_substitutions or [],
+        languages=rstcheck_config.ignore_languages,
+        directives=rstcheck_config.ignore_directives,
+        roles=rstcheck_config.ignore_roles,
+        substitutions=rstcheck_config.ignore_substitutions,
     )
 
 
@@ -170,9 +170,7 @@ def check_source(
     if isinstance(source_origin, pathlib.Path) and source_origin.name == "-":
         source_origin = "<stdin>"
     logger.info(f"Check source from '{source_origin}'")
-    ignores = ignores or types.IgnoreDict(
-        messages=None, languages=[], directives=[], roles=[], substitutions=[]
-    )
+    ignores = ignores or types.construct_ignore_dict()
     ignores["directives"].extend(
         inline_config.find_ignored_directives(source, source_origin, warn_unknown_settings)
     )
@@ -350,9 +348,7 @@ class _CheckTranslator(docutils.nodes.NodeVisitor):  # pylint: disable=too-many-
         self.checkers: t.List[types.CheckerRunFunction] = []
         self.source = source
         self.source_origin = source_origin
-        self.ignores = ignores or types.IgnoreDict(
-            messages=None, languages=[], directives=[], roles=[], substitutions=[]
-        )
+        self.ignores = ignores or types.construct_ignore_dict()
         self.report_level = report_level
         self.warn_unknown_settings = warn_unknown_settings
         self.code_block_checker = CodeBlockChecker(

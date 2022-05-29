@@ -137,7 +137,7 @@ def test__create_ignore_dict_from_config() -> None:
         test_config,
     )
 
-    assert result == types.IgnoreDict(
+    assert result == types.construct_ignore_dict(
         messages=ignore_messages_re,
         languages=ignore_languages,
         directives=ignore_directives,
@@ -202,12 +202,8 @@ Test
 Test
 ===
 """
-        ignores = types.IgnoreDict(
-            messages=re.compile(r"Possible title underline, too short for the title"),
-            languages=[],
-            directives=[],
-            roles=[],
-            substitutions=[],
+        ignores = types.construct_ignore_dict(
+            messages=re.compile(r"Possible title underline, too short for the title")
         )
 
         result = list(checker.check_source(source, ignores=ignores))
@@ -281,13 +277,7 @@ Test
 
     print(
 """
-        ignores = types.IgnoreDict(
-            messages=re.compile(r"unexpected EOF while parsing"),
-            languages=[],
-            directives=[],
-            roles=[],
-            substitutions=[],
-        )
+        ignores = types.construct_ignore_dict(messages=re.compile(r"unexpected EOF while parsing"))
 
         result = list(checker.check_source(source, ignores=ignores))
 
@@ -302,13 +292,7 @@ Test
 
     print(
 """
-        ignores = types.IgnoreDict(
-            messages=re.compile(r"'\(' was never closed"),
-            languages=[],
-            directives=[],
-            roles=[],
-            substitutions=[],
-        )
+        ignores = types.construct_ignore_dict(messages=re.compile(r"'\(' was never closed"))
 
         result = list(checker.check_source(source, ignores=ignores))
 
@@ -322,13 +306,7 @@ Test
 
     print(
 """
-        ignores = types.IgnoreDict(
-            messages=None,
-            languages=[],
-            directives=[],
-            roles=[],
-            substitutions=[],
-        )
+        ignores = types.construct_ignore_dict()
 
         result = list(checker.check_source(source, source_file=pathlib.Path("-"), ignores=ignores))
 
