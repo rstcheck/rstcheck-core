@@ -5,8 +5,8 @@ import typing as t
 from . import _compat as _t
 
 
-SourceFileOrString = t.Union[pathlib.Path, _t.Literal["<string>"]]
-"""Path to source file or if it is a string then '<string>'."""
+SourceFileOrString = t.Union[pathlib.Path, _t.Literal["<string>"], _t.Literal["<stdin>"]]
+"""Path to source file or if it is a string then '<string>' or '<stdin>'."""
 
 
 class LintError(_t.TypedDict):

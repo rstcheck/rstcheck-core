@@ -167,6 +167,8 @@ def check_source(
     :yield: Found issues
     """
     source_origin: types.SourceFileOrString = source_file or "<string>"
+    if isinstance(source_origin, pathlib.Path) and source_origin.name == "-":
+        source_origin = "<stdin>"
     logger.info(f"Check source from '{source_origin}'")
     ignores = ignores or types.IgnoreDict(
         messages=None, languages=[], directives=[], roles=[], substitutions=[]
