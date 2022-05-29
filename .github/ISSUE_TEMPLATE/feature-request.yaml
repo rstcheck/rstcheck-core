@@ -83,8 +83,14 @@ body:
 
         You can find the rstcheck version with:
 
+        Python >= 3.8:
         ```shell
-        python -c "import rstcheck; print(rstcheck.__version__)"
+        python -c "import importlib.metadata; print(importlib.metadata.version('rstcheck-core'))"
+        ```
+
+        Python < 3.8:
+        ```shell
+        python -c "import importlib_metadata; print(importlib_metadata.version('rstcheck-core'))"
         ```
     validations:
       required: true
