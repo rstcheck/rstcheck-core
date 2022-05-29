@@ -3,11 +3,12 @@
 import os
 import re
 import shutil
+import typing as t
 from datetime import date
 from importlib.util import find_spec
 from pathlib import Path
-from typing import List
 
+import sphinx.ext.autodoc
 import sphinx_rtd_theme  # type: ignore[import]
 from sphinx.application import Sphinx
 
@@ -45,9 +46,9 @@ RELEASE_LEVEL = None if not version_parts else version_parts.group("tag")
 
 
 #: -- GENERAL CONFIG -------------------------------------------------------------------
-extensions: List[str] = []
+extensions: t.List[str] = []
 today_fmt = "%Y-%m-%d"
-exclude_patterns: List[str] = []  #: Files to exclude for source of doc
+exclude_patterns: t.List[str] = []  #: Files to exclude for source of doc
 
 #: Added dirs for static and template files if they exist
 html_static_path = ["_static"] if Path("_static").exists() else []
@@ -141,12 +142,17 @@ else:
 extensions.append("sphinx.ext.autodoc")
 autodoc_typehints = "description"
 autodoc_member_order = "bysource"
-autodoc_mock_imports: List[str] = []
+autodoc_mock_imports: t.List[str] = []
 autodoc_default_options = {"members": True}
 
 
 def _remove_module_docstring(  # pylint: disable=R0913
-    app, what, name, obj, options, lines  # pylint: disable=W0613 # noqa: ANN001
+    app: Sphinx,  # pylint: disable=W0613
+    what: str,
+    name: str,  # pylint: disable=W0613
+    obj: t.Any,  # pylint: disable=W0613 # noqa: ANN401
+    options: sphinx.ext.autodoc.Options,  # pylint: disable=W0613
+    lines: t.List[str],
 ) -> None:
     """Remove module docstring."""
     if what == "module":
