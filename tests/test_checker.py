@@ -256,6 +256,20 @@ Test
         assert "unexpected EOF while parsing" in result[0]["message"]
 
     @staticmethod
+    @pytest.mark.skipif(sys.version_info < (3, 10), reason="Requires python3.10 or higher")
+    def test_code_block_lint_error_returned_on_default_ignore() -> None:
+        """Test code lint error is returned with default ignores."""
+        source = """
+.. code:: python
+
+    print(
+"""
+
+        result = list(checker.check_source(source))
+
+        assert "'(' was never closed" in result[0]["message"]
+
+    @staticmethod
     @pytest.mark.skipif(sys.version_info[0:2] > (3, 9), reason="Requires python3.9 or lower")
     def test_code_block_no_error_on_set_ignore_pre310() -> None:
         """Test code lint error is skipped with set ignores.
@@ -278,20 +292,6 @@ Test
         result = list(checker.check_source(source, ignores=ignores))
 
         assert not result
-
-    @staticmethod
-    @pytest.mark.skipif(sys.version_info < (3, 10), reason="Requires python3.10 or higher")
-    def test_code_block_lint_error_returned_on_default_ignore() -> None:
-        """Test code lint error is returned with default ignores."""
-        source = """
-.. code:: python
-
-    print(
-"""
-
-        result = list(checker.check_source(source))
-
-        assert "'(' was never closed" in result[0]["message"]
 
     @staticmethod
     @pytest.mark.skipif(sys.version_info < (3, 10), reason="Requires python3.10 or higher")
