@@ -36,7 +36,7 @@ class RstcheckMainRunner:
             )
 
         self.check_paths = check_paths
-        self.files_to_check: t.List[pathlib.Path] = []
+        self._files_to_check: t.List[pathlib.Path] = []
         self.update_file_list()
 
         pool_size = multiprocessing.cpu_count()
@@ -44,6 +44,14 @@ class RstcheckMainRunner:
         self._pool_size = pool_size if sys.platform != "win32" else min(pool_size, 61)
 
         self.errors: t.List[types.LintError] = []
+
+    @property
+    def files_to_check(self) -> t.List[pathlib.Path]:
+        """List of files to check.
+
+        This list is updated via the :py:meth:`RstcheckMainRunner.update_file_list` method.
+        """
+        return self._files_to_check
 
     def load_config_file(
         self, config_path: pathlib.Path, warn_unknown_settings: bool = False
@@ -78,17 +86,20 @@ class RstcheckMainRunner:
     def update_file_list(self) -> None:  # noqa: CCR001
         """Update file path list with paths specified on initialization.
 
+        Uses paths from :py:attr:`RstcheckMainRunner.check_paths`, resolves all file paths and
+        saves them in :py:attr:`RstcheckMainRunner.files_to_check`.
+
         Clear the current file list. Then get the file and directory paths specified with
         ``self.check_paths`` attribute set on initialization and search them for rst files
         to check. Add those files to the file list.
         """  # noqa: Q440,Q441,Q447,Q449
         logger.debug("Updating list of files to check.")
         paths = list(self.check_paths)
-        self.files_to_check = []
+        self._files_to_check = []
 
         if len(paths) == 1 and paths[0].name == "-":
             logger.info("'-' detected. Using stdin for input.'")
-            self.files_to_check.append(paths[0])
+            self._files_to_check.append(paths[0])
             return
 
         checkable_rst_file: t.Callable[[pathlib.Path], bool] = (
@@ -110,7 +121,7 @@ class RstcheckMainRunner:
                 continue
 
             if checkable_rst_file(resolved_path) and resolved_path.name != "-":
-                self.files_to_check.append(path)
+                self._files_to_check.append(path)
 
     def _run_checks_sync(self) -> t.List[t.List[types.LintError]]:
         """Check all files from the file list syncronously and return the errors.
@@ -121,7 +132,7 @@ class RstcheckMainRunner:
         with _sphinx.load_sphinx_if_available():
             results = [
                 checker.check_file(file, self.config, self.overwrite_config)
-                for file in self.files_to_check
+                for file in self._files_to_check
             ]
         return results
 
@@ -134,7 +145,7 @@ class RstcheckMainRunner:
         with _sphinx.load_sphinx_if_available(), multiprocessing.Pool(self._pool_size) as pool:
             results = pool.starmap(
                 checker.check_file,
-                [(file, self.config, self.overwrite_config) for file in self.files_to_check],
+                [(file, self.config, self.overwrite_config) for file in self._files_to_check],
             )
         return results
 
@@ -158,7 +169,9 @@ class RstcheckMainRunner:
         """
         logger.info("Run checks for all files.")
         results = (
-            self._run_checks_parallel() if len(self.files_to_check) > 1 else self._run_checks_sync()
+            self._run_checks_parallel()
+            if len(self._files_to_check) > 1
+            else self._run_checks_sync()
         )
         self._update_results(results)
 

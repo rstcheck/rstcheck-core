@@ -92,7 +92,7 @@ class TestRstcheckMainRunnerFileListUpdater:
 
         _runner.update_file_list()  # act
 
-        assert not _runner.files_to_check
+        assert not _runner._files_to_check
 
     @staticmethod
     def test_single_file_in_list(tmp_path: pathlib.Path) -> None:
@@ -105,7 +105,7 @@ class TestRstcheckMainRunnerFileListUpdater:
 
         _runner.update_file_list()  # act
 
-        assert _runner.files_to_check == file_list
+        assert _runner._files_to_check == file_list
 
     @staticmethod
     def test_multiple_files_in_list(tmp_path: pathlib.Path) -> None:
@@ -124,7 +124,7 @@ class TestRstcheckMainRunnerFileListUpdater:
 
         _runner.update_file_list()  # act
 
-        assert _runner.files_to_check == file_list
+        assert _runner._files_to_check == file_list
 
     @staticmethod
     def test_non_rst_files(tmp_path: pathlib.Path) -> None:
@@ -141,7 +141,7 @@ class TestRstcheckMainRunnerFileListUpdater:
 
         _runner.update_file_list()  # act
 
-        assert len(_runner.files_to_check) == 2
+        assert len(_runner._files_to_check) == 2
 
     @staticmethod
     def test_directory_without_recursive(tmp_path: pathlib.Path) -> None:
@@ -154,7 +154,7 @@ class TestRstcheckMainRunnerFileListUpdater:
 
         _runner.update_file_list()  # act
 
-        assert not _runner.files_to_check
+        assert not _runner._files_to_check
 
     @staticmethod
     def test_directory_with_recursive(tmp_path: pathlib.Path) -> None:
@@ -169,9 +169,9 @@ class TestRstcheckMainRunnerFileListUpdater:
 
         _runner.update_file_list()  # act
 
-        assert len(_runner.files_to_check) == 2
-        assert tmp_path / "rst.rst" in _runner.files_to_check
-        assert tmp_path / "rst2.rst" in _runner.files_to_check
+        assert len(_runner._files_to_check) == 2
+        assert tmp_path / "rst.rst" in _runner._files_to_check
+        assert tmp_path / "rst2.rst" in _runner._files_to_check
 
     @staticmethod
     def test_dash_as_file() -> None:
@@ -182,7 +182,7 @@ class TestRstcheckMainRunnerFileListUpdater:
 
         _runner.update_file_list()  # act
 
-        assert file_list == _runner.files_to_check
+        assert file_list == _runner._files_to_check
 
     @staticmethod
     def test_dash_as_file_with_others(tmp_path: pathlib.Path) -> None:
@@ -195,8 +195,8 @@ class TestRstcheckMainRunnerFileListUpdater:
 
         _runner.update_file_list()  # act
 
-        assert len(_runner.files_to_check) == 1
-        assert test_file in _runner.files_to_check
+        assert len(_runner._files_to_check) == 1
+        assert test_file in _runner._files_to_check
 
 
 @pytest.mark.parametrize(
@@ -297,7 +297,7 @@ def test_check_method_sync_with_1_file(mocker: pytest_mock.MockerFixture) -> Non
     mocked_parallel_runner = mocker.patch.object(runner.RstcheckMainRunner, "_run_checks_parallel")
     init_config = config.RstcheckConfig()
     _runner = runner.RstcheckMainRunner([], init_config)
-    _runner.files_to_check = [pathlib.Path("file")]
+    _runner._files_to_check = [pathlib.Path("file")]
 
     _runner.check()  # act
 
@@ -314,7 +314,7 @@ def test_check_method_parallel_with_more_files(mocker: pytest_mock.MockerFixture
     mocked_parallel_runner = mocker.patch.object(runner.RstcheckMainRunner, "_run_checks_parallel")
     init_config = config.RstcheckConfig()
     _runner = runner.RstcheckMainRunner([], init_config)
-    _runner.files_to_check = [pathlib.Path("file"), pathlib.Path("file2")]
+    _runner._files_to_check = [pathlib.Path("file"), pathlib.Path("file2")]
 
     _runner.check()  # act
 
