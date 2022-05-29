@@ -330,10 +330,10 @@ Test
             substitutions=[],
         )
 
-        result = list(checker.check_source(source, ignores=ignores))
+        result = list(checker.check_source(source, source_file=pathlib.Path("-"), ignores=ignores))
 
         assert len(result) == 1
-        assert result[0]["message"].startswith("<stdin>")
+        assert result[0]["source_origin"] == "<stdin>"
 
 
 class TestCodeCheckRunner:
