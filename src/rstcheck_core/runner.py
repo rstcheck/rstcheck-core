@@ -95,7 +95,7 @@ class RstcheckMainRunner:
     def update_file_list(self) -> None:  # noqa: CCR001
         """Update file path list with paths specified on initialization.
 
-        Uses paths from :py:attr:`RstcheckMainRunner.check_paths`, resolves all file paths and
+        Uses paths from ``RstcheckMainRunner.check_paths``, resolves all file paths and
         saves them in :py:attr:`RstcheckMainRunner.files_to_check`.
 
         If a given path does not exist, it is filtered out and saved in
