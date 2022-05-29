@@ -32,6 +32,35 @@ class IgnoreDict(_t.TypedDict):
     substitutions: t.List[str]
 
 
+def construct_ignore_dict(
+    # NOTE: Pattern type-arg errors pydanic: https://github.com/samuelcolvin/pydantic/issues/2636
+    messages: t.Optional[t.Pattern] = None,  # type: ignore[type-arg]
+    languages: t.Optional[t.List[str]] = None,
+    directives: t.Optional[t.List[str]] = None,
+    roles: t.Optional[t.List[str]] = None,
+    substitutions: t.Optional[t.List[str]] = None,
+) -> IgnoreDict:
+    """Create an :py:class:`IgnoreDict` with passed values or defaults.
+
+    :param messages: Value for :py:attr:`IgnoreDict.messages`;
+        :py:obj:`None` results in an empty list; defaults to :py:obj:`None`
+    :param directives: Value for :py:attr:`IgnoreDict.directives`;
+        :py:obj:`None` results in an empty list; defaults to :py:obj:`None`
+    :param roles: Value for :py:attr:`IgnoreDict.roles`;
+        :py:obj:`None` results in an empty list; defaults to :py:obj:`None`
+    :param substitutions: Value for :py:attr:`IgnoreDict.substitutions`;
+        :py:obj:`None` results in an empty list; defaults to :py:obj:`None`
+    :return: :py:class:`IgnoreDict` with passed values or defaults
+    """
+    return IgnoreDict(
+        messages=messages,
+        languages=languages if languages is not None else [],
+        directives=directives if directives is not None else [],
+        roles=roles if roles is not None else [],
+        substitutions=substitutions if substitutions is not None else [],
+    )
+
+
 CheckerRunFunction = t.Callable[..., YieldedLintError]
 """Function to run checks.
 
