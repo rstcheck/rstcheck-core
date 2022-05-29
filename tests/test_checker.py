@@ -1,5 +1,5 @@
-# pylint: disable=too-many-lines
 """Tests for ``checker`` module."""
+# pylint: disable=too-many-lines,protected-access
 import os
 import pathlib
 import re
@@ -45,9 +45,7 @@ class TestRunConfigLoader:
         """
         test_config = config.RstcheckConfig(config_path=pathlib.Path())
 
-        result = checker._load_run_config(  # pylint: disable=protected-access
-            pathlib.Path(), test_config
-        )
+        result = checker._load_run_config(pathlib.Path(), test_config)
 
         assert result == test_config
 
@@ -60,9 +58,7 @@ class TestRunConfigLoader:
         monkeypatch.setattr(config, "load_config_file_from_dir_tree", lambda _: None)
         test_config = config.RstcheckConfig()
 
-        result = checker._load_run_config(  # pylint: disable=protected-access
-            pathlib.Path(), test_config
-        )
+        result = checker._load_run_config(pathlib.Path(), test_config)
 
         assert result == test_config
 
@@ -76,9 +72,7 @@ class TestRunConfigLoader:
         monkeypatch.setattr(config, "load_config_file_from_dir_tree", lambda _: test_file_config)
         test_config = config.RstcheckConfig()
 
-        result = checker._load_run_config(  # pylint: disable=protected-access
-            pathlib.Path(), test_config, True
-        )
+        result = checker._load_run_config(pathlib.Path(), test_config, True)
 
         assert result is not None
         assert test_config != config.ReportLevel.SEVERE
@@ -95,7 +89,7 @@ class TestSourceGetter:
         monkeypatch.setattr(sys.stdin, "read", lambda: source)
         test_file = pathlib.Path("-")
 
-        result = checker._get_source(test_file)  # pylint: disable=protected-access
+        result = checker._get_source(test_file)
 
         assert result == source
 
@@ -109,7 +103,7 @@ Test
         test_file = tmp_path / "testfile.rst"
         test_file.write_text(source)
 
-        result = checker._get_source(test_file)  # pylint: disable=protected-access
+        result = checker._get_source(test_file)
 
         assert result == source
 
@@ -118,9 +112,7 @@ def test__replace_ignored_substitutions() -> None:
     """Test ``_replace_ignored_substitutions`` fucntion replaces substitutions."""
     source = "|Substitution1| |Substitution2|"
 
-    result = checker._replace_ignored_substitutions(  # pylint: disable=protected-access
-        source, ["Substitution1"]
-    )
+    result = checker._replace_ignored_substitutions(source, ["Substitution1"])
 
     assert result == "xSubstitution1x |Substitution2|"
 
@@ -141,7 +133,7 @@ def test__create_ignore_dict_from_config() -> None:
         ignore_substitutions=ignore_substitutions,
     )
 
-    result = checker._create_ignore_dict_from_config(  # pylint: disable=protected-access
+    result = checker._create_ignore_dict_from_config(
         test_config,
     )
 
@@ -335,11 +327,7 @@ class TestCodeCheckRunner:
             cb_checker.create_checker("{", "json"),
         ]
 
-        result = list(
-            checker._run_code_checker_and_filter_errors(  # pylint: disable=protected-access
-                checker_list, None
-            )
-        )
+        result = list(checker._run_code_checker_and_filter_errors(checker_list, None))
 
         assert len(result) == 2
 
@@ -353,11 +341,7 @@ class TestCodeCheckRunner:
         ]
         ignore_messages = re.compile(r"Expecting property name enclosed in double quotes")
 
-        result = list(
-            checker._run_code_checker_and_filter_errors(  # pylint: disable=protected-access
-                checker_list, ignore_messages
-            )
-        )
+        result = list(checker._run_code_checker_and_filter_errors(checker_list, ignore_messages))
 
         assert len(result) == 1
 
@@ -370,11 +354,7 @@ class TestRstErrorParseFilter:
         """Test both error messages are parsed and returned."""
         error_str = "<string>:1:1: Error message 1\n<string>:1:2: Error message 2"
 
-        result = list(
-            checker._parse_and_filter_rst_errors(  # pylint: disable=protected-access
-                error_str, "<string>", None
-            )
-        )
+        result = list(checker._parse_and_filter_rst_errors(error_str, "<string>", None))
 
         assert len(result) == 2
 
@@ -384,11 +364,7 @@ class TestRstErrorParseFilter:
         error_str = "<string>:1:1: Error message 1\n<string>:1:2: Error message 2"
         ignore_messages = re.compile(r"Error message 1")
 
-        result = list(
-            checker._parse_and_filter_rst_errors(  # pylint: disable=protected-access
-                error_str, "<string>", ignore_messages
-            )
-        )
+        result = list(checker._parse_and_filter_rst_errors(error_str, "<string>", ignore_messages))
 
         assert len(result) == 1
 
@@ -401,7 +377,7 @@ class TestCheckTranslator:  # pylint: disable=too-few-public-methods
         """Test checkers are empty on init."""
         doc = docutils.utils.new_document("")
 
-        result = checker._CheckTranslator(doc, "", "<string>")  # pylint: disable=protected-access
+        result = checker._CheckTranslator(doc, "", "<string>")
 
         assert not result.checkers
 
@@ -887,7 +863,7 @@ int main()
         cb_checker = checker.CodeBlockChecker("<string>")
 
         result = list(
-            cb_checker._gcc_checker(  # pylint: disable=protected-access
+            cb_checker._gcc_checker(
                 source,
                 ".cpp",
                 [os.getenv("CXX", "g++")]
@@ -912,7 +888,7 @@ int main()
         cb_checker = checker.CodeBlockChecker("<string>")
 
         result = list(
-            cb_checker._gcc_checker(  # pylint: disable=protected-access
+            cb_checker._gcc_checker(
                 source,
                 ".cpp",
                 [os.getenv("CXX", "g++")]
@@ -937,7 +913,7 @@ int main()
         cb_checker = checker.CodeBlockChecker("<string>")
 
         result = list(
-            cb_checker._gcc_checker(  # pylint: disable=protected-access
+            cb_checker._gcc_checker(
                 source,
                 ".cpp",
                 [os.getenv("CXX", "g++")]
@@ -962,7 +938,7 @@ int main()
         cb_checker = checker.CodeBlockChecker("<string>")
 
         result = list(
-            cb_checker._gcc_checker(  # pylint: disable=protected-access
+            cb_checker._gcc_checker(
                 source,
                 ".cpp",
                 [os.getenv("CXX", "g++")]
@@ -988,7 +964,7 @@ int main()
 """
         cb_checker = checker.CodeBlockChecker("<string>")
 
-        result = cb_checker._run_in_subprocess(  # pylint: disable=protected-access
+        result = cb_checker._run_in_subprocess(
             source,
             ".cpp",
             [os.getenv("CXX", "g++")]
@@ -1011,7 +987,7 @@ int main()
 """
         cb_checker = checker.CodeBlockChecker("<string>")
 
-        result = cb_checker._run_in_subprocess(  # pylint: disable=protected-access
+        result = cb_checker._run_in_subprocess(
             source,
             ".cpp",
             [os.getenv("CXX", "g++")]
@@ -1036,7 +1012,7 @@ int main()
 """
         cb_checker = checker.CodeBlockChecker("<string>")
 
-        result = cb_checker._run_in_subprocess(  # pylint: disable=protected-access
+        result = cb_checker._run_in_subprocess(
             source,
             ".cpp",
             [os.getenv("CXX", "g++")]
@@ -1061,7 +1037,7 @@ int main()
 """
         cb_checker = checker.CodeBlockChecker("<string>")
 
-        result = cb_checker._run_in_subprocess(  # pylint: disable=protected-access
+        result = cb_checker._run_in_subprocess(
             source,
             ".cpp",
             [os.getenv("CXX", "g++")]
@@ -1086,7 +1062,7 @@ int main()
 """
         cb_checker = checker.CodeBlockChecker(pathlib.Path("filename.cpp"))
 
-        result = cb_checker._run_in_subprocess(  # pylint: disable=protected-access
+        result = cb_checker._run_in_subprocess(
             source,
             ".cpp",
             [os.getenv("CXX", "g++")]
@@ -1111,7 +1087,7 @@ int main()
 """
         cb_checker = checker.CodeBlockChecker(pathlib.Path("filename.cpp"))
 
-        result = cb_checker._run_in_subprocess(  # pylint: disable=protected-access
+        result = cb_checker._run_in_subprocess(
             source,
             ".cpp",
             [os.getenv("CXX", "g++")]
@@ -1136,7 +1112,7 @@ int main()
 """
         cb_checker = checker.CodeBlockChecker(pathlib.Path("filename.cpp"))
 
-        result = cb_checker._run_in_subprocess(  # pylint: disable=protected-access
+        result = cb_checker._run_in_subprocess(
             source,
             ".cpp",
             [os.getenv("CXX", "g++")]
@@ -1155,9 +1131,7 @@ int main()
         message = "Foo bar"
 
         with pytest.raises(ValueError, match="Message cannot be parsed."):
-            checker._parse_gcc_style_error_message(  # pylint: disable=protected-access
-                message, "<string>"
-            )
+            checker._parse_gcc_style_error_message(message, "<string>")
 
     @staticmethod
     def test__parse_gcc_style_error_message_with_column() -> None:
@@ -1169,9 +1143,7 @@ int main()
             message="Error message",
         )
 
-        result = checker._parse_gcc_style_error_message(  # pylint: disable=protected-access
-            message, "<string>"
-        )
+        result = checker._parse_gcc_style_error_message(message, "<string>")
 
         assert result == error
 
@@ -1185,8 +1157,6 @@ int main()
             message="Error message",
         )
 
-        result = checker._parse_gcc_style_error_message(  # pylint: disable=protected-access
-            message, "<string>", False
-        )
+        result = checker._parse_gcc_style_error_message(message, "<string>", False)
 
         assert result == error

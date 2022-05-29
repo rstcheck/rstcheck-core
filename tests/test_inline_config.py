@@ -1,4 +1,5 @@
 """Tests for ``inline_config`` module."""
+# pylint: disable=protected-access
 import typing as t
 
 import pytest
@@ -182,9 +183,7 @@ Example
 """
 
         result = list(
-            inline_config._filter_config_and_split_values(  # pylint: disable=protected-access
-                "ignore-languages", source, "<string>"
-            )
+            inline_config._filter_config_and_split_values("ignore-languages", source, "<string>")
         )
 
         assert result == ["cpp"]
@@ -200,9 +199,7 @@ Example
 """
 
         result = list(
-            inline_config._filter_config_and_split_values(  # pylint: disable=protected-access
-                "ignore-languages", source, "<string>"
-            )
+            inline_config._filter_config_and_split_values("ignore-languages", source, "<string>")
         )
 
         assert result == ["cpp", "json", "python"]

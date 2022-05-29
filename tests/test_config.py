@@ -1,5 +1,5 @@
 """Tests for ``config`` module."""
-# pylint: disable=too-many-lines
+# pylint: disable=too-many-lines,protected-access
 import logging
 import pathlib
 import re
@@ -21,8 +21,7 @@ def test_report_level_map_matches_numbers() -> None:  # noqa: AAA01
 def test_report_level_map_matches_names() -> None:  # noqa: AAA01
     """Test that the enum's name match the map's keys."""
     enum_names = [
-        e.casefold()
-        for e in config.ReportLevel._member_names_  # pylint: disable=protected-access,no-member
+        e.casefold() for e in config.ReportLevel._member_names_  # pylint: disable=no-member
     ]
     map_keys = list(config.ReportLevelMap.keys())
 
@@ -61,7 +60,7 @@ class TestSplitStrValidator:
     @staticmethod
     def test_none_means_default() -> None:
         """Test ``None`` results in ``None``."""
-        result = config._split_str_validator(None)  # pylint: disable=protected-access
+        result = config._split_str_validator(None)
 
         assert result is None
 
@@ -83,7 +82,7 @@ class TestSplitStrValidator:
     )
     def test_strings_are_transformed_to_lists(string: str, split_list: t.List[str]) -> None:
         """Test strings are split at the ",", trailing commas are ignored and whitespace cleaned."""
-        result = config._split_str_validator(string)  # pylint: disable=protected-access
+        result = config._split_str_validator(string)
 
         assert result == split_list
 
@@ -102,7 +101,7 @@ class TestSplitStrValidator:
         string_list: t.List[str], string_list_cleaned: t.List[str]
     ) -> None:
         """Test lists of strings are whitespace cleaned."""
-        result = config._split_str_validator(string_list)  # pylint: disable=protected-access
+        result = config._split_str_validator(string_list)
 
         assert result == string_list_cleaned
 
@@ -124,7 +123,7 @@ class TestSplitStrValidator:
     def test_invalid_settings(value: str) -> None:
         """Test invalid settings."""
         with pytest.raises(ValueError, match="Not a string or list of strings"):
-            config._split_str_validator(value)  # pylint: disable=protected-access
+            config._split_str_validator(value)
 
 
 class TestReportLevelValidatorMethod:
@@ -392,7 +391,7 @@ class TestIniFileLoader:
         """Test no config is loaded if NONE is set."""
         conf_file = pathlib.Path("NONE")
 
-        result = config._load_config_from_ini_file(conf_file)  # pylint: disable=protected-access
+        result = config._load_config_from_ini_file(conf_file)
 
         assert result is None
 
@@ -402,7 +401,7 @@ class TestIniFileLoader:
         conf_file = tmp_path / "config.ini"
 
         with pytest.raises(FileNotFoundError):
-            config._load_config_from_ini_file(conf_file)  # pylint: disable=protected-access
+            config._load_config_from_ini_file(conf_file)
 
     @staticmethod
     def test_not_a_file_errors(tmp_path: pathlib.Path) -> None:
@@ -410,7 +409,7 @@ class TestIniFileLoader:
         conf_file = tmp_path
 
         with pytest.raises(FileNotFoundError):
-            config._load_config_from_ini_file(conf_file)  # pylint: disable=protected-access
+            config._load_config_from_ini_file(conf_file)
 
     @staticmethod
     def test_returns_none_on_missing_section(tmp_path: pathlib.Path) -> None:
@@ -419,7 +418,7 @@ class TestIniFileLoader:
         file_content = "[not-rstcheck]"
         conf_file.write_text(file_content)
 
-        result = config._load_config_from_ini_file(conf_file)  # pylint: disable=protected-access
+        result = config._load_config_from_ini_file(conf_file)
 
         assert result is None
 
@@ -432,7 +431,7 @@ class TestIniFileLoader:
         """
         conf_file.write_text(file_content)
 
-        result = config._load_config_from_ini_file(conf_file)  # pylint: disable=protected-access
+        result = config._load_config_from_ini_file(conf_file)
 
         assert result is not None
 
@@ -451,7 +450,7 @@ class TestIniFileLoader:
         conf_file.write_text(file_content)
         regex = re.compile("message")
 
-        result = config._load_config_from_ini_file(conf_file)  # pylint: disable=protected-access
+        result = config._load_config_from_ini_file(conf_file)
 
         assert result is not None
         assert result.report_level == config.ReportLevel.ERROR
@@ -474,7 +473,7 @@ class TestIniFileLoader:
         """
         conf_file.write_text(file_content)
 
-        result = config._load_config_from_ini_file(conf_file)  # pylint: disable=protected-access
+        result = config._load_config_from_ini_file(conf_file)
 
         assert result is not None
         assert result.ignore_directives == ["directive"]
@@ -493,7 +492,7 @@ class TestIniFileLoader:
         """
         conf_file.write_text(file_content)
 
-        result = config._load_config_from_ini_file(conf_file)  # pylint: disable=protected-access
+        result = config._load_config_from_ini_file(conf_file)
 
         assert result is not None
         assert result.ignore_directives == ["directive"]
@@ -510,7 +509,7 @@ class TestIniFileLoader:
         """
         conf_file.write_text(file_content)
 
-        result = config._load_config_from_ini_file(conf_file)  # pylint: disable=protected-access
+        result = config._load_config_from_ini_file(conf_file)
 
         assert result is not None
         assert result.report_level == config.ReportLevel.ERROR
@@ -532,7 +531,7 @@ class TestIniFileLoader:
         """
         conf_file.write_text(file_content)
 
-        result = config._load_config_from_ini_file(conf_file)  # pylint: disable=protected-access
+        result = config._load_config_from_ini_file(conf_file)
 
         assert result is not None
         assert result.report_level == config.ReportLevel.ERROR
@@ -547,7 +546,7 @@ class TestIniFileLoader:
         file_content = "[checkrst]"
         conf_file.write_text(file_content)
 
-        result = config._load_config_from_ini_file(conf_file)  # pylint: disable=protected-access
+        result = config._load_config_from_ini_file(conf_file)
 
         assert result is None
         assert f"Config file has no [rstcheck] section: '{conf_file}'." in caplog.text
@@ -562,9 +561,7 @@ class TestIniFileLoader:
         conf_file.write_text(file_content)
         caplog.set_level(logging.INFO)
 
-        result = config._load_config_from_ini_file(  # pylint: disable=protected-access
-            conf_file, log_missing_section_as_warning=False
-        )
+        result = config._load_config_from_ini_file(conf_file, log_missing_section_as_warning=False)
 
         assert result is None
         assert f"Config file has no [rstcheck] section: '{conf_file}'." in caplog.text
@@ -582,7 +579,7 @@ unkwown_setting=true
 """
         conf_file.write_text(file_content)
 
-        result = config._load_config_from_ini_file(  # pylint: disable=protected-access
+        result = config._load_config_from_ini_file(
             conf_file,
             log_missing_section_as_warning=False,
         )
@@ -603,7 +600,7 @@ unkwown_setting=true
 """
         conf_file.write_text(file_content)
 
-        result = config._load_config_from_ini_file(  # pylint: disable=protected-access
+        result = config._load_config_from_ini_file(
             conf_file,
             log_missing_section_as_warning=False,
             warn_unknown_settings=True,
@@ -626,7 +623,7 @@ report_level=INFO
 """
         conf_file.write_text(file_content)
 
-        result = config._load_config_from_ini_file(  # pylint: disable=protected-access
+        result = config._load_config_from_ini_file(
             conf_file,
             log_missing_section_as_warning=False,
             warn_unknown_settings=True,
@@ -645,7 +642,7 @@ class TestTomlFileLoader:
         """Test no config is loaded if NONE is set."""
         conf_file = pathlib.Path("NONE")
 
-        result = config._load_config_from_toml_file(conf_file)  # pylint: disable=protected-access
+        result = config._load_config_from_toml_file(conf_file)
 
         assert result is None
 
@@ -656,7 +653,7 @@ class TestTomlFileLoader:
         conf_file.touch()
 
         with pytest.raises(ValueError, match="File is not a TOML file"):
-            config._load_config_from_toml_file(conf_file)  # pylint: disable=protected-access
+            config._load_config_from_toml_file(conf_file)
 
     @staticmethod
     def test_missing_file_errors(tmp_path: pathlib.Path) -> None:
@@ -664,7 +661,7 @@ class TestTomlFileLoader:
         conf_file = tmp_path / "config.toml"
 
         with pytest.raises(FileNotFoundError):
-            config._load_config_from_toml_file(conf_file)  # pylint: disable=protected-access
+            config._load_config_from_toml_file(conf_file)
 
     @staticmethod
     def test_not_a_file_errors(tmp_path: pathlib.Path) -> None:
@@ -673,7 +670,7 @@ class TestTomlFileLoader:
         conf_file.mkdir()
 
         with pytest.raises(FileNotFoundError):
-            config._load_config_from_toml_file(conf_file)  # pylint: disable=protected-access
+            config._load_config_from_toml_file(conf_file)
 
     @staticmethod
     @pytest.mark.parametrize("invalid_section", ["[tool.not-rstcheck]", "[rstcheck]"])
@@ -682,7 +679,7 @@ class TestTomlFileLoader:
         conf_file = tmp_path / "config.toml"
         conf_file.write_text(invalid_section)
 
-        result = config._load_config_from_toml_file(conf_file)  # pylint: disable=protected-access
+        result = config._load_config_from_toml_file(conf_file)
 
         assert result is None
 
@@ -695,7 +692,7 @@ class TestTomlFileLoader:
         """
         conf_file.write_text(file_content)
 
-        result = config._load_config_from_toml_file(conf_file)  # pylint: disable=protected-access
+        result = config._load_config_from_toml_file(conf_file)
 
         assert result is not None
 
@@ -714,7 +711,7 @@ class TestTomlFileLoader:
         conf_file.write_text(file_content)
         regex = re.compile("message")
 
-        result = config._load_config_from_toml_file(conf_file)  # pylint: disable=protected-access
+        result = config._load_config_from_toml_file(conf_file)
 
         assert result is not None
         assert result.report_level == config.ReportLevel.ERROR
@@ -735,7 +732,7 @@ class TestTomlFileLoader:
         """
         conf_file.write_text(file_content)
 
-        result = config._load_config_from_toml_file(conf_file)  # pylint: disable=protected-access
+        result = config._load_config_from_toml_file(conf_file)
 
         assert result is not None
         assert result.report_level == config.ReportLevel.ERROR
@@ -757,7 +754,7 @@ class TestTomlFileLoader:
         """
         conf_file.write_text(file_content)
 
-        result = config._load_config_from_toml_file(conf_file)  # pylint: disable=protected-access
+        result = config._load_config_from_toml_file(conf_file)
 
         assert result is not None
         assert result.report_level == config.ReportLevel.ERROR
@@ -783,7 +780,7 @@ class TestTomlFileLoader:
         """
         conf_file.write_text(file_content)
 
-        result = config._load_config_from_toml_file(conf_file)  # pylint: disable=protected-access
+        result = config._load_config_from_toml_file(conf_file)
 
         assert result is not None
         assert result.report_level == parsed_value
@@ -807,7 +804,7 @@ class TestTomlFileLoader:
         """
         conf_file.write_text(file_content)
 
-        result = config._load_config_from_toml_file(conf_file)  # pylint: disable=protected-access
+        result = config._load_config_from_toml_file(conf_file)
 
         assert result is not None
         assert result.report_level == parsed_value
@@ -822,7 +819,7 @@ class TestTomlFileLoader:
         conf_file.write_text(file_content)
         regex = re.compile("some-regex")
 
-        result = config._load_config_from_toml_file(conf_file)  # pylint: disable=protected-access
+        result = config._load_config_from_toml_file(conf_file)
 
         assert result is not None
         assert result.ignore_messages == regex
@@ -837,7 +834,7 @@ class TestTomlFileLoader:
         conf_file.write_text(file_content)
         regex = re.compile(r"some-regex|another-regex")
 
-        result = config._load_config_from_toml_file(conf_file)  # pylint: disable=protected-access
+        result = config._load_config_from_toml_file(conf_file)
 
         assert result is not None
         assert result.ignore_messages == regex
@@ -851,7 +848,7 @@ class TestTomlFileLoader:
         file_content = "[tool.checkrst]"
         conf_file.write_text(file_content)
 
-        result = config._load_config_from_toml_file(conf_file)  # pylint: disable=protected-access
+        result = config._load_config_from_toml_file(conf_file)
 
         assert result is None
         assert f"Config file has no [tool.rstcheck] section: '{conf_file}'." in caplog.text
@@ -866,9 +863,7 @@ class TestTomlFileLoader:
         conf_file.write_text(file_content)
         caplog.set_level(logging.INFO)
 
-        result = config._load_config_from_toml_file(  # pylint: disable=protected-access
-            conf_file, log_missing_section_as_warning=False
-        )
+        result = config._load_config_from_toml_file(conf_file, log_missing_section_as_warning=False)
 
         assert result is None
         assert f"Config file has no [tool.rstcheck] section: '{conf_file}'." in caplog.text
@@ -886,7 +881,7 @@ unkwown_setting=true
 """
         conf_file.write_text(file_content)
 
-        result = config._load_config_from_toml_file(  # pylint: disable=protected-access
+        result = config._load_config_from_toml_file(
             conf_file,
             log_missing_section_as_warning=False,
         )
@@ -907,7 +902,7 @@ unkwown_setting=true
 """
         conf_file.write_text(file_content)
 
-        result = config._load_config_from_toml_file(  # pylint: disable=protected-access
+        result = config._load_config_from_toml_file(
             conf_file,
             log_missing_section_as_warning=False,
             warn_unknown_settings=True,
@@ -930,7 +925,7 @@ report_level="INFO"
 """
         conf_file.write_text(file_content)
 
-        result = config._load_config_from_toml_file(  # pylint: disable=protected-access
+        result = config._load_config_from_toml_file(
             conf_file,
             log_missing_section_as_warning=False,
             warn_unknown_settings=True,
@@ -1161,9 +1156,7 @@ class TestConfigDirLoader:
         file_content = "[checkrst]"
         conf_file.write_text(file_content)
 
-        result = config.load_config_file_from_dir(  # pylint: disable=protected-access
-            conf_dir, log_missing_section_as_warning=False
-        )
+        result = config.load_config_file_from_dir(conf_dir, log_missing_section_as_warning=False)
 
         assert result is None
         assert f"Config file has no [rstcheck] section: '{conf_file}'." in caplog.text
