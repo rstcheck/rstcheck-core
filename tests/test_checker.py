@@ -314,6 +314,27 @@ Test
 
         assert not result
 
+    @staticmethod
+    def test_stdin_message() -> None:
+        """Test code lint error message for stdin."""
+        source = """
+.. code:: python
+
+    print(
+"""
+        ignores = types.IgnoreDict(
+            messages=None,
+            languages=[],
+            directives=[],
+            roles=[],
+            substitutions=[],
+        )
+
+        result = list(checker.check_source(source, ignores=ignores))
+
+        assert len(result) == 1
+        assert result[0]["message"].startswith("<stdin>")
+
 
 class TestCodeCheckRunner:
     """Test ``_run_code_checker_and_filter_errors`` function."""
