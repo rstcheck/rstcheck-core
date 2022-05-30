@@ -15,7 +15,7 @@ MINOR = ("minor", "feature")
 MAJOR = ("major", "breaking")
 
 REPO_URL = "https://github.com/rstcheck/rstcheck-core"
-PYPI_URL = "https://pypi.org/project/rstcheck"
+PYPI_URL = "https://pypi.org/project/rstcheck-core"
 
 
 #: -- UTILS ----------------------------------------------------------------------------
