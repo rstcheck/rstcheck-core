@@ -23,6 +23,7 @@ NOTE: please use them in this order.
 
 - Add tox envs to test with sphinx v5.
 - Wide version range for `sphinx` extra to include v5.
+- Update `sphinx` `extlinks` config for v5.
 
 ## 1.0.1.post2 (2022-05-30)
 
