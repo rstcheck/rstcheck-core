@@ -243,6 +243,7 @@ class RstcheckMainRunner:
 
             print(message, file=output_file or sys.stderr)
 
+        print("Error! Issues detected.", file=output_file or sys.stderr)
         return 1
 
     def run(self) -> int:  # pragma: no cover

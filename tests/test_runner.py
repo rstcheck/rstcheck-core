@@ -456,6 +456,19 @@ class TestRstcheckMainRunnerResultPrinter:
         assert "Success! No issues detected." in capsys.readouterr().out
 
     @staticmethod
+    def test_error_message_on_error(
+        tmp_path: pathlib.Path, capsys: pytest.CaptureFixture[str]
+    ) -> None:
+        """Test error message is printed to stderr by default if errors are found."""
+        test_file = tmp_path / "nonexisting.rst"
+        init_config = config.RstcheckConfig()
+        _runner = runner.RstcheckMainRunner([test_file], init_config)
+
+        _runner.print_result()  # act
+
+        assert "Error! Issues detected." in capsys.readouterr().err
+
+    @staticmethod
     def test_success_message_print_to_file(tmp_path: pathlib.Path) -> None:
         """Test success message is printed to given file."""
         out_file = tmp_path / "outfile.txt"
