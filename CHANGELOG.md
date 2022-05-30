@@ -48,7 +48,7 @@ NOTE: please use them in this order.
 
 ### New features
 
-- Add function to create dummy `SPhinx` app ([#13](https://github.com/rstcheck/rstcheck-core/pull/13))
+- Add function to create dummy `Sphinx` app ([#13](https://github.com/rstcheck/rstcheck-core/pull/13))
 
 ### Bugfixes
 
