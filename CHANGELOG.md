@@ -19,6 +19,10 @@ NOTE: please use them in this order.
 
 [diff v1.0.0...main](https://github.com/rstcheck/rstcheck-core/compare/v1.0.0...main)
 
+### Miscellaneous
+
+- Changed log level for unparsable GCC style messages from WARNING to DEBUG to reduce noise.
+
 ## v1.0.0 (2022-05-29)
 
 [diff v1.0.0rc1...v1.0.0](https://github.com/rstcheck/rstcheck-core/compare/v1.0.0rc1...v1.0.0)
