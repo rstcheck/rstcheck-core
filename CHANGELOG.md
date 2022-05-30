@@ -21,7 +21,8 @@ NOTE: please use them in this order.
 
 ### Miscellaneous
 
-- Add tox envs to test with sphinx v5
+- Add tox envs to test with sphinx v5.
+- Wide version range for `sphinx` extra to include v5.
 
 ## 1.0.1.post2 (2022-05-30)
 
