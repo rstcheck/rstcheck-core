@@ -12,7 +12,7 @@ import docutils.nodes
 import docutils.utils
 import pytest
 
-from rstcheck_core import _extras, _sphinx, checker, config, types
+from rstcheck_core import _extras, checker, config, types
 
 
 def test_check_file(monkeypatch: pytest.MonkeyPatch) -> None:
@@ -337,9 +337,8 @@ Test
     print(
 """
         ignores = types.construct_ignore_dict()
-        with _sphinx.load_sphinx_if_available():
 
-            result = list(checker.check_source(source, ignores=ignores))
+        result = list(checker.check_source(source, ignores=ignores))
 
         assert len(result) == 1
         assert result[0]["line_number"] == 8
@@ -363,9 +362,8 @@ Test
     print(
 """
         ignores = types.construct_ignore_dict()
-        with _sphinx.load_sphinx_if_available():
 
-            result = list(checker.check_source(source, ignores=ignores))
+        result = list(checker.check_source(source, ignores=ignores))
 
         assert len(result) == 1
         assert result[0]["line_number"] == 8
