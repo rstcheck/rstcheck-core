@@ -1230,7 +1230,7 @@ class TestConfigPathLoader:
 
     @staticmethod
     def test_raises_on_nonexisting_path() -> None:
-        """Test raises OSError on path that is not a file or directory."""
+        """Test raises FileNotFoundError on path that is not a file or directory."""
         conf_file = pathlib.Path("does-not-exist-cfg")
 
         with pytest.raises(FileNotFoundError, match=re.compile("Passed config path not found.")):
