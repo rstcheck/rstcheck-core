@@ -168,6 +168,7 @@ Test
 
         result = list(checker.check_source(source))
 
+        assert len(result) == 1
         assert result[0]["source_origin"] == "<string>"
 
     @staticmethod
@@ -181,6 +182,7 @@ Test
 
         result = list(checker.check_source(source, test_file))
 
+        assert len(result) == 1
         assert result[0]["source_origin"] == test_file
 
     @staticmethod
@@ -193,6 +195,7 @@ Test
 
         result = list(checker.check_source(source))
 
+        assert len(result) == 1
         assert "Possible title underline, too short for the title" in result[0]["message"]
 
     @staticmethod
@@ -220,6 +223,7 @@ Test
 
         result = list(checker.check_source(source))
 
+        assert len(result) > 0
         assert 'No directive entry for "py:function"' in result[0]["message"]
 
     @staticmethod
@@ -249,6 +253,7 @@ Test
 
         result = list(checker.check_source(source))
 
+        assert len(result) == 1
         assert "unexpected EOF while parsing" in result[0]["message"]
 
     @staticmethod
@@ -263,6 +268,7 @@ Test
 
         result = list(checker.check_source(source))
 
+        assert len(result) == 1
         assert "'(' was never closed" in result[0]["message"]
 
     @staticmethod
@@ -461,6 +467,7 @@ print(
 
         result = list(cb_checker.check(source, "python"))
 
+        assert len(result) == 1
         assert "unexpected EOF while parsing" in result[0]["message"]
 
     @staticmethod
@@ -474,6 +481,7 @@ print(
 
         result = list(cb_checker.check(source, "python"))
 
+        assert len(result) == 1
         assert "'(' was never closed" in result[0]["message"]
 
     @staticmethod
@@ -502,6 +510,7 @@ print(
 
         result = list(cb_checker.check_python(source))
 
+        assert len(result) == 1
         assert "unexpected EOF while parsing" in result[0]["message"]
 
     @staticmethod
@@ -515,6 +524,7 @@ print(
 
         result = list(cb_checker.check_python(source))
 
+        assert len(result) == 1
         assert "'(' was never closed" in result[0]["message"]
 
     @staticmethod
@@ -553,6 +563,7 @@ if mystring is "ok":
 
         result = list(cb_checker.check_python(source))
 
+        assert len(result) == 1
         assert '"is" with a literal' in result[0]["message"]
 
     @staticmethod
@@ -581,6 +592,7 @@ if mystring is "ok":
 
         result = list(cb_checker.check_json(source))
 
+        assert len(result) == 1
         assert "Expecting value:" in result[0]["message"]
 
     @staticmethod
@@ -609,6 +621,7 @@ if mystring is "ok":
 
         result = list(cb_checker.check_xml(source))
 
+        assert len(result) == 1
         assert "mismatched tag:" in result[0]["message"]
 
     @staticmethod
@@ -635,6 +648,7 @@ Heading
 
         result = list(cb_checker.check_rst(source))
 
+        assert len(result) == 1
         assert "Title underline too short." in result[0]["message"]
 
     @staticmethod
@@ -663,6 +677,7 @@ Heading
 
         result = list(cb_checker.check_doctest(source))
 
+        assert len(result) == 1
         assert "lacks blank after >>>: '>>>> x'" in result[0]["message"]
 
     @staticmethod
@@ -711,6 +726,7 @@ fi
 
         result = list(cb_checker.check_bash(source))
 
+        assert len(result) == 1
         assert "syntax error: unexpected end of file" in result[0]["message"]
 
     @staticmethod
@@ -745,6 +761,7 @@ int main()
 
         result = list(cb_checker.check_c(source))
 
+        assert len(result) > 0
         assert (
             "error: \u2018x\u2019 undeclared (first use in this function)" in result[0]["message"]
         )
@@ -763,6 +780,7 @@ int main()
 
         result = list(cb_checker.check_c(source))
 
+        assert len(result) > 0
         assert "error: use of undeclared identifier 'x'" in result[0]["message"]
 
     @staticmethod
@@ -779,6 +797,7 @@ int main()
 
         result = list(cb_checker.check_c(source))
 
+        assert len(result) > 0
         assert "error: 'x' undeclared (first use in this function)" in result[0]["message"]
 
     @staticmethod
@@ -813,6 +832,7 @@ int main()
 
         result = list(cb_checker.check_cpp(source))
 
+        assert len(result) == 1
         assert "error: \u2018x\u2019 was not declared in this scope" in result[0]["message"]
 
     @staticmethod
@@ -829,6 +849,7 @@ int main()
 
         result = list(cb_checker.check_cpp(source))
 
+        assert len(result) == 1
         assert "error: use of undeclared identifier 'x'" in result[0]["message"]
 
     @staticmethod
@@ -845,6 +866,7 @@ int main()
 
         result = list(cb_checker.check_cpp(source))
 
+        assert len(result) == 1
         assert "error: 'x' was not declared in this scope" in result[0]["message"]
 
     @staticmethod
@@ -897,6 +919,7 @@ int main()
             )
         )
 
+        assert len(result) == 1
         assert "error: \u2018x\u2019 was not declared in this scope" in result[0]["message"]
 
     @staticmethod
@@ -922,6 +945,7 @@ int main()
             )
         )
 
+        assert len(result) == 1
         assert "error: use of undeclared identifier 'x'" in result[0]["message"]
 
     @staticmethod
@@ -947,6 +971,7 @@ int main()
             )
         )
 
+        assert len(result) == 1
         assert "error: 'x' was not declared in this scope" in result[0]["message"]
 
     @staticmethod
