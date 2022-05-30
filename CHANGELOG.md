@@ -27,7 +27,7 @@ NOTE: please use them in this order.
 
 - Update changelog with missing notes
 
-## [1.0.1 (2022-05-30)](https://pypi.org/project/rstcheck/1.0.1)
+## [1.0.1 (2022-05-30)](https://pypi.org/project/rstcheck-core/1.0.1)
 
 [diff v1.0.0...v1.0.1](https://github.com/rstcheck/rstcheck-core/compare/v1.0.0...v1.0.1)
 
