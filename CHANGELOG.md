@@ -26,7 +26,7 @@ NOTE: please use them in this order.
 ### Miscellaneous
 
 - Changed log level for unparsable GCC style messages from WARNING to DEBUG to reduce noise.
-- Log CRITICAL on AttributeError with sphinx support on, which mostly propably comes from
+- Log CRITICAL on AttributeError with sphinx support on, which mostly probably comes from
   language-less code blocks ([#13](https://github.com/rstcheck/rstcheck-core/pull/13))
 
 ## v1.0.0 (2022-05-29)
