@@ -34,6 +34,11 @@ NOTE: please use them in this order.
 - Fix link for PyPI in changelog for 1.0.1 release.
 - Fix link for PyPI in release script.
 
+### New features
+
+- Add function to register passed code block directives
+- Add function to register sphinx code block directives
+
 ## 1.0.1.post1 (2022-05-30)
 
 [diff v1.0.1...v1.0.1.post1](https://github.com/rstcheck/rstcheck-core/compare/v1.0.1...v1.0.1.post1)
