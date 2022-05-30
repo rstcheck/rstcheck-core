@@ -22,7 +22,7 @@ NOTE: please use them in this order.
 ### Miscellaneous
 
 - Add tox envs to test with sphinx v5.
-- Wide version range for `sphinx` extra to include v5.
+- Widen version range for `sphinx` extra to include v5.
 - Update `sphinx` `extlinks` config for v5.
 - Print error message on non-zero exit code ([#15](https://github.com/rstcheck/rstcheck-core/pull/15))
 - Add integration tests based off of cli tests from `rstcheck` cli app ([#16](https://github.com/rstcheck/rstcheck-core/pull/16))
