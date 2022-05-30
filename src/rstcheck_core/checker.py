@@ -147,7 +147,7 @@ def _create_ignore_dict_from_config(rstcheck_config: config.RstcheckConfig) -> t
     )
 
 
-def check_source(
+def check_source(  # noqa: CCR001
     source: str,
     source_file: t.Optional[pathlib.Path] = None,
     ignores: t.Optional[types.IgnoreDict] = None,
@@ -207,20 +207,31 @@ def check_source(
     with contextlib.suppress(UnicodeError):
         source = source.encode("utf-8").decode("utf-8-sig")
 
-    with contextlib.suppress(docutils.utils.SystemMessage, AttributeError):
+    with contextlib.suppress(docutils.utils.SystemMessage):
         # Sphinx will sometimes throw an `AttributeError` trying to access
         # "self.state.document.settings.env". Ignore this for now until we
         # figure out a better approach.
-        docutils.core.publish_string(
-            source,
-            writer=writer,
-            source_path=str(source_origin),
-            settings_overrides={
-                "halt_level": 5,
-                "report_level": report_level.value,
-                "warning_stream": string_io,
-            },
-        )
+        try:
+            docutils.core.publish_string(
+                source,
+                writer=writer,
+                source_path=str(source_origin),
+                settings_overrides={
+                    "halt_level": 5,
+                    "report_level": report_level.value,
+                    "warning_stream": string_io,
+                },
+            )
+        except AttributeError:
+            if not _extras.SPHINX_INSTALLED:
+                raise
+            logger.critical(
+                "An `AttributeError` error occured. This is most propably due to a code block "
+                "directive (code/code-block/sourcecode) without a specified language. "
+                f"This may result in a false negative for source: '{source_origin}'. "
+                "See https://rstcheck-core.readthedocs.io/en/latest/faq/"
+                "#code-blocks-without-language-sphinx for more information."
+            )
 
     yield from _run_code_checker_and_filter_errors(writer.checkers, ignores["messages"])
 

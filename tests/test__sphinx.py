@@ -13,6 +13,14 @@ if _extras.SPHINX_INSTALLED:
     import sphinx.application
 
 
+@pytest.mark.skipif(not _extras.SPHINX_INSTALLED, reason="Depends on sphinx extra.")
+def test_dummy_app_creator() -> None:
+    """Test creation of dummy sphinx app."""
+    result = _sphinx.create_dummy_sphinx_app()
+
+    assert isinstance(result, sphinx.application.Sphinx)
+
+
 class TestContextManager:
     """Test ``load_sphinx_if_available`` context manager."""
 
@@ -131,6 +139,20 @@ class TestDirectiveAndRoleFilter:
 
         assert "test-directive" not in result_directives
         assert "test-directive2" in result_directives
+
+    @staticmethod
+    @pytest.mark.skipif(not _extras.SPHINX_INSTALLED, reason="Depends on sphinx extra.")
+    def test_code_directives_are_filtered() -> None:
+        """Test code directives are filtered."""
+        (unfiltered_directives, _) = _sphinx.get_sphinx_directives_and_roles()
+
+        (result_directives, _) = _sphinx.filter_whitelisted_directives_and_roles(
+            unfiltered_directives, []
+        )  # act
+
+        assert "code" not in result_directives
+        assert "code-block" not in result_directives
+        assert "sourcecode" not in result_directives
 
     @staticmethod
     @pytest.mark.skipif(not _extras.SPHINX_INSTALLED, reason="Depends on sphinx extra.")

@@ -326,6 +326,8 @@ There are also control flow instructions which are only available as inline comm
 They change the flow of checking the rst source, hence the name.
 
 
+.. _skipping-code-blocks:
+
 Skipping code blocks
 ~~~~~~~~~~~~~~~~~~~~
 
