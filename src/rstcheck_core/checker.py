@@ -845,7 +845,7 @@ def _parse_gcc_style_error_message(
     colons = 2 if has_column else 1
     prefix = str(source_origin) + ":"
     if not message.startswith(prefix):
-        logger.warning(f"Skipping unparsable message: '{message}'.")
+        logger.debug(f"Skipping unparsable message: '{message}'.")
         raise ValueError("Message cannot be parsed.")
     message = message[len(prefix) :]
     split_message = message.split(":", colons)
