@@ -186,11 +186,12 @@ def check_source(  # noqa: CCR001
 
     source = _replace_ignored_substitutions(source, ignores["substitutions"])
 
-    _docutils.register_code_directive(
-        ignore_code_directive="code" in ignores["directives"],
-        ignore_codeblock_directive="code-block" in ignores["directives"],
-        ignore_sourcecode_directive="sourcecode" in ignores["directives"],
-    )
+    if not _extras.SPHINX_INSTALLED:
+        _docutils.register_rstcheck_code_directives(
+            ignore_code_directive="code" in ignores["directives"],
+            ignore_codeblock_directive="code-block" in ignores["directives"],
+            ignore_sourcecode_directive="sourcecode" in ignores["directives"],
+        )
 
     _docutils.ignore_directives_and_roles(ignores["directives"] or [], ignores["roles"] or [])
 
