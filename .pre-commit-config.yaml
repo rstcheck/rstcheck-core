@@ -244,12 +244,3 @@ repos:
     rev: 058fef75598d1a9d9250487d91549abf379878e0 # frozen: v1.26.3
     hooks:
       - id: yamllint
-
-  # ----------------------------------------------
-  # Validate .pre-commit-hooks.yaml file
-  # ----------------------------------------------
-
-  - repo: https://github.com/pre-commit/pre-commit
-    rev: cc9d950601cd3eba27e8395a7edcd455262705d9 # frozen: v2.19.0
-    hooks:
-      - id: validate_manifest
