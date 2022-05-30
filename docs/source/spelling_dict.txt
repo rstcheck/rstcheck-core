@@ -91,6 +91,7 @@ tokenize
 tox
 travis
 txt
+unparsable
 venv
 virtualenv
 whitespace
