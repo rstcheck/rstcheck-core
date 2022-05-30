@@ -125,7 +125,7 @@ class TestRegisterCodeDirective:
         assert "sourcecode" in docutils_directives._directives
 
 
-class TestRegisterRstcheckCodeDirectives:
+class TestRegisterRstcheckCodeDirectives:  # pylint: disable=duplicate-code
     """Test ``register_rstcheck_code_directives`` function."""
 
     @staticmethod
