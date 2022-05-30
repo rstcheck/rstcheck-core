@@ -12,7 +12,7 @@ import docutils.nodes
 import docutils.utils
 import pytest
 
-from rstcheck_core import _extras, checker, config, types
+from rstcheck_core import _extras, _sphinx, checker, config, types
 
 
 def test_check_file(monkeypatch: pytest.MonkeyPatch) -> None:
@@ -318,6 +318,58 @@ Test
 
         assert len(result) == 1
         assert result[0]["source_origin"] == "<stdin>"
+
+    @staticmethod
+    @pytest.mark.skipif(_extras.SPHINX_INSTALLED, reason="Test without sphinx extra.")
+    @pytest.mark.skipif(sys.version_info[0:2] > (3, 9), reason="Requires python3.9 or lower")
+    @pytest.mark.parametrize("code_block_directive", ["code", "code-block", "sourcecode"])
+    def test_code_block_without_language_works_without_sphinx_pre310(
+        code_block_directive: str,
+    ) -> None:
+        """Test code blocks without a language are not checked and do not error."""
+        source = f"""
+.. {code_block_directive}::
+
+    print(
+
+.. {code_block_directive}:: python
+
+    print(
+"""
+        ignores = types.construct_ignore_dict()
+        with _sphinx.load_sphinx_if_available():
+
+            result = list(checker.check_source(source, ignores=ignores))
+
+        assert len(result) == 1
+        assert result[0]["line_number"] == 8
+        assert "unexpected EOF while parsing" in result[0]["message"]
+
+    @staticmethod
+    @pytest.mark.skipif(_extras.SPHINX_INSTALLED, reason="Test without sphinx extra.")
+    @pytest.mark.skipif(sys.version_info < (3, 10), reason="Requires python3.10 or higher")
+    @pytest.mark.parametrize("code_block_directive", ["code", "code-block", "sourcecode"])
+    def test_code_block_without_language_works_without_sphinx(
+        code_block_directive: str,
+    ) -> None:
+        """Test code blocks without a language are not checked and do not error."""
+        source = f"""
+.. {code_block_directive}::
+
+    print(
+
+.. {code_block_directive}:: python
+
+    print(
+"""
+        ignores = types.construct_ignore_dict()
+        with _sphinx.load_sphinx_if_available():
+
+            result = list(checker.check_source(source, ignores=ignores))
+
+        assert len(result) == 1
+        assert result[0]["line_number"] == 8
+        assert "'(' was never closed" in result[0]["message"]
 
 
 class TestCodeCheckRunner:
