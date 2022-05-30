@@ -23,6 +23,14 @@ NOTE: please use them in this order.
 
 [diff v1.0.0...v1.0.1](https://github.com/rstcheck/rstcheck-core/compare/v1.0.0...v1.0.1)
 
+### New features
+
+- Add function to create dummy `SPhinx` app ([#13](https://github.com/rstcheck/rstcheck-core/pull/13))
+
+### Bugfixes
+
+- Fix `sourcecode` directive being ignored, when Sphinx support is active ([#13](https://github.com/rstcheck/rstcheck-core/pull/13))
+
 ### Documentation
 
 - Add section to FAQ about issue with language-less code blocks with sphinx ([#13](https://github.com/rstcheck/rstcheck-core/pull/13))
