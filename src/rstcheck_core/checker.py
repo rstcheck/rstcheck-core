@@ -25,6 +25,14 @@ import docutils.utils
 from . import _docutils, _extras, _sphinx, config, inline_config, types
 
 
+if _extras.SPHINX_INSTALLED:
+    import sphinx.application
+    import sphinx.config
+    import sphinx.environment
+    import sphinx.io
+    import sphinx.parsers
+
+
 logger = logging.getLogger(__name__)
 
 
@@ -208,31 +216,32 @@ def check_source(  # noqa: CCR001
     with contextlib.suppress(UnicodeError):
         source = source.encode("utf-8").decode("utf-8-sig")
 
+    source_path = source_origin
+    settings_overrides: t.Dict[str, t.Any] = {
+        "halt_level": 5,
+        "report_level": report_level.value,
+        "warning_stream": string_io,
+    }
+
+    if _extras.SPHINX_INSTALLED:
+        source_path = pathlib.Path(source_origin).resolve()
+
+        sphinx_env = sphinx.environment.BuildEnvironment()
+        sphinx_env.config = sphinx.config.Config()
+        sphinx_env.srcdir = str(source_path.parent)
+        sphinx_env.temp_data["docname"] = str(source_path)
+        sphinx_env.settings = settings_overrides
+        sphinx_env.settings["env"] = sphinx_env
+
+        settings_overrides = sphinx_env.settings
+
     with contextlib.suppress(docutils.utils.SystemMessage):
-        # Sphinx will sometimes throw an `AttributeError` trying to access
-        # "self.state.document.settings.env". Ignore this for now until we
-        # figure out a better approach.
-        try:
-            docutils.core.publish_string(
-                source,
-                writer=writer,
-                source_path=str(source_origin),
-                settings_overrides={
-                    "halt_level": 5,
-                    "report_level": report_level.value,
-                    "warning_stream": string_io,
-                },
-            )
-        except AttributeError:
-            if not _extras.SPHINX_INSTALLED:
-                raise
-            logger.critical(
-                "An `AttributeError` error occured. This is most propably due to a code block "
-                "directive (code/code-block/sourcecode) without a specified language. "
-                f"This may result in a false negative for source: '{source_origin}'. "
-                "See https://rstcheck-core.readthedocs.io/en/latest/faq/"
-                "#code-blocks-without-language-sphinx for more information."
-            )
+        docutils.core.publish_string(
+            source,
+            writer=writer,
+            source_path=str(source_path),
+            settings_overrides=settings_overrides,
+        )
 
     yield from _run_code_checker_and_filter_errors(writer.checkers, ignores["messages"])
 
