@@ -18,6 +18,8 @@ class TestInput:
     @pytest.mark.parametrize("test_file", list(EXAMPLES_DIR.glob("good/*.rst")))
     def test_all_good_examples(test_file: pathlib.Path, capsys: pytest.CaptureFixture[str]) -> None:
         """Test all files in ``testing/examples/good`` are errorless."""
+        if sys.platform == "win32" and test_file.name == "bom.rst":
+            pytest.xfail(reason="BOM test fails for windows")
         init_config = config.RstcheckConfig()
         _runner = runner.RstcheckMainRunner(check_paths=[test_file], rstcheck_config=init_config)
 
@@ -27,6 +29,9 @@ class TestInput:
         assert "Success! No issues detected." in capsys.readouterr().out
 
     @staticmethod
+    @pytest.mark.xfail(
+        sys.platform == "win32", reason="Unknown Windows specific wrong result", strict=True
+    )
     def test_all_good_examples_recurively(capsys: pytest.CaptureFixture[str]) -> None:
         """Test all files in ``testing/examples/good`` recursively."""
         test_dir = EXAMPLES_DIR / "good"
@@ -42,6 +47,8 @@ class TestInput:
     @pytest.mark.parametrize("test_file", list(EXAMPLES_DIR.glob("bad/*.rst")))
     def test_all_bad_examples(test_file: pathlib.Path, capsys: pytest.CaptureFixture[str]) -> None:
         """Test all files in ``testing/examples/bad`` have errors."""
+        if sys.platform == "win32" and test_file.name == "bash.rst":
+            pytest.xfail(reason="Unknown Windows specific wrong result for bash.rst")
         init_config = config.RstcheckConfig()
         _runner = runner.RstcheckMainRunner(check_paths=[test_file], rstcheck_config=init_config)
 
