@@ -428,7 +428,7 @@ Test
         assert "'(' was never closed" in result[0]["message"]
 
     @staticmethod
-    @pytest.mark.skipif(not _extras.SPHINX_INSTALLED, reason="Depends on sphinx extra.")
+    @pytest.mark.skipif(_extras.SPHINX_INSTALLED, reason="Test without sphinx extra.")
     @pytest.mark.parametrize("code_block_directive", ["code", "code-block", "sourcecode"])
     def test_code_block_without_language_logs_nothing_without_sphinx(
         code_block_directive: str,
