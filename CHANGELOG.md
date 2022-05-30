@@ -25,6 +25,7 @@ NOTE: please use them in this order.
 - Wide version range for `sphinx` extra to include v5.
 - Update `sphinx` `extlinks` config for v5.
 - Print error message on non-zero exit code ([#15](https://github.com/rstcheck/rstcheck-core/pull/15))
+- Add integration tests based off of cli tests from `rstcheck` cli app ([#16](https://github.com/rstcheck/rstcheck-core/pull/16))
 
 ## 1.0.1.post2 (2022-05-30)
 
