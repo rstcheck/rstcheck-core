@@ -13,6 +13,14 @@ if _extras.SPHINX_INSTALLED:
     import sphinx.application
 
 
+@pytest.mark.skipif(not _extras.SPHINX_INSTALLED, reason="Depends on sphinx extra.")
+def test_dummy_app_creator() -> None:
+    """Test creation of dummy sphinx app."""
+    result = _sphinx.create_dummy_sphinx_app()
+
+    assert isinstance(result, sphinx.application.Sphinx)
+
+
 class TestContextManager:
     """Test ``load_sphinx_if_available`` context manager."""
 
