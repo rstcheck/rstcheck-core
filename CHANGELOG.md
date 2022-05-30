@@ -19,6 +19,10 @@ NOTE: please use them in this order.
 
 [diff v1.0.1.post2...main](https://github.com/rstcheck/rstcheck-core/compare/v1.0.1.post1...main)
 
+### Miscellaneous
+
+- Add tox envs to test with sphinx v5
+
 ## 1.0.1.post2 (2022-05-30)
 
 [diff v1.0.1.post1...v1.0.1.post2](https://github.com/rstcheck/rstcheck-core/compare/v1.0.1.post1...v1.0.1.post2)
