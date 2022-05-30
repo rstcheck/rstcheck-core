@@ -17,7 +17,16 @@ NOTE: please use them in this order.
 
 ## Unreleased
 
-[diff v1.0.1.post1...main](https://github.com/rstcheck/rstcheck-core/compare/v1.0.1.post1...main)
+[diff v1.0.1.post2...main](https://github.com/rstcheck/rstcheck-core/compare/v1.0.1.post1...main)
+
+## 1.0.1.post2 (2022-05-30)
+
+[diff v1.0.1.post1...v1.0.1.post2](https://github.com/rstcheck/rstcheck-core/compare/v1.0.1.post1...v1.0.1.post2)
+
+### Miscellaneous
+
+- Fix link for PyPI in changelog for 1.0.1 release.
+- Fix link for PyPI in release script.
 
 ## 1.0.1.post1 (2022-05-30)
 
