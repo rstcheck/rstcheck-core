@@ -19,9 +19,15 @@ NOTE: please use them in this order.
 
 [diff v1.0.0...main](https://github.com/rstcheck/rstcheck-core/compare/v1.0.0...main)
 
+### Documentation
+
+- Add section to FAQ about issue with language-less code blocks with sphinx ([#13](https://github.com/rstcheck/rstcheck-core/pull/13))
+
 ### Miscellaneous
 
 - Changed log level for unparsable GCC style messages from WARNING to DEBUG to reduce noise.
+- Log CRITICAL on AttributeError with sphinx support on, which mostly propably comes from
+  language-less code blocks ([#13](https://github.com/rstcheck/rstcheck-core/pull/13))
 
 ## v1.0.0 (2022-05-29)
 
