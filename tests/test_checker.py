@@ -326,7 +326,7 @@ Test
     def test_code_block_without_language_works_without_sphinx_pre310(
         code_block_directive: str,
     ) -> None:
-        """Test code blocks without a language are not checked and do not error."""
+        """Test code blocks without a language are not checked and do not error without sphinx."""
         source = f"""
 .. {code_block_directive}::
 
@@ -351,7 +351,7 @@ Test
     def test_code_block_without_language_works_without_sphinx(
         code_block_directive: str,
     ) -> None:
-        """Test code blocks without a language are not checked and do not error."""
+        """Test code blocks without a language are not checked and do not error without sphinx."""
         source = f"""
 .. {code_block_directive}::
 
@@ -379,7 +379,7 @@ Test
     def test_code_block_without_language_is_works_with_sphinx_pre310(
         code_block_directive: str,
     ) -> None:
-        """Test code blocks without a language are working and do not error."""
+        """Test code blocks without a language are working and do not error with sphinx."""
         source = f"""
 .. {code_block_directive}::
 
@@ -408,7 +408,7 @@ Test
     def test_code_block_without_language_is_works_with_sphinx(
         code_block_directive: str,
     ) -> None:
-        """Test code blocks without a language are working and do not error."""
+        """Test code blocks without a language are working and do not error with sphinx."""
         source = f"""
 .. {code_block_directive}::
 
@@ -426,6 +426,66 @@ Test
         assert len(result) == 1
         assert result[0]["line_number"] == 9
         assert "'(' was never closed" in result[0]["message"]
+
+    @staticmethod
+    @pytest.mark.skipif(not _extras.SPHINX_INSTALLED, reason="Depends on sphinx extra.")
+    @pytest.mark.parametrize("code_block_directive", ["code", "code-block", "sourcecode"])
+    def test_code_block_without_language_logs_nothing_without_sphinx(
+        code_block_directive: str,
+        caplog: pytest.LogCaptureFixture,
+    ) -> None:
+        """Test code blocks without a language log nothing and do not error without sphinx.
+
+        Conter part to the XFAIL tests ``test_code_block_without_language_is_works_with_sphinx``.
+        """
+        source = f"""
+.. {code_block_directive}::
+
+    print(
+
+.. {code_block_directive}:: python
+
+    print(
+"""
+        ignores = types.construct_ignore_dict()
+        with _sphinx.load_sphinx_if_available():
+
+            result = list(checker.check_source(source, ignores=ignores))
+
+        assert result
+        assert "An `AttributeError` error occured" not in caplog.text
+        assert (
+            "directive (code/code-block/sourcecode) without a specified language" not in caplog.text
+        )
+
+    @staticmethod
+    @pytest.mark.skipif(not _extras.SPHINX_INSTALLED, reason="Depends on sphinx extra.")
+    @pytest.mark.parametrize("code_block_directive", ["code", "code-block", "sourcecode"])
+    def test_code_block_without_language_logs_critcal_with_sphinx(
+        code_block_directive: str,
+        caplog: pytest.LogCaptureFixture,
+    ) -> None:
+        """Test code blocks without a language log critical and do not error with sphinx.
+
+        Conter part to the XFAIL tests ``test_code_block_without_language_is_works_with_sphinx``.
+        """
+        source = f"""
+.. {code_block_directive}::
+
+    print(
+
+.. {code_block_directive}:: python
+
+    print(
+"""
+        ignores = types.construct_ignore_dict()
+        with _sphinx.load_sphinx_if_available():
+
+            result = list(checker.check_source(source, ignores=ignores))
+
+        assert not result
+        assert "An `AttributeError` error occured" in caplog.text
+        assert "directive (code/code-block/sourcecode) without a specified language" in caplog.text
 
 
 class TestCodeCheckRunner:
