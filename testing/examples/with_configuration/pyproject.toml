@@ -1,0 +1,15 @@
+[tool.rstcheck]
+ignore_directives = [
+	"foobar",
+	"custom-directive"
+]
+ignore_roles = [
+	"custom-role"
+]
+ignore_messages = [
+	"(Title underline too short\\.$)"
+]
+ignore_languages = [
+	"cpp"
+]
+report_level = "warning"
