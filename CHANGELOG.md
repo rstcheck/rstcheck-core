@@ -25,6 +25,7 @@ NOTE: please use them in this order.
 
 ### Miscellaneous
 
+- Fix release script's changelog insertion
 - Add pre-commit-ci badge to README
 - Update development tooling dependencies
 

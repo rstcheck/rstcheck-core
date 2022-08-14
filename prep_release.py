@@ -14,8 +14,7 @@ PATCH = ("patch", "bugfix")
 MINOR = ("minor", "feature")
 MAJOR = ("major", "breaking")
 
-REPO_URL = "https://github.com/rstcheck/rstcheck-core"
-PYPI_URL = "https://pypi.org/project/rstcheck-core"
+REPO_URL = "https://github.com/rstcheck/rstcheck"
 
 
 #: -- UTILS ----------------------------------------------------------------------------
@@ -138,18 +137,17 @@ def update_changelog(new_version: str, last_version: str, first_release: bool) -
         changelog_lines[release_line] = (
             "## Unreleased\n"
             "\n"
-            f"[diff v{new_version}...main]({REPO_URL}/compare/v{new_version}...main)\n"
+            f"[diff v{new_version}...main]"
+            f"({REPO_URL}/compare/v{new_version}...main)\n"
             "\n"
-            f"## [{new_version} ({today})]({PYPI_URL}/{new_version})\n"
+            f"## [{new_version} ({today})]({REPO_URL}/releases/v{new_version})\n"
             "\n"
             f"[diff {compare}]({REPO_URL}/compare/{compare})"
         )
-        #: Remove blank line after release line
-        changelog_lines.pop(release_line + 1)
 
-    #: Remove [diff ...] link line
-    if len(changelog_lines) - 1 >= release_line + 1:
-        changelog_lines.pop(release_line + 1)
+    if len(changelog_lines) - 1 >= release_line + 2:
+        changelog_lines.pop(release_line + 1)  # Remove blank line
+        changelog_lines.pop(release_line + 1)  # Remove [diff ...] link line
 
     with open("CHANGELOG.md", "w", encoding="utf8") as changelog_file:
         changelog_file.write("\n".join(changelog_lines))
