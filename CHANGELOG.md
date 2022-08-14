@@ -19,6 +19,10 @@ NOTE: please use them in this order.
 
 [diff v1.0.2...main](https://github.com/rstcheck/rstcheck-core/compare/v1.0.2...main)
 
+### Documentation
+
+- Update release docs for changed release script
+
 ### Miscellaneous
 
 - Add pre-commit-ci badge to README
