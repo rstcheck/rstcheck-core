@@ -17,6 +17,7 @@ if _extras.SPHINX_INSTALLED:
     import sphinx.domains.javascript
     import sphinx.domains.python
     import sphinx.domains.std
+    import sphinx.util.docutils
 
 
 logger = logging.getLogger(__name__)
@@ -34,7 +35,7 @@ def create_dummy_sphinx_app() -> sphinx.application.Sphinx:
             doctreedir=str(outdir),
             buildername="dummy",
             # NOTE: https://github.com/sphinx-doc/sphinx/issues/10483
-            status=None,  # type: ignore[arg-type]
+            status=None,
         )
 
         return sphinx_app
@@ -79,10 +80,10 @@ def get_sphinx_directives_and_roles() -> t.Tuple[t.List[str], t.List[str]]:
         sphinx_roles += domain_roles + [f"{domain.name}:{item}" for item in domain_roles]
 
     sphinx_directives += list(
-        sphinx.application.docutils.directives._directives  # pylint: disable=protected-access
+        sphinx.util.docutils.directives._directives  # type: ignore[attr-defined] # pylint: disable=protected-access # noqa: B950
     )
     sphinx_roles += list(
-        sphinx.application.docutils.roles._roles  # pylint: disable=protected-access
+        sphinx.util.docutils.roles._roles  # type: ignore[attr-defined] # pylint: disable=protected-access
     )
 
     return (sphinx_directives, sphinx_roles)

@@ -2,14 +2,9 @@
 import pathlib
 import typing as t
 
-import docutils.parsers.rst
 import pytest
 
 from rstcheck_core import _extras
-
-
-if _extras.SPHINX_INSTALLED:
-    import sphinx.application
 
 
 REPO_DIR = pathlib.Path(__file__).resolve().parents[1].resolve()
@@ -28,10 +23,8 @@ def _patch_docutils_directives_and_roles_dict_fixture(monkeypatch: pytest.Monkey
     test_dict_roles: t.Dict[str, t.Any] = {}
 
     if _extras.SPHINX_INSTALLED:
-        monkeypatch.setattr(
-            sphinx.application.docutils.directives, "_directives", test_dict_directives
-        )
-        monkeypatch.setattr(sphinx.application.docutils.roles, "_roles", test_dict_roles)
+        monkeypatch.setattr("sphinx.util.docutils.directives._directives", test_dict_directives)
+        monkeypatch.setattr("sphinx.util.docutils.roles._roles", test_dict_roles)
     else:
-        monkeypatch.setattr(docutils.parsers.rst.directives, "_directives", test_dict_directives)
-        monkeypatch.setattr(docutils.parsers.rst.roles, "_roles", test_dict_roles)
+        monkeypatch.setattr("docutils.parsers.rst.directives._directives", test_dict_directives)
+        monkeypatch.setattr("docutils.parsers.rst.roles._roles", test_dict_roles)

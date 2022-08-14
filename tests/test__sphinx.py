@@ -111,11 +111,9 @@ class TestSphinxDirectiveAndRoleGetter:
     def test_docutils_state_dict_is_loaded(monkeypatch: pytest.MonkeyPatch) -> None:
         """Test docutils' state is loaded."""
         test_dict_directives: t.Dict[str, t.Any] = {"test-directive": "test-directive"}
-        monkeypatch.setattr(
-            sphinx.application.docutils.directives, "_directives", test_dict_directives
-        )
+        monkeypatch.setattr("sphinx.util.docutils.directives._directives", test_dict_directives)
         test_dict_roles: t.Dict[str, t.Any] = {"test-role": "test-role"}
-        monkeypatch.setattr(sphinx.application.docutils.roles, "_roles", test_dict_roles)
+        monkeypatch.setattr("sphinx.util.docutils.roles._roles", test_dict_roles)
 
         (result_directives, result_roles) = _sphinx.get_sphinx_directives_and_roles()  # act
 
