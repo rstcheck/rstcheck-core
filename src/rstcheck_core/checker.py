@@ -809,7 +809,7 @@ class CodeBlockChecker:
         :return: :py:obj:`None` if no issues were found else a tuple of the stderr and temp-file
             name
         """
-        get_encoding = lambda: locale.getpreferredencoding() or sys.getdefaultencoding()
+        encoding = locale.getpreferredencoding() or sys.getdefaultencoding()
 
         source_origin_path = self.source_origin
         if isinstance(source_origin_path, str):
@@ -833,7 +833,7 @@ class CodeBlockChecker:
             )
 
             if result.returncode != 0:
-                return (result.stderr.decode(get_encoding()), temporary_file_path)
+                return (result.stderr.decode(encoding), temporary_file_path)
             return None
         finally:
             temporary_file_path.unlink()
