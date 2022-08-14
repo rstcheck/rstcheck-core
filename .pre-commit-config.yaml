@@ -25,7 +25,7 @@ repos:
 
   # file checking out-of-the-box hooks
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: db7346d375eda68a0174f2c057dd97f2fbffe030 # frozen: v4.2.0
+    rev: 3298ddab3c13dd77d6ce1fc0baf97691430d84b0 # frozen: v4.3.0
     hooks:
       - id: check-case-conflict
       - id: check-shebang-scripts-are-executable
@@ -36,7 +36,7 @@ repos:
 
   # safety - python dependency vulnerability checker
   - repo: https://github.com/Lucas-C/pre-commit-hooks-safety
-    rev: d0c2c5156e146e5030e6aafff1a0cb398875b4f2 # frozen: v1.2.4
+    rev: 8131ecce7c746aa3c0f8ebb453a6df1e0f62b8b5 # frozen: v1.3.0
     hooks:
       - id: python-safety-dependencies-check
         args: ["--full-report"]
@@ -55,7 +55,7 @@ repos:
 
   # pyupgrade - upgrade old syntax to new
   - repo: https://github.com/asottile/pyupgrade
-    rev: 4d35c00c9ff5a51a853a89137db5fdd2bdf0ca95 # frozen: v2.32.1
+    rev: a78007c1e9de96e71d5fb3e720c2b9fae8ed8abf # frozen: v2.37.3
     hooks:
       - id: pyupgrade
         args: ["--py37-plus"]
@@ -68,7 +68,7 @@ repos:
 
   # black - python formatter
   - repo: https://github.com/psf/black
-    rev: ae2c0758c9e61a385df9700dc9c231bf54887041 # frozen: 22.3.0
+    rev: f6c139c5215ce04fd3e73a900f1372942d58eca0 # frozen: 22.6.0
     hooks:
       - id: black
         args: ["--safe"]
@@ -86,7 +86,7 @@ repos:
 
   # prettier - multi formatter
   - repo: https://github.com/pre-commit/mirrors-prettier
-    rev: 5e374fda194d7f7ce9eebbd582b2a5594838c85b # frozen: v2.6.2
+    rev: 50c5478ed9e10bf360335449280cf2a67f4edb7a # frozen: v2.7.1
     hooks:
       - id: prettier
 
@@ -117,7 +117,7 @@ repos:
 
   # code unspecific out-of-the-box hooks
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: db7346d375eda68a0174f2c057dd97f2fbffe030 # frozen: v4.2.0
+    rev: 3298ddab3c13dd77d6ce1fc0baf97691430d84b0 # frozen: v4.3.0
     hooks:
       - id: end-of-file-fixer
         stages: [commit]
@@ -147,7 +147,7 @@ repos:
 
   # code unspecific out-of-the-box hooks
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: db7346d375eda68a0174f2c057dd97f2fbffe030 # frozen: v4.2.0
+    rev: 3298ddab3c13dd77d6ce1fc0baf97691430d84b0 # frozen: v4.3.0
     hooks:
       - id: check-merge-conflict
       - id: detect-private-key
@@ -158,7 +158,7 @@ repos:
 
   # python specific out-of-the-box hooks
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: db7346d375eda68a0174f2c057dd97f2fbffe030 # frozen: v4.2.0
+    rev: 3298ddab3c13dd77d6ce1fc0baf97691430d84b0 # frozen: v4.3.0
     hooks:
       - id: debug-statements
       - id: fix-encoding-pragma
@@ -178,12 +178,12 @@ repos:
 
   # flakeheaven - wrapper for flake8
   - repo: https://github.com/flakeheaven/flakeheaven
-    rev: "20f94457744c47d965d4520d3b22def538b0cc49" # frozen: 0.11.1
+    rev: e32a6e822ae45390c9e02b5491d808d5a14971ba # frozen: 3.0.0
     hooks:
       - id: flakeheaven
         types: [python]
         additional_dependencies:
-          - "git+https://github.com/cielquan/my-flake8-plugins.git@v1.3.1"
+          - "git+https://github.com/cielquan/my-flake8-plugins.git@v1.5.0"
 
   # Lint hooks managed via tox envs b/c they need the pkg installed
   - repo: local
@@ -212,7 +212,7 @@ repos:
 
   # poetry - python dependency maJSONnagement
   - repo: https://github.com/python-poetry/poetry
-    rev: 1492f0efa8aae73843f7c68ae06b74d2ac78bdd7 # frozen: 1.2.0b1
+    rev: 536c7990696d73398ce380f2070e12d019eb1929 # frozen: 1.2.0b3
     hooks:
       - id: poetry-check
 
@@ -232,7 +232,7 @@ repos:
 
   # rstcheck - rst file checker
   - repo: https://github.com/rstcheck/rstcheck
-    rev: fe0866883f96071f9b1bb37f6cb445727124b785 # PR
+    rev: 2e2717d279fc149e1d0e063b42e2def3a08d37c1 # frozen: v6.0.0.post1
     hooks:
       - id: rstcheck
         additional_dependencies: [sphinx]
@@ -245,7 +245,7 @@ repos:
 
   # markdownlint - md file checker
   - repo: https://github.com/DavidAnson/markdownlint-cli2
-    rev: 79c5e552066e7ad28aca449e7f2eed692a603abf # frozen: v0.4.0
+    rev: c303058e614a540cf34066afe16cefb1521f8dec # frozen: v0.5.1
     hooks:
       - id: markdownlint-cli2
 
@@ -255,13 +255,13 @@ repos:
 
   # JSON specific out-of-the-box hooks
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: db7346d375eda68a0174f2c057dd97f2fbffe030 # frozen: v4.2.0
+    rev: 3298ddab3c13dd77d6ce1fc0baf97691430d84b0 # frozen: v4.3.0
     hooks:
       - id: check-toml
       - id: check-yaml
 
   # yamllint - yaml linter
   - repo: https://github.com/adrienverge/yamllint
-    rev: 058fef75598d1a9d9250487d91549abf379878e0 # frozen: v1.26.3
+    rev: a09ad89268e9042349b764084426617da69957d3 # frozen: v1.27.1
     hooks:
       - id: yamllint
