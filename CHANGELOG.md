@@ -22,6 +22,7 @@ NOTE: please use them in this order.
 ### Miscellaneous
 
 - Add pre-commit-ci badge to README
+- Update development tooling dependencies
 
 ## [1.0.2 (2022-05-30)](https://pypi.org/project/rstcheck-core/1.0.2)
 
