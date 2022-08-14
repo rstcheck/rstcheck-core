@@ -7,7 +7,7 @@ rstcheck-core
 |                   +---------------------------------------------------------------------------------------------+
 |                   | |rtd|                                                                                       |
 +-------------------+---------------------------------------------------------------------------------------------+
-| **CI**            | |gha_tests| |gha_docu| |gha_qa|                                                             |
+| **CI**            | |gha_tests| |gha_docu| |gha_qa| |pre_commit_ci|                                             |
 +-------------------+---------------------------------------------------------------------------------------------+
 | **PyPI**          | |pypi_release| |pypi_py_versions| |pypi_implementations|                                    |
 |                   +---------------------------------------------------------------------------------------------+
@@ -99,6 +99,9 @@ Supported languages in code blocks
     :target: https://github.com/rstcheck/rstcheck-core/actions/workflows/qa.yaml
     :alt: QA status
 
+.. |pre_commit_ci| image:: https://results.pre-commit.ci/badge/github/rstcheck/rstcheck-core/main.svg
+    :target: https://results.pre-commit.ci/latest/github/rstcheck-core/rstcheck/main
+    :alt: pre-commit status
 
 .. PyPI
 
