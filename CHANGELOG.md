@@ -22,6 +22,7 @@ NOTE: please use them in this order.
 ### Documentation
 
 - Update release docs for changed release script
+- Restructure FAQ in docs
 
 ### Miscellaneous
 
