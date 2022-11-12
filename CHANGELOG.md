@@ -29,6 +29,7 @@ NOTE: please use them in this order.
 - Fix release script's changelog insertion
 - Add pre-commit-ci badge to README
 - Update development tooling dependencies
+- Update GHA workflows ([#22](https://github.com/rstcheck/rstcheck-core/issues/22))
 
 ## [1.0.2 (2022-05-30)](https://pypi.org/project/rstcheck-core/1.0.2)
 
