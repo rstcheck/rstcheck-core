@@ -31,6 +31,7 @@ NOTE: please use them in this order.
 - Update development tooling dependencies
 - Update GHA workflows ([#22](https://github.com/rstcheck/rstcheck-core/issues/22))
 - Add support for python 3.11 ([#21](https://github.com/rstcheck/rstcheck-core/issues/21))
+- Update docutils version constraint ([#20](https://github.com/rstcheck/rstcheck-core/issues/20))
 
 ## [1.0.2 (2022-05-30)](https://pypi.org/project/rstcheck-core/1.0.2)
 
