@@ -39,14 +39,14 @@ class TestInstallGuard:
 
     @staticmethod
     @pytest.mark.skipif(_extras.SPHINX_INSTALLED, reason="Test without sphinx extra.")
-    def test_false_on_missing_sphinx_package() -> None:
+    def test_error_on_missing_sphinx_package() -> None:
         """Test install-guard raises exception when ``sphinx`` is missing."""
         with pytest.raises(ModuleNotFoundError):
             _extras.install_guard("sphinx")  # act
 
     @staticmethod
     @pytest.mark.skipif(not _extras.SPHINX_INSTALLED, reason="Depends on sphinx extra.")
-    def test_true_on_installed_sphinx_package() -> None:
+    def test_ok_on_installed_sphinx_package() -> None:
         """Test install-guard doesn't raise when ``sphinx`` is installed."""
         _extras.install_guard("sphinx")  # act
 
