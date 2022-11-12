@@ -12,8 +12,14 @@ import pydantic
 from . import _extras
 
 
-if _extras.TOMLI_INSTALLED:  # pragma: no cover
-    import tomli
+tomllib_imported = False
+try:
+    import tomllib  # type: ignore[import]
+
+    tomllib_imported = True
+except ModuleNotFoundError:
+    if _extras.TOMLI_INSTALLED:  # pragma: no cover
+        import tomli as tomllib  # type: ignore[no-redef]
 
 
 logger = logging.getLogger(__name__)
@@ -278,7 +284,7 @@ def _load_config_from_toml_file(
 
     .. warning::
 
-        Needs tomli installed!
+        Needs tomli installed for python versions before 3.11!
         Use toml extra.
 
     :param toml_file: TOML file to load config from
@@ -292,7 +298,7 @@ def _load_config_from_toml_file(
     :return: instance of :py:class:`RstcheckConfigFile` or :py:obj:`None` on missing config section
         or ``NONE`` is passed as the config path.
     """
-    _extras.install_guard("tomli")
+    _extras.install_guard_tomli(tomllib_imported)
     logger.debug(f"Try loading config from TOML file: '{toml_file}'.")
 
     if toml_file.name == "NONE":
@@ -310,7 +316,7 @@ def _load_config_from_toml_file(
         raise ValueError("File is not a TOML file")
 
     with open(resolved_file, "rb") as toml_file_handle:
-        toml_dict = tomli.load(toml_file_handle)
+        toml_dict = tomllib.load(toml_file_handle)
 
     optional_rstcheck_section = t.Optional[t.Dict[str, t.Any]]
     rstcheck_section: optional_rstcheck_section = toml_dict.get("tool", {}).get("rstcheck")
@@ -344,7 +350,7 @@ def load_config_file(
 
     .. caution::
 
-        If a TOML file is passed this function need tomli installed!
+        If a TOML file is passed this function need tomli installed for python versions before 3.11!
         Use toml extra or install manually.
 
     :param file_path: File to load config from
