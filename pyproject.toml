@@ -57,6 +57,7 @@ my-flake8-plugins = { git = "https://github.com/cielquan/my-flake8-plugins.git",
 pylint = ">=2.12"
 mypy = ">=0.931"
 pytest = ">=6.0"
+pytest-mock = ">=3.7"
 sphinx = ">=4.0"
 sphinx-rtd-theme = "*"
 
