@@ -129,7 +129,8 @@ TOML format
 
 .. note::
 
-    TOML format is only supported when the python library ``tomli`` is importable.
+    TOML format is only supported when the python library ``tomli`` is importable if the used
+    python version is lower than 3.11.
     See the :ref:`installation:Installation` section for more information.
 
 In TOML format all config related to ``rstcheck-core`` must go into the ``[tool.rstcheck]``

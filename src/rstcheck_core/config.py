@@ -278,7 +278,7 @@ def _load_config_from_toml_file(
 
     .. warning::
 
-        Needs tomli installed!
+        Needs tomli installed for python versions before 3.11!
         Use toml extra.
 
     :param toml_file: TOML file to load config from
@@ -344,7 +344,7 @@ def load_config_file(
 
     .. caution::
 
-        If a TOML file is passed this function need tomli installed!
+        If a TOML file is passed this function need tomli installed for python versions before 3.11!
         Use toml extra or install manually.
 
     :param file_path: File to load config from
