@@ -92,3 +92,21 @@ def install_guard(package: ExtraDependencies) -> None:
         f"Install rstcheck with {extra} extra (rstcheck[{extra}]) or "
         f"install a supported version of {package} yourself."
     )
+
+
+def install_guard_tomli(tomllib_imported: bool) -> None:
+    """Specific version of :py:func:`install_guard` for ``tomli``.
+
+    :param tomllib_imported: If tomllib is imported
+    :raises ModuleNotFoundError: When ``tomli`` is not installed.
+    """
+    if tomllib_imported or ExtraDependenciesInstalled["tomli"] is True:
+        return
+
+    extra = ExtraDependenciesInfos["tomli"]
+
+    raise ModuleNotFoundError(
+        "tomllib could not be imported and no supported version of tomli installed. "
+        f"Install rstcheck with {extra} extra (rstcheck[{extra}]) or "
+        f"install a supported version of tomli yourself."
+    )
