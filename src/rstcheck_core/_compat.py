@@ -8,12 +8,12 @@ except ImportError:  # pragma: py-gte-38
 try:
     from typing import Literal
 except ImportError:  # pragma: py-gte-38
-    from typing_extensions import Literal  # type: ignore[misc]
+    from typing_extensions import Literal  # type: ignore[assignment]
 
 try:
     from typing import Protocol
 except ImportError:  # pragma: py-gte-38
-    from typing_extensions import Protocol  # type: ignore[misc]
+    from typing_extensions import Protocol  # type: ignore[assignment]
 
 try:
     from typing import TypedDict

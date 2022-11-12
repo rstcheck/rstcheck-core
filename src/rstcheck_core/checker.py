@@ -117,7 +117,7 @@ def _get_source(source_file: pathlib.Path) -> str:
 
     resolved_file_path = source_file.resolve()
     with contextlib.closing(docutils.io.FileInput(source_path=resolved_file_path)) as input_file:
-        return t.cast(str, input_file.read())
+        return input_file.read()
 
 
 def _replace_ignored_substitutions(source: str, ignore_substitutions: t.List[str]) -> str:
