@@ -47,8 +47,8 @@ def load_sphinx_if_available() -> t.Generator[t.Optional[sphinx.application.Sphi
     if _extras.SPHINX_INSTALLED:
         create_dummy_sphinx_app()
         # NOTE: Hack to prevent sphinx warnings for overwriting registered nodes; see #113
-        sphinx.application.builtin_extensions = [  # type: ignore[assignment]
-            e for e in sphinx.application.builtin_extensions if e != "sphinx.addnodes"
+        sphinx.application.builtin_extensions = [
+            e for e in sphinx.application.builtin_extensions if e != "sphinx.addnodes"  # type: ignore[assignment] # noqa: B950
         ]
 
     yield None
