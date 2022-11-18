@@ -1,6 +1,7 @@
 """Integration test for the main runner."""
 import io
 import pathlib
+import platform
 import re
 import sys
 
@@ -226,7 +227,10 @@ class TestWithoutConfigFile:
         assert len(ERROR_CODE_REGEX.findall(capsys.readouterr().err)) == 6
 
     @staticmethod
-    @pytest.mark.skipif(sys.platform != "darwin", reason="MacOS specific error count")
+    @pytest.mark.skipif(
+        sys.platform != "darwin" or platform.mac_ver()[0].startswith("10"),
+        reason="MacOS >10 specific error count",
+    )
     def test_error_without_config_file_macos(capsys: pytest.CaptureFixture[str]) -> None:
         """Test bad example without set config file and implicit config file shows errors.
 
@@ -241,6 +245,26 @@ class TestWithoutConfigFile:
 
         assert result != 0
         assert len(ERROR_CODE_REGEX.findall(capsys.readouterr().err)) == 7
+
+    @staticmethod
+    @pytest.mark.skipif(
+        sys.platform != "darwin" or not platform.mac_ver()[0].startswith("10"),
+        reason="MacOS 10 specific error count",
+    )
+    def test_error_without_config_file_macos_10(capsys: pytest.CaptureFixture[str]) -> None:
+        """Test bad example without set config file and implicit config file shows errors.
+
+        On MacOS the cpp code block generates an additional error compared to linux:
+        ``(ERROR/3) (cpp) warning: no newline at end of file [-Wnewline-eof]``
+        """
+        test_file = EXAMPLES_DIR / "without_configuration" / "bad.rst"
+        init_config = config.RstcheckConfig()
+        _runner = runner.RstcheckMainRunner(check_paths=[test_file], rstcheck_config=init_config)
+
+        result = _runner.run()
+
+        assert result != 0
+        assert len(ERROR_CODE_REGEX.findall(capsys.readouterr().err)) == 6
 
     @staticmethod
     def test_no_error_with_set_ini_config_file(capsys: pytest.CaptureFixture[str]) -> None:
@@ -301,7 +325,10 @@ class TestWithConfigFile:
         assert len(ERROR_CODE_REGEX.findall(capsys.readouterr().err)) == 6
 
     @staticmethod
-    @pytest.mark.skipif(sys.platform != "darwin", reason="MacOS specific error count")
+    @pytest.mark.skipif(
+        sys.platform != "darwin" or platform.mac_ver()[0].startswith("10"),
+        reason="MacOS >10 specific error count",
+    )
     def test_file_1_is_bad_without_config_macos(capsys: pytest.CaptureFixture[str]) -> None:
         """Test bad file ``bad.rst`` without config file is not ok.
 
@@ -317,6 +344,27 @@ class TestWithConfigFile:
 
         assert result != 0
         assert len(ERROR_CODE_REGEX.findall(capsys.readouterr().err)) == 7
+
+    @staticmethod
+    @pytest.mark.skipif(
+        sys.platform != "darwin" or not platform.mac_ver()[0].startswith("10"),
+        reason="MacOS 10 specific error count",
+    )
+    def test_file_1_is_bad_without_config_macos_10(capsys: pytest.CaptureFixture[str]) -> None:
+        """Test bad file ``bad.rst`` without config file is not ok.
+
+        On MacOS the cpp code block generates an additional error compared to linux:
+        ``(ERROR/3) (cpp) warning: no newline at end of file [-Wnewline-eof]``
+        """
+        test_file = EXAMPLES_DIR / "with_configuration" / "bad.rst"
+        config_file = pathlib.Path("NONE")
+        init_config = config.RstcheckConfig(config_path=config_file)
+        _runner = runner.RstcheckMainRunner(check_paths=[test_file], rstcheck_config=init_config)
+
+        result = _runner.run()
+
+        assert result != 0
+        assert len(ERROR_CODE_REGEX.findall(capsys.readouterr().err)) == 6
 
     @staticmethod
     def test_file_2_is_bad_without_config(capsys: pytest.CaptureFixture[str]) -> None:

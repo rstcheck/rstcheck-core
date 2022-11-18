@@ -1,6 +1,7 @@
 """Integration test for the main runner."""
 import io
 import pathlib
+import platform
 import re
 import sys
 import typing as t
@@ -134,7 +135,10 @@ class TestWithoutConfigFile:
         assert len(result) == 6
 
     @staticmethod
-    @pytest.mark.skipif(sys.platform != "darwin", reason="MacOS specific error count")
+    @pytest.mark.skipif(
+        sys.platform != "darwin" or platform.mac_ver()[0].startswith("10"),
+        reason="MacOS >10 specific error count",
+    )
     def test_error_without_config_file_macos() -> None:
         """Test bad example without set config file and implicit config file shows errors.
 
@@ -147,6 +151,24 @@ class TestWithoutConfigFile:
         result = checker.check_file(test_file, init_config)
 
         assert len(result) == 7
+
+    @staticmethod
+    @pytest.mark.skipif(
+        sys.platform != "darwin" or not platform.mac_ver()[0].startswith("10"),
+        reason="MacOS 10 specific error count",
+    )
+    def test_error_without_config_file_macos_10() -> None:
+        """Test bad example without set config file and implicit config file shows errors.
+
+        On MacOS the cpp code block generates an additional error compared to linux:
+        ``(ERROR/3) (cpp) warning: no newline at end of file [-Wnewline-eof]``
+        """
+        test_file = EXAMPLES_DIR / "without_configuration" / "bad.rst"
+        init_config = config.RstcheckConfig()
+
+        result = checker.check_file(test_file, init_config)
+
+        assert len(result) == 6
 
     @staticmethod
     def test_no_error_with_set_ini_config_file() -> None:
@@ -203,7 +225,10 @@ class TestWithConfigFile:
         assert len(result) == 6
 
     @staticmethod
-    @pytest.mark.skipif(sys.platform != "darwin", reason="MacOS specific error count")
+    @pytest.mark.skipif(
+        sys.platform != "darwin" or platform.mac_ver()[0].startswith("10"),
+        reason="MacOS >10 specific error count",
+    )
     def test_file_1_is_bad_without_config_macos() -> None:
         """Test bad file ``bad.rst`` without config file is not ok.
 
@@ -216,6 +241,24 @@ class TestWithConfigFile:
         result = checker.check_file(test_file, init_config)
 
         assert len(result) == 7
+
+    @staticmethod
+    @pytest.mark.skipif(
+        sys.platform != "darwin" or not platform.mac_ver()[0].startswith("10"),
+        reason="MacOS 10 specific error count",
+    )
+    def test_file_1_is_bad_without_config_macos_10() -> None:
+        """Test bad file ``bad.rst`` without config file is not ok.
+
+        On MacOS the cpp code block generates an additional error compared to linux:
+        ``(ERROR/3) (cpp) warning: no newline at end of file [-Wnewline-eof]``
+        """
+        test_file = EXAMPLES_DIR / "with_configuration" / "bad.rst"
+        init_config = config.RstcheckConfig(config_path=pathlib.Path("NONE"))
+
+        result = checker.check_file(test_file, init_config)
+
+        assert len(result) == 6
 
     @staticmethod
     def test_file_2_is_bad_without_config() -> None:
