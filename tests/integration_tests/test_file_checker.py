@@ -136,7 +136,7 @@ class TestWithoutConfigFile:
 
     @staticmethod
     @pytest.mark.skipif(
-        sys.platform != "darwin" or platform.mac_ver()[0].startswith("10"),
+        sys.platform != "darwin" or int(platform.release()[:2]) < 20,
         reason="MacOS >10 specific error count",
     )
     def test_error_without_config_file_macos() -> None:
@@ -154,7 +154,7 @@ class TestWithoutConfigFile:
 
     @staticmethod
     @pytest.mark.skipif(
-        sys.platform != "darwin" or not platform.mac_ver()[0].startswith("10"),
+        sys.platform != "darwin" or not int(platform.release()[:2]) < 20,
         reason="MacOS 10 specific error count",
     )
     def test_error_without_config_file_macos_10() -> None:
@@ -226,7 +226,7 @@ class TestWithConfigFile:
 
     @staticmethod
     @pytest.mark.skipif(
-        sys.platform != "darwin" or platform.mac_ver()[0].startswith("10"),
+        sys.platform != "darwin" or int(platform.release()[:2]) < 20,
         reason="MacOS >10 specific error count",
     )
     def test_file_1_is_bad_without_config_macos() -> None:
@@ -244,7 +244,7 @@ class TestWithConfigFile:
 
     @staticmethod
     @pytest.mark.skipif(
-        sys.platform != "darwin" or not platform.mac_ver()[0].startswith("10"),
+        sys.platform != "darwin" or not int(platform.release()[:2]) < 20,
         reason="MacOS 10 specific error count",
     )
     def test_file_1_is_bad_without_config_macos_10() -> None:
