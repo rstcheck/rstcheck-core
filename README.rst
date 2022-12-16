@@ -87,15 +87,15 @@ Supported languages in code blocks
 .. CI
 
 
-.. |gha_tests| image:: https://img.shields.io/github/workflow/status/rstcheck/rstcheck-core/Test%20code/main?style=flat-square&logo=github&label=Test%20code
+.. |gha_tests| image:: https://img.shields.io/github/actions/workflow/status/rstcheck/rstcheck-core/test.yml?branch=main&style=flat-square&logo=github&label=Test%20code
     :target: https://github.com/rstcheck/rstcheck-core/actions/workflows/test.yaml
     :alt: Test status
 
-.. |gha_docu| image:: https://img.shields.io/github/workflow/status/rstcheck/rstcheck-core/Test%20documentation/main?style=flat-square&logo=github&label=Test%20documentation
+.. |gha_docu| image:: https://img.shields.io/github/actions/workflow/status/rstcheck/rstcheck-core/documentation.yml?branch=main&style=flat-square&logo=github&label=Test%20documentation
     :target: https://github.com/rstcheck/rstcheck-core/actions/workflows/documentation.yaml
     :alt: Documentation status
 
-.. |gha_qa| image:: https://img.shields.io/github/workflow/status/rstcheck/rstcheck-core/QA/main?style=flat-square&logo=github&label=QA
+.. |gha_qa| image:: https://img.shields.io/github/actions/workflow/status/rstcheck/rstcheck-core/qa.yml?branch=main&style=flat-square&logo=github&label=QA
     :target: https://github.com/rstcheck/rstcheck-core/actions/workflows/qa.yaml
     :alt: QA status
 
