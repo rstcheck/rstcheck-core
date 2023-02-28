@@ -390,9 +390,12 @@ Test
     print(
 """
         ignores = types.construct_ignore_dict()
+        # fmt: off
         with _sphinx.load_sphinx_if_available():
+
             result = list(checker.check_source(source, ignores=ignores))
 
+        # fmt: on
         assert len(result) == 1
         assert result[0]["line_number"] == 9
         assert "unexpected EOF while parsing" in result[0]["message"]
@@ -418,9 +421,12 @@ Test
     print(
 """
         ignores = types.construct_ignore_dict()
+        # fmt: off
         with _sphinx.load_sphinx_if_available():
+
             result = list(checker.check_source(source, ignores=ignores))
 
+        # fmt: on
         assert len(result) == 1
         assert result[0]["line_number"] == 9
         assert "'(' was never closed" in result[0]["message"]
@@ -446,9 +452,12 @@ Test
     print(
 """
         ignores = types.construct_ignore_dict()
+        # fmt: off
         with _sphinx.load_sphinx_if_available():
+
             result = list(checker.check_source(source, ignores=ignores))
 
+        # fmt: on
         assert result
         assert "An `AttributeError` error occured" not in caplog.text
         assert (
@@ -476,9 +485,12 @@ Test
     print(
 """
         ignores = types.construct_ignore_dict()
+        # fmt: off
         with _sphinx.load_sphinx_if_available():
+
             result = list(checker.check_source(source, ignores=ignores))
 
+        # fmt: on
         assert not result
         assert "An `AttributeError` error occured" in caplog.text
         assert "directive (code/code-block/sourcecode) without a specified language" in caplog.text
