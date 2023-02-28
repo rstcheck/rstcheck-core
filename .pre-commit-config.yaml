@@ -68,7 +68,7 @@ repos:
 
   # black - python formatter
   - repo: https://github.com/psf/black
-    rev: b0d1fba7ac3be53c71fb0d3211d911e629f8aecb  # frozen: 23.1.0
+    rev: b0d1fba7ac3be53c71fb0d3211d911e629f8aecb # frozen: 23.1.0
     hooks:
       - id: black
         args: ["--safe"]
@@ -212,7 +212,7 @@ repos:
 
   # poetry - python dependency management
   - repo: https://github.com/Cielquan/mirrors-poetry
-    rev: d1b667cf10d9ee3e488bf79382509cd70f2325a8  # frozen: 1.4.0
+    rev: d1b667cf10d9ee3e488bf79382509cd70f2325a8 # frozen: 1.4.0
     hooks:
       - id: poetry-check
 

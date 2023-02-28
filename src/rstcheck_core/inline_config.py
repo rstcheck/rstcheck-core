@@ -43,7 +43,7 @@ def get_inline_config_from_source(
     :return: A list of inline configs
     """
     configs: t.List[types.InlineConfig] = []
-    for (idx, line) in enumerate(source.splitlines()):
+    for idx, line in enumerate(source.splitlines()):
         match = RSTCHECK_CONFIG_COMMENT_REGEX.search(line)
         if match is None:
             continue
@@ -234,7 +234,7 @@ def get_inline_flow_control_from_source(
     :return: A list of inline flow controls
     """
     configs: t.List[types.InlineFlowControl] = []
-    for (idx, line) in enumerate(source.splitlines()):
+    for idx, line in enumerate(source.splitlines()):
         match = RSTCHECK_FLOW_CONTROL_COMMENT_REGEX.search(line)
         if match is None:
             continue

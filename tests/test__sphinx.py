@@ -30,7 +30,6 @@ class TestContextManager:
     def test_yield_nothing_with_sphinx_missing() -> None:
         """Test for ``None`` yield and no action when sphinx is missing."""
         with _sphinx.load_sphinx_if_available() as ctx_manager:
-
             assert ctx_manager is None
             assert not docutils_directives._directives
             assert not docutils_roles._roles
@@ -41,7 +40,6 @@ class TestContextManager:
     def test_yield_nothing_with_sphinx_installed() -> None:
         """Test for ``None`` yield but action when sphinx is installed."""
         with _sphinx.load_sphinx_if_available() as ctx_manager:
-
             assert ctx_manager is None
             assert docutils_directives._directives
             assert docutils_roles._roles

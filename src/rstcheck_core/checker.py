@@ -58,7 +58,6 @@ def check_file(
     _docutils.clean_docutils_directives_and_roles_cache()
 
     with _sphinx.load_sphinx_if_available():
-
         all_errors = []
         for error in check_source(
             source,
