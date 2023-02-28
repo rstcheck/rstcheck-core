@@ -475,10 +475,12 @@ class TestRstcheckMainRunnerResultPrinter:
         out_file.touch()
         init_config = config.RstcheckConfig()
         _runner = runner.RstcheckMainRunner([], init_config)
+        # fmt: off
         with open(out_file, encoding="utf-8", mode="w") as out_file_handle:
 
             _runner.print_result(output_file=out_file_handle)  # act
 
+        # fmt: on
         assert "Success! No issues detected." in out_file.read_text()
 
     @staticmethod
@@ -530,10 +532,12 @@ class TestRstcheckMainRunnerResultPrinter:
         _runner._update_results(
             [[types.LintError(source_origin="<string>", line_number=0, message="Some error.")]]
         )
+        # fmt: off
         with open(out_file, encoding="utf-8", mode="w") as out_file_handle:
 
             _runner.print_result(output_file=out_file_handle)  # act
 
+        # fmt: on
         assert "(ERROR/3) Some error" in out_file.read_text()
 
     @staticmethod
