@@ -391,6 +391,7 @@ Test
 """
         ignores = types.construct_ignore_dict()
         with _sphinx.load_sphinx_if_available():
+
             result = list(checker.check_source(source, ignores=ignores))
 
         assert len(result) == 1
@@ -419,6 +420,7 @@ Test
 """
         ignores = types.construct_ignore_dict()
         with _sphinx.load_sphinx_if_available():
+
             result = list(checker.check_source(source, ignores=ignores))
 
         assert len(result) == 1
@@ -447,6 +449,7 @@ Test
 """
         ignores = types.construct_ignore_dict()
         with _sphinx.load_sphinx_if_available():
+
             result = list(checker.check_source(source, ignores=ignores))
 
         assert result
@@ -477,6 +480,7 @@ Test
 """
         ignores = types.construct_ignore_dict()
         with _sphinx.load_sphinx_if_available():
+
             result = list(checker.check_source(source, ignores=ignores))
 
         assert not result
