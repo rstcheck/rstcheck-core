@@ -14,12 +14,12 @@ from . import _extras
 
 tomllib_imported = False
 try:
-    import tomllib  # type: ignore[import]
+    import tomllib
 
     tomllib_imported = True
 except ModuleNotFoundError:
     if _extras.TOMLI_INSTALLED:  # pragma: no cover
-        import tomli as tomllib
+        import tomli as tomllib  # type: ignore[no-redef]
 
 
 logger = logging.getLogger(__name__)
