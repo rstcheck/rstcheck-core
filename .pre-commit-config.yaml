@@ -68,7 +68,7 @@ repos:
 
   # black - python formatter
   - repo: https://github.com/psf/black
-    rev: b0d1fba7ac3be53c71fb0d3211d911e629f8aecb # frozen: 23.1.0
+    rev: bf7a16254ec96b084a6caf3d435ec18f0f245cc7  # frozen: 23.3.0
     hooks:
       - id: black
         args: ["--safe"]
@@ -178,7 +178,7 @@ repos:
 
   # flakeheaven - wrapper for flake8
   - repo: https://github.com/flakeheaven/flakeheaven
-    rev: 4cd049b3b188a32435fa2020f84625b5bd9c53d7 # frozen: 3.2.1
+    rev: 289c489c9654342dae2ad871527c5951acb2f22d  # frozen: 3.3.0
     hooks:
       - id: flakeheaven
         types: [python]
@@ -212,7 +212,7 @@ repos:
 
   # poetry - python dependency management
   - repo: https://github.com/Cielquan/mirrors-poetry
-    rev: 86ee4b1b1af5187c2d2a696df86abe5a806ab7e1 # frozen: 1.4.1
+    rev: c94fcaa1d73e0c66f221e2e9ffc0d85f3c04e5ed  # frozen: 1.4.2
     hooks:
       - id: poetry-check
 
@@ -262,6 +262,6 @@ repos:
 
   # yamllint - yaml linter
   - repo: https://github.com/adrienverge/yamllint
-    rev: b9e1fd18c1acbaa4b0028196f8925ce4e91970d9 # frozen: v1.29.0
+    rev: 9d0f59876dc6882e263b2657ab42a1ced4c0207d  # frozen: v1.30.0
     hooks:
       - id: yamllint
