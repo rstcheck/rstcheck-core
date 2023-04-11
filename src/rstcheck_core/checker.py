@@ -394,7 +394,7 @@ class _CheckTranslator(docutils.nodes.NodeVisitor):  # pylint: disable=too-many-
         :raises docutils.nodes.SkipNode: After a check was added or nothing to do
         """
         # For "..code-block:: language"
-        language = node.get("language", None)
+        language = node.get("language")
         is_code_node = False
         if not language:
             # For "..code:: language"
