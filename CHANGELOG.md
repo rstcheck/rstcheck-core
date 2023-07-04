@@ -19,6 +19,10 @@ NOTE: please use them in this order.
 
 [diff v1.0.3...main](https://github.com/rstcheck/rstcheck-core/compare/v1.0.3...main)
 
+### Miscellaneous
+
+- Ignore "no newline at end of file" errors when C++ code is checked by clang (such as on macOS)
+
 ## [1.0.3 (2022-11-12)](https://github.com/rstcheck/rstcheck-core/releases/v1.0.3)
 
 [diff v1.0.2...v1.0.3](https://github.com/rstcheck/rstcheck-core/compare/v1.0.2...v1.0.3)

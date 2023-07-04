@@ -763,7 +763,9 @@ class CodeBlockChecker:
         """
         logger.debug("Check C++ source.")
         yield from self._gcc_checker(
-            source_code,
+            # Add a newline to ignore "no newline at end of file" errors
+            # that are reported using clang (e.g. on macOS).
+            source_code + "\n",
             ".cpp",
             [os.getenv("CXX", "g++")]
             + shlex.split(os.getenv("CXXFLAGS", ""))

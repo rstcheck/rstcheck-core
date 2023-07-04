@@ -213,7 +213,6 @@ class TestWithoutConfigFile:
     """Test without config file in dir tree."""
 
     @staticmethod
-    @pytest.mark.skipif(sys.platform == "darwin", reason="MacOS specific variant exists")
     def test_error_without_config_file(capsys: pytest.CaptureFixture[str]) -> None:
         """Test bad example without set config file and implicit config file shows errors."""
         test_file = EXAMPLES_DIR / "without_configuration" / "bad.rst"
@@ -224,23 +223,6 @@ class TestWithoutConfigFile:
 
         assert result != 0
         assert len(ERROR_CODE_REGEX.findall(capsys.readouterr().err)) == 6
-
-    @staticmethod
-    @pytest.mark.skipif(sys.platform != "darwin", reason="MacOS specific error count")
-    def test_error_without_config_file_macos(capsys: pytest.CaptureFixture[str]) -> None:
-        """Test bad example without set config file and implicit config file shows errors.
-
-        On MacOS the cpp code block generates an additional error compared to linux:
-        ``(ERROR/3) (cpp) warning: no newline at end of file [-Wnewline-eof]``
-        """
-        test_file = EXAMPLES_DIR / "without_configuration" / "bad.rst"
-        init_config = config.RstcheckConfig()
-        _runner = runner.RstcheckMainRunner(check_paths=[test_file], rstcheck_config=init_config)
-
-        result = _runner.run()
-
-        assert result != 0
-        assert len(ERROR_CODE_REGEX.findall(capsys.readouterr().err)) == 7
 
     @staticmethod
     def test_no_error_with_set_ini_config_file(capsys: pytest.CaptureFixture[str]) -> None:
@@ -287,7 +269,6 @@ class TestWithConfigFile:
     """Test with config file in dir tree."""
 
     @staticmethod
-    @pytest.mark.skipif(sys.platform == "darwin", reason="MacOS specific variant exists")
     def test_file_1_is_bad_without_config(capsys: pytest.CaptureFixture[str]) -> None:
         """Test bad file ``bad.rst`` without config file is not ok."""
         test_file = EXAMPLES_DIR / "with_configuration" / "bad.rst"
@@ -299,24 +280,6 @@ class TestWithConfigFile:
 
         assert result != 0
         assert len(ERROR_CODE_REGEX.findall(capsys.readouterr().err)) == 6
-
-    @staticmethod
-    @pytest.mark.skipif(sys.platform != "darwin", reason="MacOS specific error count")
-    def test_file_1_is_bad_without_config_macos(capsys: pytest.CaptureFixture[str]) -> None:
-        """Test bad file ``bad.rst`` without config file is not ok.
-
-        On MacOS the cpp code block generates an additional error compared to linux:
-        ``(ERROR/3) (cpp) warning: no newline at end of file [-Wnewline-eof]``
-        """
-        test_file = EXAMPLES_DIR / "with_configuration" / "bad.rst"
-        config_file = pathlib.Path("NONE")
-        init_config = config.RstcheckConfig(config_path=config_file)
-        _runner = runner.RstcheckMainRunner(check_paths=[test_file], rstcheck_config=init_config)
-
-        result = _runner.run()
-
-        assert result != 0
-        assert len(ERROR_CODE_REGEX.findall(capsys.readouterr().err)) == 7
 
     @staticmethod
     def test_file_2_is_bad_without_config(capsys: pytest.CaptureFixture[str]) -> None:
