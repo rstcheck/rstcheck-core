@@ -83,15 +83,15 @@ class RstcheckConfigFile(pydantic.BaseModel):  # pylint: disable=no-member
     :raises pydantic.error_wrappers.ValidationError: If setting is not parsable into correct type
     """
 
-    report_level: t.Optional[ReportLevel]
-    ignore_directives: t.Optional[t.List[str]]
-    ignore_roles: t.Optional[t.List[str]]
-    ignore_substitutions: t.Optional[t.List[str]]
-    ignore_languages: t.Optional[t.List[str]]
+    report_level: t.Optional[ReportLevel] = None
+    ignore_directives: t.Optional[t.List[str]] = None
+    ignore_roles: t.Optional[t.List[str]] = None
+    ignore_substitutions: t.Optional[t.List[str]] = None
+    ignore_languages: t.Optional[t.List[str]] = None
     # NOTE: Pattern type-arg errors pydanic: https://github.com/samuelcolvin/pydantic/issues/2636
-    ignore_messages: t.Optional[t.Pattern]  # type: ignore[type-arg]
+    ignore_messages: t.Optional[t.Pattern] = None  # type: ignore[type-arg]
 
-    @pydantic.validator("report_level", pre=True)
+    @pydantic.field_validator("report_level", mode="before")
     @classmethod
     def valid_report_level(cls, value: t.Any) -> t.Optional[ReportLevel]:  # noqa: ANN401
         """Validate the report_level setting.
@@ -124,8 +124,12 @@ class RstcheckConfigFile(pydantic.BaseModel):  # pylint: disable=no-member
 
         raise ValueError("Invalid report level")
 
-    @pydantic.validator(
-        "ignore_directives", "ignore_roles", "ignore_substitutions", "ignore_languages", pre=True
+    @pydantic.field_validator(
+        "ignore_directives",
+        "ignore_roles",
+        "ignore_substitutions",
+        "ignore_languages",
+        mode="before",
     )
     @classmethod
     def split_str(cls, value: t.Any) -> t.Optional[t.List[str]]:  # noqa: ANN401
@@ -144,7 +148,7 @@ class RstcheckConfigFile(pydantic.BaseModel):  # pylint: disable=no-member
         """
         return _split_str_validator(value)
 
-    @pydantic.validator("ignore_messages", pre=True)
+    @pydantic.field_validator("ignore_messages", mode="before")
     @classmethod
     def join_regex_str(
         cls, value: t.Any  # noqa: ANN401
@@ -180,9 +184,9 @@ class RstcheckConfig(RstcheckConfigFile):  # pylint: disable=too-few-public-meth
     :raises pydantic.error_wrappers.ValidationError: If setting is not parsable into correct type
     """
 
-    config_path: t.Optional[pathlib.Path]
-    recursive: t.Optional[bool]
-    warn_unknown_settings: t.Optional[bool]
+    config_path: t.Optional[pathlib.Path] = None
+    recursive: t.Optional[bool] = None
+    warn_unknown_settings: t.Optional[bool] = None
 
 
 class _RstcheckConfigINIFile(
@@ -195,12 +199,12 @@ class _RstcheckConfigINIFile(
     :raises pydantic.error_wrappers.ValidationError: If setting is not parsable into correct type
     """
 
-    report_level: pydantic.NoneStr = pydantic.Field(None)  # pylint: disable=no-member
-    ignore_directives: pydantic.NoneStr = pydantic.Field(None)  # pylint: disable=no-member
-    ignore_roles: pydantic.NoneStr = pydantic.Field(None)  # pylint: disable=no-member
-    ignore_substitutions: pydantic.NoneStr = pydantic.Field(None)  # pylint: disable=no-member
-    ignore_languages: pydantic.NoneStr = pydantic.Field(None)  # pylint: disable=no-member
-    ignore_messages: pydantic.NoneStr = pydantic.Field(None)  # pylint: disable=no-member
+    report_level: t.Optional[str] = None  # pylint: disable=no-member
+    ignore_directives: t.Optional[str] = None  # pylint: disable=no-member
+    ignore_roles: t.Optional[str] = None  # pylint: disable=no-member
+    ignore_substitutions: t.Optional[str] = None  # pylint: disable=no-member
+    ignore_languages: t.Optional[str] = None  # pylint: disable=no-member
+    ignore_messages: t.Optional[str] = None  # pylint: disable=no-member
 
 
 def _load_config_from_ini_file(

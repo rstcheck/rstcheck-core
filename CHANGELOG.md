@@ -22,6 +22,7 @@ NOTE: please use them in this order.
 ### Miscellaneous
 
 - Ignore "no newline at end of file" errors when C++ code is checked by clang (such as on macOS) ([#45](https://github.com/rstcheck/rstcheck-core/pull/45))
+- Update `pydantic` dependency to >= 2.0.
 
 ## [1.0.3 (2022-11-12)](https://github.com/rstcheck/rstcheck-core/releases/v1.0.3)
 
