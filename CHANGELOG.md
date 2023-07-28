@@ -19,6 +19,10 @@ NOTE: please use them in this order.
 
 [diff v1.0.3...main](https://github.com/rstcheck/rstcheck-core/compare/v1.0.3...main)
 
+### Bugfixes
+
+- Auto discover pyproject.toml file on py311 and up
+
 ### Miscellaneous
 
 - Ignore "no newline at end of file" errors when C++ code is checked by clang (such as on macOS)
