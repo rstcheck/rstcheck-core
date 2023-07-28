@@ -31,5 +31,6 @@ Additional contributions by (sorted by name)
 - Sameer Singh <sam7thegreat@gmail.com>
 - Santos Gallegos <santos_g@outlook.com>
 - Svintsov Dmitry <root@uralbash.ru>
+- Theodore Ni <3806110+tjni@users.noreply.github.com>
 - Timo Röhling <timo@gaussglocke.de>
 - biscuitsnake <11334474+biscuitsnake@users.noreply.github.com>
