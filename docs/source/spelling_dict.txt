@@ -48,6 +48,7 @@ kwarg
 kwargs
 linter
 linters
+macOS
 makefile
 monkypatch
 monkypatched
