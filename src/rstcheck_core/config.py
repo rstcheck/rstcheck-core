@@ -27,7 +27,7 @@ logger = logging.getLogger(__name__)
 
 CONFIG_FILES = [".rstcheck.cfg", "setup.cfg"]
 """Supported default config files."""
-if _extras.TOMLI_INSTALLED:  # pragma: no cover
+if _extras.TOMLI_INSTALLED or tomllib_imported:  # pragma: no cover
     CONFIG_FILES = [".rstcheck.cfg", "pyproject.toml", "setup.cfg"]
 
 

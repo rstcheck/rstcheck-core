@@ -19,10 +19,17 @@ NOTE: please use them in this order.
 
 [diff v1.0.3...main](https://github.com/rstcheck/rstcheck-core/compare/v1.0.3...main)
 
+### Bugfixes
+
+- Auto discover pyproject.toml file on py311 and up
+
 ### Miscellaneous
 
 - Ignore "no newline at end of file" errors when C++ code is checked by clang (such as on macOS) ([#45](https://github.com/rstcheck/rstcheck-core/pull/45))
-- Update `pydantic` dependency to >= 2.0.
+- Update `pydantic` dependency to >= 2.0. ([#46](https://github.com/rstcheck/rstcheck-core/pull/46))
+- Drop python 3.7 ([#52](https://github.com/rstcheck/rstcheck-core/pull/52))
+- Drop support for Sphinx v2 and v3 ([#51](https://github.com/rstcheck/rstcheck-core/pull/51))
+- Add tox environments for v6 adn v7 ([#51](https://github.com/rstcheck/rstcheck-core/pull/51))
 
 ## [1.0.3 (2022-11-12)](https://github.com/rstcheck/rstcheck-core/releases/v1.0.3)
 
