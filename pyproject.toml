@@ -44,7 +44,7 @@ sphinx-autodoc-typehints = { version = ">=1.15", optional = true }
 sphinxcontrib-apidoc = { version = ">=0.3", optional = true }
 sphinxcontrib-spelling = { version = ">=7.3", optional = true }
 # MAIN DEPENDENCIES
-importlib-metadata = {version = ">=1.6, <5.0", python = "<3.8"}
+importlib-metadata = {version = ">=1.6,<7.0", python = "<3.8"}
 typing-extensions = {version = ">=3.7.4, <5.0", python = "<3.8"}
 docutils = ">=0.7, <0.20"
 types-docutils = ">=0.18,<0.21"
