@@ -12,6 +12,7 @@ Additional contributions by (sorted by name)
 - Changxu Wang <Changxu.mail@gmail.com>
 - Christian Riedel <christian.riedel@siegwerk.com>
 - Christian Riedel <cielquan@protonmail.com>
+- Daniel M. Capella <polyzen@archlinux.org>
 - Daniel M. Capella <polyzen@users.noreply.github.com>
 - Dmitry <root@uralbash.ru>
 - Doyle Rowland <doyle.rowland@reliaqual.com>
