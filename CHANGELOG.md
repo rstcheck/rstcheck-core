@@ -33,7 +33,7 @@ NOTE: please use them in this order.
 - Update Sphinx Theme Version and remove outdated Dark Mode Lib ([#51](https://github.com/rstcheck/rstcheck-core/pull/51))
 - Switch from poetry to setuptools ([#59](https://github.com/rstcheck/rstcheck-core/pull/59))
 - Change test file naming convention ([#60](https://github.com/rstcheck/rstcheck-core/pull/60))
-- Change dev tooling ([#60](https://github.com/rstcheck/rstcheck--core/pull/60))
+- Change dev tooling ([#60](https://github.com/rstcheck/rstcheck-core/pull/60))
 
 ## [1.0.3 (2022-11-12)](https://github.com/rstcheck/rstcheck-core/releases/v1.0.3)
 
