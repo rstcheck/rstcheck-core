@@ -48,12 +48,12 @@ docs = [
     "sphinxcontrib-spelling >=7.3",
     "sphinx-autobuild >=2021.3.14",
 ]
-type_check = [
+type-check = [
   "mypy >=1.0",
   "types-docutils >=0.18",
 ]
 dev = [
-  "rstcheck-core[sphinx,toml,testing,docs,type_check]",
+  "rstcheck-core[sphinx,toml,testing,docs,type-check]",
   "tox >=3.15",
 ]
 
