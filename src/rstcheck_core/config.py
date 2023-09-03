@@ -85,15 +85,15 @@ class RstcheckConfigFile(pydantic.BaseModel):
     :raises pydantic.error_wrappers.ValidationError: If setting is not parsable into correct type
     """
 
-    report_level: ReportLevel | None
-    ignore_directives: list[str] | None
-    ignore_roles: list[str] | None
-    ignore_substitutions: list[str] | None
-    ignore_languages: list[str] | None
+    report_level: t.Optional[ReportLevel] = None  # noqa: UP007
+    ignore_directives: list[str] | None = None
+    ignore_roles: list[str] | None = None
+    ignore_substitutions: list[str] | None = None
+    ignore_languages: list[str] | None = None
     # NOTE: Pattern type-arg errors pydanic: https://github.com/samuelcolvin/pydantic/issues/2636
-    ignore_messages: t.Pattern | None  # type: ignore[type-arg]
+    ignore_messages: t.Pattern | None = None  # type: ignore[type-arg]
 
-    @pydantic.validator("report_level", pre=True)
+    @pydantic.field_validator("report_level", mode="before")
     @classmethod
     def valid_report_level(cls, value: t.Any) -> ReportLevel | None:  # noqa: ANN401
         """Validate the report_level setting.
@@ -130,8 +130,12 @@ class RstcheckConfigFile(pydantic.BaseModel):
         msg = "Invalid report level"
         raise ValueError(msg)
 
-    @pydantic.validator(
-        "ignore_directives", "ignore_roles", "ignore_substitutions", "ignore_languages", pre=True
+    @pydantic.field_validator(
+        "ignore_directives",
+        "ignore_roles",
+        "ignore_substitutions",
+        "ignore_languages",
+        mode="before",
     )
     @classmethod
     def split_str(cls, value: t.Any) -> list[str] | None:  # noqa: ANN401
@@ -150,7 +154,7 @@ class RstcheckConfigFile(pydantic.BaseModel):
         """
         return _split_str_validator(value)
 
-    @pydantic.validator("ignore_messages", pre=True)
+    @pydantic.field_validator("ignore_messages", mode="before")
     @classmethod
     def join_regex_str(cls, value: t.Any) -> str | t.Pattern[str] | None:  # noqa: ANN401
         """Validate and concatenate the ignore_messages setting to a RegEx string.
@@ -185,9 +189,9 @@ class RstcheckConfig(RstcheckConfigFile):
     :raises pydantic.error_wrappers.ValidationError: If setting is not parsable into correct type
     """
 
-    config_path: pathlib.Path | None
-    recursive: bool | None
-    warn_unknown_settings: bool | None
+    config_path: pathlib.Path | None = None
+    recursive: bool | None = None
+    warn_unknown_settings: bool | None = None
 
 
 class _RstcheckConfigINIFile(pydantic.BaseModel):
@@ -198,12 +202,12 @@ class _RstcheckConfigINIFile(pydantic.BaseModel):
     :raises pydantic.error_wrappers.ValidationError: If setting is not parsable into correct type
     """
 
-    report_level: pydantic.NoneStr = pydantic.Field(None)
-    ignore_directives: pydantic.NoneStr = pydantic.Field(None)
-    ignore_roles: pydantic.NoneStr = pydantic.Field(None)
-    ignore_substitutions: pydantic.NoneStr = pydantic.Field(None)
-    ignore_languages: pydantic.NoneStr = pydantic.Field(None)
-    ignore_messages: pydantic.NoneStr = pydantic.Field(None)
+    report_level: str | None = None
+    ignore_directives: str | None = None
+    ignore_roles: str | None = None
+    ignore_substitutions: str | None = None
+    ignore_languages: str | None = None
+    ignore_messages: str | None = None
 
 
 def _load_config_from_ini_file(
@@ -253,7 +257,7 @@ def _load_config_from_ini_file(
 
     config_values_raw = dict(parser.items("rstcheck"))
     if warn_unknown_settings:
-        known_settings = _RstcheckConfigINIFile().dict().keys()
+        known_settings = _RstcheckConfigINIFile().model_dump().keys()
         unknown = [s for s in config_values_raw if s not in known_settings]
         if unknown:
             logger.warning(
@@ -262,7 +266,7 @@ def _load_config_from_ini_file(
             )
 
     config_values_checked = _RstcheckConfigINIFile(**config_values_raw)
-    return RstcheckConfigFile(**config_values_checked.dict())
+    return RstcheckConfigFile(**config_values_checked.model_dump())
 
 
 class _RstcheckConfigTOMLFile(
@@ -275,12 +279,12 @@ class _RstcheckConfigTOMLFile(
     :raises pydantic.error_wrappers.ValidationError: If setting is not parsable into correct type
     """
 
-    report_level: str | None = pydantic.Field(None)
-    ignore_directives: list[str] | None = pydantic.Field(None)
-    ignore_roles: list[str] | None = pydantic.Field(None)
-    ignore_substitutions: list[str] | None = pydantic.Field(None)
-    ignore_languages: list[str] | None = pydantic.Field(None)
-    ignore_messages: str | list[str] | None = pydantic.Field(None)
+    report_level: str | None = None
+    ignore_directives: list[str] | None = None
+    ignore_roles: list[str] | None = None
+    ignore_substitutions: list[str] | None = None
+    ignore_languages: list[str] | None = None
+    ignore_messages: str | list[str] | None = None
 
 
 def _load_config_from_toml_file(
@@ -350,7 +354,7 @@ def _load_config_from_toml_file(
         return None
 
     if warn_unknown_settings:
-        known_settings = _RstcheckConfigTOMLFile().dict().keys()
+        known_settings = _RstcheckConfigTOMLFile().model_dump().keys()
         unknown = [s for s in rstcheck_section if s not in known_settings]
         if unknown:
             logger.warning(
@@ -359,7 +363,7 @@ def _load_config_from_toml_file(
             )
 
     config_values_checked = _RstcheckConfigTOMLFile(**rstcheck_section)
-    return RstcheckConfigFile(**config_values_checked.dict())
+    return RstcheckConfigFile(**config_values_checked.model_dump())
 
 
 def load_config_file(
@@ -591,13 +595,13 @@ def merge_configs(
     """
     logger.debug("Merging configs.")
     sub_config: RstcheckConfig | RstcheckConfigFile = config_base
-    sub_config_dict = sub_config.dict()
+    sub_config_dict = sub_config.model_dump()
     for setting in dict(sub_config_dict):
         if sub_config_dict[setting] is None:
             del sub_config_dict[setting]
 
     dom_config: RstcheckConfig | RstcheckConfigFile = config_add
-    dom_config_dict = dom_config.dict()
+    dom_config_dict = dom_config.model_dump()
     for setting in dict(dom_config_dict):
         if dom_config_dict[setting] is None:
             del dom_config_dict[setting]

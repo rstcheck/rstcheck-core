@@ -140,7 +140,7 @@ class TestWithoutConfigFile:
         test_file = EXAMPLES_DIR / "without_configuration" / "bad.rst"
         config_file = EXAMPLES_DIR / "with_configuration" / "rstcheck.ini"
         file_config = t.cast(config.RstcheckConfigFile, config.load_config_file(config_file))
-        init_config = config.RstcheckConfig(config_path=config_file, **file_config.dict())
+        init_config = config.RstcheckConfig(config_path=config_file, **file_config.model_dump())
 
         result = checker.check_file(test_file, init_config)
 
@@ -154,7 +154,7 @@ class TestWithoutConfigFile:
         file_config = t.cast(
             config.RstcheckConfigFile, config.load_config_file_from_dir(config_dir)
         )
-        init_config = config.RstcheckConfig(config_path=config_dir, **file_config.dict())
+        init_config = config.RstcheckConfig(config_path=config_dir, **file_config.model_dump())
 
         result = checker.check_file(test_file, init_config)
 
@@ -167,7 +167,7 @@ class TestWithoutConfigFile:
         test_file = EXAMPLES_DIR / "without_configuration" / "bad.rst"
         config_file = EXAMPLES_DIR / "with_configuration" / "pyproject.toml"
         file_config = t.cast(config.RstcheckConfigFile, config.load_config_file(config_file))
-        init_config = config.RstcheckConfig(config_path=config_file, **file_config.dict())
+        init_config = config.RstcheckConfig(config_path=config_file, **file_config.model_dump())
 
         result = checker.check_file(test_file, init_config)
 
@@ -223,7 +223,7 @@ class TestWithConfigFile:
         test_file = EXAMPLES_DIR / "with_configuration" / "bad.rst"
         config_file = EXAMPLES_DIR / "with_configuration" / "rstcheck.ini"
         file_config = t.cast(config.RstcheckConfigFile, config.load_config_file(config_file))
-        init_config = config.RstcheckConfig(config_path=config_file, **file_config.dict())
+        init_config = config.RstcheckConfig(config_path=config_file, **file_config.model_dump())
 
         result = checker.check_file(test_file, init_config)
 
@@ -235,7 +235,7 @@ class TestWithConfigFile:
         test_file = EXAMPLES_DIR / "with_configuration" / "bad_rst.rst"
         config_file = EXAMPLES_DIR / "with_configuration" / "rstcheck.ini"
         file_config = t.cast(config.RstcheckConfigFile, config.load_config_file(config_file))
-        init_config = config.RstcheckConfig(config_path=config_file, **file_config.dict())
+        init_config = config.RstcheckConfig(config_path=config_file, **file_config.model_dump())
 
         result = checker.check_file(test_file, init_config)
 
@@ -273,7 +273,7 @@ class TestCustomDirectivesAndRoles:
         test_file = EXAMPLES_DIR / "custom" / "custom_directive_and_role.rst"
         config_file = EXAMPLES_DIR / "custom" / "rstcheck.custom.ini"
         file_config = t.cast(config.RstcheckConfigFile, config.load_config_file(config_file))
-        init_config = config.RstcheckConfig(config_path=config_file, **file_config.dict())
+        init_config = config.RstcheckConfig(config_path=config_file, **file_config.model_dump())
 
         result = checker.check_file(test_file, init_config)
 
