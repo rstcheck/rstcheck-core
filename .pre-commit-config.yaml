@@ -34,14 +34,19 @@ repos:
   # Dependency hooks
   # ----------------------------------------------
 
-  # safety - python dependency vulnerability checker
-  - repo: https://github.com/Lucas-C/pre-commit-hooks-safety
-    rev: a4a1eb373d8e809534a46855a58be427a0a29219 # frozen: v1.3.1
+  - repo: local
     hooks:
-      - id: python-safety-dependencies-check
-        args: ["--disable-telemetry", "--full-report", "--ignore=51457"]
-        files: pyproject.toml
-        exclude: testing
+      # pipenv - python depencency and virtualenv manager
+      # safety - python dependency vulnerability checker
+      - id: pipenv-saftey
+        name: pipenv safety
+        description: run safety over main dependencies via pipenv
+        entry: pipenv
+        args: ["check"]
+        language: python
+        additional_dependencies: [pipenv]
+        pass_filenames: false
+        require_serial: true
 
   # ####################################################################################
   #
