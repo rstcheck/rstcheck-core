@@ -78,6 +78,3 @@ There are 3 available ``tox`` envs with all use the same virtualenv:
 
 
 .. _Semantic Versioning: https://semver.org/
-.. _pipenv: https://pipenv.pypa.io/en/latest/
-.. _pipx: https://pypa.github.io/pipx/
-.. _tox: https://tox.wiki/en/latest/index.html
