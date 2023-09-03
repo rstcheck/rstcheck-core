@@ -7,10 +7,13 @@ import pathlib
 import re
 import typing as t
 
-import pydantic
-
 from . import _extras
 
+
+try:
+    from pydantic import v1 as pydantic
+except ModuleNotFoundError:
+    import pydantic
 
 tomllib_imported = False
 try:
