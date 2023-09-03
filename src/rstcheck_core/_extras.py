@@ -22,13 +22,14 @@ from __future__ import annotations
 
 import importlib
 import logging
+import typing as t
 
 from . import _compat as _t
 
 logger = logging.getLogger(__name__)
 
 
-ExtraDependencies = _t.Literal["sphinx", "tomli"]
+ExtraDependencies = t.Literal["sphinx", "tomli"]
 """List of all dependencies installable through extras."""
 
 

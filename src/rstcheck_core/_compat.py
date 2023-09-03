@@ -7,11 +7,6 @@ except ImportError:  # pragma: py-gte-38
     from importlib_metadata import version  # type: ignore[import,no-redef]
 
 try:
-    from typing import Literal
-except ImportError:  # pragma: py-gte-38
-    from typing import Literal  # type: ignore[assignment]
-
-try:
     from typing import Protocol
 except ImportError:  # pragma: py-gte-38
     from typing_extensions import Protocol  # type: ignore[assignment]
@@ -22,4 +17,4 @@ except ImportError:  # pragma: py-gte-38
     from typing_extensions import TypedDict
 
 
-__all__ = ["Literal", "Protocol", "TypedDict", "version"]
+__all__ = ["Protocol", "TypedDict", "version"]

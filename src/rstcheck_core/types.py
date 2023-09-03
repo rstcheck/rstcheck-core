@@ -6,7 +6,7 @@ import typing as t
 
 from . import _compat as _t
 
-SourceFileOrString = pathlib.Path | _t.Literal["<string>"] | _t.Literal["<stdin>"]
+SourceFileOrString = pathlib.Path | t.Literal["<string>", "<stdin>"]
 """Path to source file or if it is a string then '<string>' or '<stdin>'."""
 
 

@@ -21,9 +21,7 @@ def test_report_level_map_matches_numbers() -> None:
 
 def test_report_level_map_matches_names() -> None:
     """Test that the enum's name match the map's keys."""
-    enum_names = [
-        e.casefold() for e in config.ReportLevel._member_names_
-    ]
+    enum_names = [e.casefold() for e in config.ReportLevel._member_names_]
     map_keys = list(config.ReportLevelMap.keys())
 
     assert enum_names == map_keys

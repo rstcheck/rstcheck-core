@@ -34,7 +34,8 @@ class RstcheckMainRunner:
         self.overwrite_config = overwrite_config
         if rstcheck_config.config_path:
             self.load_config_file(
-                rstcheck_config.config_path, rstcheck_config.warn_unknown_settings or False
+                rstcheck_config.config_path,
+                warn_unknown_settings=rstcheck_config.warn_unknown_settings or False,
             )
 
         self.check_paths = check_paths
@@ -185,10 +186,7 @@ class RstcheckMainRunner:
         """
         logger.debug("Runnning checks synchronically.")
         with _sphinx.load_sphinx_if_available():
-            return [
-                checker.check_file(file, self.config, self.overwrite_config)
-                for file in self._files_to_check
-            ]
+            return [checker.check_file(file, self.config) for file in self._files_to_check]
 
     def _run_checks_parallel(self) -> list[list[types.LintError]]:
         """Check all files from the file list in parallel and return the errors.

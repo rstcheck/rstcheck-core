@@ -6,7 +6,7 @@ import logging
 import re
 import typing as t
 
-from . import _compat as _t, types
+from . import types
 
 logger = logging.getLogger(__name__)
 
@@ -18,12 +18,9 @@ VALID_INLINE_CONFIG_KEYS = (
     "ignore-substitutions",
     "ignore-languages",
 )
-ValidInlineConfigKeys = (
-    _t.Literal["ignore-directives"]
-    | _t.Literal["ignore-roles"]
-    | _t.Literal["ignore-substitutions"]
-    | _t.Literal["ignore-languages"]
-)
+ValidInlineConfigKeys = t.Literal[
+    "ignore-directives", "ignore-roles", "ignore-substitutions", "ignore-languages"
+]
 
 RSTCHECK_FLOW_CONTROL_COMMENT_REGEX = re.compile(r"\.\. rstcheck: ([a-z-]*)$")
 VALID_INLINE_FLOW_CONTROLS = ("ignore-next-code-block",)
@@ -119,7 +116,7 @@ def find_ignored_directives(
     :yield: Found directives to ignore
     """
     yield from _filter_config_and_split_values(
-        "ignore-directives", source, source_origin, warn_unknown_settings
+        "ignore-directives", source, source_origin, warn_unknown_settings=warn_unknown_settings
     )
 
 
@@ -152,7 +149,7 @@ def find_ignored_roles(
     :yield: Found roles to ignore
     """
     yield from _filter_config_and_split_values(
-        "ignore-roles", source, source_origin, warn_unknown_settings
+        "ignore-roles", source, source_origin, warn_unknown_settings=warn_unknown_settings
     )
 
 
@@ -185,7 +182,7 @@ def find_ignored_substitutions(
     :yield: Found substitutions to ignore
     """
     yield from _filter_config_and_split_values(
-        "ignore-substitutions", source, source_origin, warn_unknown_settings
+        "ignore-substitutions", source, source_origin, warn_unknown_settings=warn_unknown_settings
     )
 
 
@@ -218,7 +215,7 @@ def find_ignored_languages(
     :yield: Found languages to ignore
     """
     yield from _filter_config_and_split_values(
-        "ignore-languages", source, source_origin, warn_unknown_settings
+        "ignore-languages", source, source_origin, warn_unknown_settings=warn_unknown_settings
     )
 
 

@@ -174,16 +174,24 @@ def check_source(
     logger.info("Check source from '{source_origin}'", extra={"source_origin": source_origin})
     ignores = ignores or types.construct_ignore_dict()
     ignores["directives"].extend(
-        inline_config.find_ignored_directives(source, source_origin, warn_unknown_settings)
+        inline_config.find_ignored_directives(
+            source, source_origin, warn_unknown_settings=warn_unknown_settings
+        )
     )
     ignores["roles"].extend(
-        inline_config.find_ignored_roles(source, source_origin, warn_unknown_settings)
+        inline_config.find_ignored_roles(
+            source, source_origin, warn_unknown_settings=warn_unknown_settings
+        )
     )
     ignores["substitutions"].extend(
-        inline_config.find_ignored_substitutions(source, source_origin, warn_unknown_settings)
+        inline_config.find_ignored_substitutions(
+            source, source_origin, warn_unknown_settings=warn_unknown_settings
+        )
     )
     ignores["languages"].extend(
-        inline_config.find_ignored_languages(source, source_origin, warn_unknown_settings)
+        inline_config.find_ignored_languages(
+            source, source_origin, warn_unknown_settings=warn_unknown_settings
+        )
     )
 
     source = _replace_ignored_substitutions(source, ignores["substitutions"])
