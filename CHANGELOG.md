@@ -29,6 +29,7 @@ NOTE: please use them in this order.
 - Drop python 3.7 ([#52](https://github.com/rstcheck/rstcheck-core/pull/52))
 - Drop support for Sphinx v2 and v3 ([#51](https://github.com/rstcheck/rstcheck-core/pull/51))
 - Add tox environments for v6 adn v7 ([#51](https://github.com/rstcheck/rstcheck-core/pull/51))
+- Update Sphinx Theme Version and remove outdated Dark Mode Lib ([#51](https://github.com/rstcheck/rstcheck-core/pull/51))
 
 ## [1.0.3 (2022-11-12)](https://github.com/rstcheck/rstcheck-core/releases/v1.0.3)
 
