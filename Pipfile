@@ -14,11 +14,10 @@ tox = ">=3.15"
 my-flake8-plugins = { git = "https://github.com/cielquan/my-flake8-plugins.git", ref = "v1.5.0", extras= ["flakeheaven"] }
 pylint = ">=2.12"
 mypy = ">=0.931"
-pytest = ">=6.0"
+pytest = ">=7.2"
 pytest-mock = ">=3.7"
 sphinx = ">=4.0"
-sphinx-rtd-theme = "*"
-rstcheck-core = {file = ".", editable = true}
+sphinx-rtd-theme = ">1.2"
 
 [docs-packages]
 sphinx-autobuild = "2021.3.14"
