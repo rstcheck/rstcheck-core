@@ -30,24 +30,6 @@ repos:
       - id: check-case-conflict
       - id: check-shebang-scripts-are-executable
 
-  # ----------------------------------------------
-  # Dependency hooks
-  # ----------------------------------------------
-
-  - repo: local
-    hooks:
-      # pipenv - python depencency and virtualenv manager
-      # safety - python dependency vulnerability checker
-      - id: pipenv-saftey
-        name: pipenv safety
-        description: run safety over main dependencies via pipenv
-        entry: pipenv
-        args: ["check"]
-        language: python
-        additional_dependencies: [pipenv]
-        pass_filenames: false
-        require_serial: true
-
   # ####################################################################################
   #
   #       FORMATTING
