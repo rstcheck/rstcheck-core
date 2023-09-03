@@ -37,9 +37,7 @@ pytest-mock = {version = ">=3.7", optional = true}
 # EXTRA docs
 sphinx-autobuild = { version = "2021.3.14", optional = true }
 m2r2 = { version = ">=0.3.2", optional = true }
-# TODO:#i# wait for fix: https://github.com/MrDogeBro/sphinx_rtd_dark_mode/issues/28
-sphinx-rtd-theme = { version = "<1", optional = true }
-sphinx-rtd-dark-mode = {version = "^1.2.4", optional = true}
+sphinx-rtd-theme = { version = ">1.2", optional = true }
 sphinx-autodoc-typehints = { version = ">=1.15", optional = true }
 sphinxcontrib-apidoc = { version = ">=0.3", optional = true }
 sphinxcontrib-spelling = { version = ">=7.3", optional = true }
@@ -78,7 +76,6 @@ docs = [
   "sphinx-autobuild",
   "m2r2",
   "sphinx-rtd-theme",
-  "sphinx-rtd-dark-mode",
   "sphinx-autodoc-typehints",
   "sphinxcontrib-apidoc",
   "sphinxcontrib-spelling",
