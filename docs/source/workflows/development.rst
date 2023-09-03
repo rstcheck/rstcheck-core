@@ -15,7 +15,9 @@ Tooling
 
 For development the following tools are used:
 
-- ``poetry`` for dependency management, package metadata, building and publishing.
+- ``setuptools`` for package metadata and building.
+- ``twine`` for publishing.
+- ``pipenv`` for dependency and virtualenv management.
 - ``tox`` for automated and isolated testing.
 - ``pre-commit`` for automated QA checks via different linters and formatters.
 
@@ -23,14 +25,16 @@ For development the following tools are used:
 Set up Local Development Environment
 ------------------------------------
 
-The setup of a local development environment is pretty easy. The only tool you need is the
-`poetry`_. You can install it via the `recommended way`_, which installs it globally on your
-system or you can install it via ``pip`` in a self-created virtualenv (`virtualenv manual`_).
+It is recommended to install `tox`_ and `pipenv`_ via  `pipx`_ to have them globally available and
+not clutter the development virtualenv.
 
-With ``poetry`` set up and ready we can create our development environment in just one
+Next create a ``.env`` file in the project's root direcetory with ``PIPENV_VENV_IN_PROJECT=1`` as
+its content.
+
+With ``pipenv`` set up and ready we can create our development environment in just one
 step::
 
-    $ poetry install
+    $ pipenv install --dev
 
 This will install ``rstcheck-core`` along its main and development dependencies.
 
@@ -38,10 +42,11 @@ This will install ``rstcheck-core`` along its main and development dependencies.
 Working with the Local Development Environment
 ----------------------------------------------
 
-Dependency management and more with poetry
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Dependency management
+~~~~~~~~~~~~~~~~~~~~~
 
-is used for dependency management, building and publishing ``rstcheck-core``.
+Main dependencies are listed in ``pyproject.toml`` and development dependencies are managed via
+``pipenv`` in ``Pipfile``.
 
 
 Testing with tox
@@ -94,6 +99,7 @@ installed to allow IDEs to use them for inline error messages. Their config is i
 
 
 .. _Semantic Versioning: https://semver.org/
-.. _poetry: https://python-poetry.org/docs/
-.. _recommended way: https://python-poetry.org/docs/#installation
+.. _pipenv: https://pipenv.pypa.io/en/latest/
+.. _pipx: https://pypa.github.io/pipx/
+.. _tox: https://tox.wiki/en/latest/index.html
 .. _virtualenv manual: https://packaging.python.org/en/latest/guides/installing-using-pip-and-virtual-environments/
