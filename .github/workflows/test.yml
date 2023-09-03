@@ -51,8 +51,5 @@ jobs:
       - name: Install tox via pipx
         run: pipx install tox
 
-      - name: Install pipenv via pipx
-        run: pipx install pipenv
-
       - name: Run tests via tox
         run: tox -m py${{ matrix.python-version }}

@@ -42,8 +42,5 @@ jobs:
       - name: Install tox via pipx
         run: pipx install tox
 
-      - name: Install pipenv via pipx
-        run: pipx install pipenv
-
       - name: Run pre-commit via tox
         run: tox -e pre-commit-run
