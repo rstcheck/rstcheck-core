@@ -52,9 +52,10 @@ def get_inline_config_from_source(
         if key not in VALID_INLINE_CONFIG_KEYS:
             if warn_unknown_settings:
                 logger.warning(
-                    "Unknown inline config '{key}' found. "
-                    "Source: '{source_origin}' at line {idx}",
-                    extra={"key": key, "source_origin": source_origin, "idx": idx + 1},
+                    "Unknown inline config '%s' found. Source: '%s' at line %s",
+                    key,
+                    source_origin,
+                    idx + 1,
                 )
             continue
 
@@ -247,13 +248,10 @@ def get_inline_flow_control_from_source(
         if value not in VALID_INLINE_FLOW_CONTROLS:
             if warn_unknown_settings:
                 logger.warning(
-                    "Unknown inline flow control '{value}' found. "
-                    "Source: '{source_origin}' at line {line_number}",
-                    extra={
-                        "value": value,
-                        "source_origin": source_origin,
-                        "line_number": line_number,
-                    },
+                    "Unknown inline flow control '%s' found. Source: '%s' at line %s",
+                    value,
+                    source_origin,
+                    line_number,
                 )
             continue
 
@@ -278,7 +276,7 @@ def find_code_block_ignore_lines(
     :yield: Single values for the ``target_config``
     """
     flow_controls = get_inline_flow_control_from_source(
-        source, source_origin, warn_unknown_settings
+        source, source_origin, warn_unknown_settings=warn_unknown_settings
     )
     for flow_control in flow_controls:
         if flow_control["value"] == "ignore-next-code-block":

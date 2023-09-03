@@ -54,8 +54,8 @@ def is_installed_with_supported_version(package: ExtraDependencies) -> bool:
     :return: Bool if package is installed with supported version
     """
     logger.debug(
-        "Check if package is installed with supported version: '{package}'.",
-        extra={"package": package},
+        "Check if package is installed with supported version: '%s'.",
+        package,
     )
     try:
         importlib.import_module(package)

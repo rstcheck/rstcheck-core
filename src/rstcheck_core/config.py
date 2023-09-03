@@ -229,7 +229,7 @@ def _load_config_from_ini_file(
         section
         or ``NONE`` is passed as the config path.
     """
-    logger.debug("Try loading config from INI file: '{ini_file}'", extra={"ini_file": ini_file})
+    logger.debug("Try loading config from INI file: '%s'", ini_file)
 
     if ini_file.name == "NONE":
         logger.info("Config path is set to 'NONE'. No config file is loaded.")
@@ -247,11 +247,13 @@ def _load_config_from_ini_file(
     if not parser.has_section("rstcheck"):
         if log_missing_section_as_warning:
             logger.warning(
-                "Config file has no [rstcheck] section: '{ini_file}'.", extra={"ini_file": ini_file}
+                "Config file has no [rstcheck] section: '%s'.",
+                ini_file,
             )
             return None
         logger.info(
-            "Config file has no [rstcheck] section: '{ini_file}'.", extra={"ini_file": ini_file}
+            "Config file has no [rstcheck] section: '%s'.",
+            ini_file,
         )
         return None
 
@@ -261,8 +263,9 @@ def _load_config_from_ini_file(
         unknown = [s for s in config_values_raw if s not in known_settings]
         if unknown:
             logger.warning(
-                "Unknown setting(s) {unknown} found in file: '{ini_file}'.",
-                extra={"ini_file": ini_file},
+                "Unknown setting(s) %s found in file: '%s'.",
+                unknown,
+                ini_file,
             )
 
     config_values_checked = _RstcheckConfigINIFile(**config_values_raw)
@@ -312,9 +315,7 @@ def _load_config_from_toml_file(
         or ``NONE`` is passed as the config path.
     """
     _extras.install_guard_tomli(tomllib_imported=tomllib_imported)
-    logger.debug(
-        "Try loading config from TOML file: '{toml_file}'.", extra={"toml_file": toml_file}
-    )
+    logger.debug("Try loading config from TOML file: '%s'.", toml_file)
 
     if toml_file.name == "NONE":
         logger.info("Config path is set to 'NONE'. No config file is loaded.")
@@ -323,14 +324,12 @@ def _load_config_from_toml_file(
     resolved_file = toml_file.resolve()
 
     if not resolved_file.is_file():
-        logging.error("Config file is not a file: '{toml_file}'.", extra={"toml_file": toml_file})
+        logging.error("Config file is not a file: '%s'.", toml_file)
         msg = f"{resolved_file}"
         raise FileNotFoundError(msg)
 
     if resolved_file.suffix.casefold() != ".toml":
-        logging.error(
-            "Config file is not a TOML file: '{toml_file}'.", extra={"toml_file": toml_file}
-        )
+        logging.error("Config file is not a TOML file: '%s'.", toml_file)
         msg = "File is not a TOML file"
         raise ValueError(msg)
 
@@ -343,13 +342,13 @@ def _load_config_from_toml_file(
     if rstcheck_section is None:
         if log_missing_section_as_warning:
             logger.warning(
-                "Config file has no [tool.rstcheck] section: '{toml_file}'.",
-                extra={"toml_file": toml_file},
+                "Config file has no [tool.rstcheck] section: '%s'.",
+                toml_file,
             )
             return None
         logger.info(
-            "Config file has no [tool.rstcheck] section: '{toml_file}'.",
-            extra={"toml_file": toml_file},
+            "Config file has no [tool.rstcheck] section: '%s'.",
+            toml_file,
         )
         return None
 
@@ -358,8 +357,9 @@ def _load_config_from_toml_file(
         unknown = [s for s in rstcheck_section if s not in known_settings]
         if unknown:
             logger.warning(
-                "Unknown setting(s) {unknown} found in file: '{toml_file}'.",
-                extra={"toml_file": toml_file},
+                "Unknown setting(s) %s found in file: '%s'.",
+                unknown,
+                toml_file,
             )
 
     config_values_checked = _RstcheckConfigTOMLFile(**rstcheck_section)
@@ -429,9 +429,7 @@ def load_config_file_from_dir(
         :py:obj:`None` if no file is found or no file has a rstcheck section
         or ``NONE`` is passed as the config path.
     """
-    logger.debug(
-        "Try loading config file from directory: '{dir_path}'.", extra={"dir_path": dir_path}
-    )
+    logger.debug("Try loading config file from directory: '%s'.", dir_path)
 
     if dir_path.name == "NONE":
         logger.info("Config path is set to 'NONE'. No config file is loaded.")
@@ -454,8 +452,8 @@ def load_config_file_from_dir(
 
     if config is None:
         logger.info(
-            "No config section in supported config files found in directory: '{dir_path}'.",
-            extra={"dir_path": dir_path},
+            "No config section in supported config files found in directory: '%s'.",
+            dir_path,
         )
 
     return config
@@ -483,9 +481,7 @@ def load_config_file_from_dir_tree(
         :py:obj:`None` if no file is found or no file has a rstcheck section
         or ``NONE`` is passed as the config path.
     """
-    logger.debug(
-        "Try loading config file from directory tree: '{dir_path}'.", extra={"dir_path": dir_path}
-    )
+    logger.debug("Try loading config file from directory tree: '%s'.", dir_path)
 
     if dir_path.name == "NONE":
         logger.info("Config path is set to 'NONE'. No config file is loaded.")
@@ -512,8 +508,8 @@ def load_config_file_from_dir_tree(
 
     if config is None:
         logger.info(
-            "No config section in supported config files found in directory tree: '{dir_path}'.",
-            extra={"dir_path": dir_path},
+            "No config section in supported config files found in directory tree: '%s'.",
+            dir_path,
         )
 
     return config
@@ -548,7 +544,7 @@ def load_config_file_from_path(
         :py:obj:`None` if no file is found or no file has a rstcheck section
         or ``NONE`` is passed as the config path.
     """
-    logger.debug("Try loading config file from path: '{path}'.", extra={"path": path})
+    logger.debug("Try loading config file from path: '%s'.", path)
 
     if path.name == "NONE":
         logger.info("Config path is set to 'NONE'. No config file is loaded.")

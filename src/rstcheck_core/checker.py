@@ -51,7 +51,7 @@ def check_file(
         defaults to :py:obj:`True`
     :return: A list of found issues
     """
-    logger.info("Check file'{source_file}'", extra={"source_file": source_file})
+    logger.info("Check file'%s'", source_file)
     run_config = _load_run_config(
         source_file.parent, rstcheck_config, overwrite_config=overwrite_with_file_config
     )
@@ -171,7 +171,7 @@ def check_source(
     source_origin: types.SourceFileOrString = source_file or "<string>"
     if isinstance(source_origin, pathlib.Path) and source_origin.name == "-":
         source_origin = "<stdin>"
-    logger.info("Check source from '{source_origin}'", extra={"source_origin": source_origin})
+    logger.info("Check source from '%s'", source_origin)
     ignores = ignores or types.construct_ignore_dict()
     ignores["directives"].extend(
         inline_config.find_ignored_directives(
@@ -238,10 +238,10 @@ def check_source(
             logger.critical(
                 "An `AttributeError` error occured. This is most propably due to a code block "
                 "directive (code/code-block/sourcecode) without a specified language. "
-                "This may result in a false negative for source: '{source_origin}'. "
+                "This may result in a false negative for source: '%s'. "
                 "See https://rstcheck-core.readthedocs.io/en/latest/faq/"
                 "#code-blocks-without-language-sphinx for more information.",
-                extra={"source_origin": source_origin},
+                source_origin,
             )
 
     yield from _run_code_checker_and_filter_errors(writer.checkers, ignores["messages"])
@@ -421,17 +421,17 @@ class _CheckTranslator(docutils.nodes.NodeVisitor):
         directive_line = _get_code_block_directive_line(node, self.source)
         if directive_line is None:
             logger.error(
-                "Could not find line for literal block directive. "
-                "Source: '{source_origin}' at line {node_line}",
-                extra={"source_origin": self.source_origin, "node_line": node.line},
+                "Could not find line for literal block directive. Source: '%s' at line %s",
+                self.source_origin,
+                node.line,
             )
             return
 
         if directive_line - 1 in self.code_block_ignore_lines:
             logger.debug(
-                "Skipping code-block due to skip comment. "
-                "Source: '{source_origin}' at line {node_line}",
-                extra={"source_origin": self.source_origin, "node_line": node.line},
+                "Skipping code-block due to skip comment. Source: '%s' at line %s",
+                self.source_origin,
+                node.line,
             )
             return
 
@@ -880,7 +880,7 @@ def _parse_gcc_style_error_message(
     colons = 2 if has_column else 1
     prefix = str(source_origin) + ":"
     if not message.startswith(prefix):
-        logger.debug("Skipping unparsable message: '{msg_}'.", extra={"msg_": message})
+        logger.debug("Skipping unparsable message: '%s'.", message)
         msg = "Message cannot be parsed."
         raise ValueError(msg)
     message = message[len(prefix) :]

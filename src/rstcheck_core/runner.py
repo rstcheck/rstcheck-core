@@ -79,7 +79,7 @@ class RstcheckMainRunner:
             defaults to :py:obj:`False`
         """
         logger.info(
-            "Load config file for main runner: '{config_path}'.", extra={"config_path": config_path}
+            "Load config file for main runner: '%s'.", config_path
         )
         file_config = config.load_config_file_from_path(
             config_path, warn_unknown_settings=warn_unknown_settings
@@ -91,8 +91,8 @@ class RstcheckMainRunner:
 
         logger.debug(
             "Merging config from file into main config. "
-            "File config is dominant: {overwrite_config}",
-            extra={"overwrite_config": self.overwrite_config},
+            "File config is dominant: %s",
+            self.overwrite_config,
         )
         self.config = config.merge_configs(
             self.config, file_config, config_add_is_dominant=self.overwrite_config
@@ -167,14 +167,14 @@ class RstcheckMainRunner:
 
             if self.config.recursive:
                 logger.warning(
-                    "Path does not exist or is neither a file nor a directory: '{path}'.",
-                    extra={"path": path},
+                    "Path does not exist or is neither a file nor a directory: '%s'.",
+                    path,
                 )
                 continue
 
             logger.warning(
-                "Path does not exist or is not a file: '{path}'.",
-                extra={"path": path},
+                "Path does not exist or is not a file: '%s'.",
+                path,
             )
 
         return _paths
@@ -194,8 +194,8 @@ class RstcheckMainRunner:
         :return: List of lists of errors found per file
         """
         logger.debug(
-            "Runnning checks in parallel with pool size of {pool_size}.",
-            extra={"pool_size": self._pool_size},
+            "Runnning checks in parallel with pool size of %s.",
+            self._pool_size,
         )
         with _sphinx.load_sphinx_if_available(), multiprocessing.Pool(self._pool_size) as pool:
             return pool.starmap(
