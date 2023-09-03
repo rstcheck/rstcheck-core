@@ -9,12 +9,9 @@ import pathlib
 import re
 import typing as t
 
-from . import _extras
+import pydantic
 
-try:
-    from pydantic import v1 as pydantic
-except ModuleNotFoundError:
-    import pydantic
+from . import _extras
 
 tomllib_imported = False
 try:

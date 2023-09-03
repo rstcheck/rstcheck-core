@@ -22,7 +22,7 @@ dynamic = ["version"]
 
 dependencies = [
   "docutils >=0.7",
-  "pydantic >=1.2",
+  "pydantic >=2",
   "importlib-metadata >=1.6; python_version<='3.8'",
   "typing-extensions >=3.7.4; python_version<='3.8'",
 ]
