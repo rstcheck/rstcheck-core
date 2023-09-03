@@ -33,14 +33,11 @@ toml = ["tomli >=2.0; python_version<='3.10'"]
 testing = [
     "pytest >=7.2",
     "pytest-cov >=3.0",
+    "coverage[toml] >=6.0",
+    "coverage-conditional-plugin >=0.5",
     "pytest-sugar >=0.9.5",
     "pytest-randomly >=3.0",
     "pytest-mock >=3.7",
-    "rstcheck-core[coverage]",
-]
-coverage = [
-    "coverage[toml] >=6.0",
-    "coverage-conditional-plugin >=0.5",
 ]
 docs = [
     "sphinx >=4.0",
