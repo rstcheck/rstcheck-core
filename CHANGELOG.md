@@ -27,9 +27,9 @@ NOTE: please use them in this order.
 
 - Ignore "no newline at end of file" errors when C++ code is checked by clang (such as on macOS) ([#45](https://github.com/rstcheck/rstcheck-core/pull/45))
 - Drop python 3.7 ([#52](https://github.com/rstcheck/rstcheck-core/pull/52))
-- Drop support for Sphinx v2 and v3 ([#51](https://github.com/rstcheck/rstcheck-core/pull/51))
-- Add tox environments for v6 and v7 ([#51](https://github.com/rstcheck/rstcheck-core/pull/51))
-- Update Sphinx Theme Version and remove outdated Dark Mode Lib ([#51](https://github.com/rstcheck/rstcheck-core/pull/51))
+- Drop support for Sphinx v2 and v3 ([#56](https://github.com/rstcheck/rstcheck-core/pull/56))
+- Add tox environments for v6 and v7 ([#56](https://github.com/rstcheck/rstcheck-core/pull/56))
+- Update Sphinx Theme Version and remove outdated Dark Mode Lib ([#56](https://github.com/rstcheck/rstcheck-core/pull/56))
 
 ## [1.0.3 (2022-11-12)](https://github.com/rstcheck/rstcheck-core/releases/v1.0.3)
 
