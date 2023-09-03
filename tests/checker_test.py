@@ -1,5 +1,6 @@
 """Tests for ``checker`` module."""
-# pylint: disable=too-many-lines,protected-access
+from __future__ import annotations
+
 import os
 import pathlib
 import re
@@ -72,7 +73,7 @@ class TestRunConfigLoader:
         monkeypatch.setattr(config, "load_config_file_from_dir_tree", lambda _: test_file_config)
         test_config = config.RstcheckConfig()
 
-        result = checker._load_run_config(pathlib.Path(), test_config, True)
+        result = checker._load_run_config(pathlib.Path(), test_config, overwrite_config=True)
 
         assert result is not None
         assert test_config != config.ReportLevel.SEVERE
@@ -550,7 +551,7 @@ class TestRstErrorParseFilter:
         assert len(result) == 1
 
 
-class TestCheckTranslator:  # pylint: disable=too-few-public-methods
+class TestCheckTranslator:
     """Test ``_CheckTranslator`` class."""
 
     @staticmethod
@@ -563,7 +564,7 @@ class TestCheckTranslator:  # pylint: disable=too-few-public-methods
         assert not result.checkers
 
 
-class TestCodeBlockChecker:  # pylint: disable=too-many-public-methods
+class TestCodeBlockChecker:
     """Test ``CodeBlockChecker`` class."""
 
     @staticmethod
@@ -1063,10 +1064,15 @@ int main()
             cb_checker._gcc_checker(
                 source,
                 ".cpp",
-                [os.getenv("CXX", "g++")]
-                + shlex.split(os.getenv("CXXFLAGS", ""))
-                + shlex.split(os.getenv("CPPFLAGS", ""))
-                + ["-I.", "-I..", "-pedantic", "-fsyntax-only"],
+                [
+                    os.getenv("CXX", "g++"),
+                    *shlex.split(os.getenv("CXXFLAGS", "")),
+                    *shlex.split(os.getenv("CPPFLAGS", "")),
+                    "-I.",
+                    "-I..",
+                    "-pedantic",
+                    "-fsyntax-only",
+                ],
             )
         )
 
@@ -1088,10 +1094,15 @@ int main()
             cb_checker._gcc_checker(
                 source,
                 ".cpp",
-                [os.getenv("CXX", "g++")]
-                + shlex.split(os.getenv("CXXFLAGS", ""))
-                + shlex.split(os.getenv("CPPFLAGS", ""))
-                + ["-I.", "-I..", "-pedantic", "-fsyntax-only"],
+                [
+                    os.getenv("CXX", "g++"),
+                    *shlex.split(os.getenv("CXXFLAGS", "")),
+                    *shlex.split(os.getenv("CPPFLAGS", "")),
+                    "-I.",
+                    "-I..",
+                    "-pedantic",
+                    "-fsyntax-only",
+                ],
             )
         )
 
@@ -1114,10 +1125,15 @@ int main()
             cb_checker._gcc_checker(
                 source,
                 ".cpp",
-                [os.getenv("CXX", "g++")]
-                + shlex.split(os.getenv("CXXFLAGS", ""))
-                + shlex.split(os.getenv("CPPFLAGS", ""))
-                + ["-I.", "-I..", "-pedantic", "-fsyntax-only"],
+                [
+                    os.getenv("CXX", "g++"),
+                    *shlex.split(os.getenv("CXXFLAGS", "")),
+                    *shlex.split(os.getenv("CPPFLAGS", "")),
+                    "-I.",
+                    "-I..",
+                    "-pedantic",
+                    "-fsyntax-only",
+                ],
             )
         )
 
@@ -1140,10 +1156,15 @@ int main()
             cb_checker._gcc_checker(
                 source,
                 ".cpp",
-                [os.getenv("CXX", "g++")]
-                + shlex.split(os.getenv("CXXFLAGS", ""))
-                + shlex.split(os.getenv("CPPFLAGS", ""))
-                + ["-I.", "-I..", "-pedantic", "-fsyntax-only"],
+                [
+                    os.getenv("CXX", "g++"),
+                    *shlex.split(os.getenv("CXXFLAGS", "")),
+                    *shlex.split(os.getenv("CPPFLAGS", "")),
+                    "-I.",
+                    "-I..",
+                    "-pedantic",
+                    "-fsyntax-only",
+                ],
             )
         )
 
@@ -1167,10 +1188,15 @@ int main()
         result = cb_checker._run_in_subprocess(
             source,
             ".cpp",
-            [os.getenv("CXX", "g++")]
-            + shlex.split(os.getenv("CXXFLAGS", ""))
-            + shlex.split(os.getenv("CPPFLAGS", ""))
-            + ["-I.", "-I..", "-pedantic", "-fsyntax-only"],
+            [
+                os.getenv("CXX", "g++"),
+                *shlex.split(os.getenv("CXXFLAGS", "")),
+                *shlex.split(os.getenv("CPPFLAGS", "")),
+                "-I.",
+                "-I..",
+                "-pedantic",
+                "-fsyntax-only",
+            ],
         )
 
         assert not result
@@ -1190,10 +1216,15 @@ int main()
         result = cb_checker._run_in_subprocess(
             source,
             ".cpp",
-            [os.getenv("CXX", "g++")]
-            + shlex.split(os.getenv("CXXFLAGS", ""))
-            + shlex.split(os.getenv("CPPFLAGS", ""))
-            + ["-I.", "-I..", "-pedantic", "-fsyntax-only"],
+            [
+                os.getenv("CXX", "g++"),
+                *shlex.split(os.getenv("CXXFLAGS", "")),
+                *shlex.split(os.getenv("CPPFLAGS", "")),
+                "-I.",
+                "-I..",
+                "-pedantic",
+                "-fsyntax-only",
+            ],
         )
 
         assert result is not None
@@ -1215,10 +1246,15 @@ int main()
         result = cb_checker._run_in_subprocess(
             source,
             ".cpp",
-            [os.getenv("CXX", "g++")]
-            + shlex.split(os.getenv("CXXFLAGS", ""))
-            + shlex.split(os.getenv("CPPFLAGS", ""))
-            + ["-I.", "-I..", "-pedantic", "-fsyntax-only"],
+            [
+                os.getenv("CXX", "g++"),
+                *shlex.split(os.getenv("CXXFLAGS", "")),
+                *shlex.split(os.getenv("CPPFLAGS", "")),
+                "-I.",
+                "-I..",
+                "-pedantic",
+                "-fsyntax-only",
+            ],
         )
 
         assert result is not None
@@ -1240,10 +1276,15 @@ int main()
         result = cb_checker._run_in_subprocess(
             source,
             ".cpp",
-            [os.getenv("CXX", "g++")]
-            + shlex.split(os.getenv("CXXFLAGS", ""))
-            + shlex.split(os.getenv("CPPFLAGS", ""))
-            + ["-I.", "-I..", "-pedantic", "-fsyntax-only"],
+            [
+                os.getenv("CXX", "g++"),
+                *shlex.split(os.getenv("CXXFLAGS", "")),
+                *shlex.split(os.getenv("CPPFLAGS", "")),
+                "-I.",
+                "-I..",
+                "-pedantic",
+                "-fsyntax-only",
+            ],
         )
 
         assert result is not None
@@ -1265,10 +1306,15 @@ int main()
         result = cb_checker._run_in_subprocess(
             source,
             ".cpp",
-            [os.getenv("CXX", "g++")]
-            + shlex.split(os.getenv("CXXFLAGS", ""))
-            + shlex.split(os.getenv("CPPFLAGS", ""))
-            + ["-I.", "-I..", "-pedantic", "-fsyntax-only"],
+            [
+                os.getenv("CXX", "g++"),
+                *shlex.split(os.getenv("CXXFLAGS", "")),
+                *shlex.split(os.getenv("CPPFLAGS", "")),
+                "-I.",
+                "-I..",
+                "-pedantic",
+                "-fsyntax-only",
+            ],
         )
 
         assert result is not None
@@ -1290,10 +1336,15 @@ int main()
         result = cb_checker._run_in_subprocess(
             source,
             ".cpp",
-            [os.getenv("CXX", "g++")]
-            + shlex.split(os.getenv("CXXFLAGS", ""))
-            + shlex.split(os.getenv("CPPFLAGS", ""))
-            + ["-I.", "-I..", "-pedantic", "-fsyntax-only"],
+            [
+                os.getenv("CXX", "g++"),
+                *shlex.split(os.getenv("CXXFLAGS", "")),
+                *shlex.split(os.getenv("CPPFLAGS", "")),
+                "-I.",
+                "-I..",
+                "-pedantic",
+                "-fsyntax-only",
+            ],
         )
 
         assert result is not None
@@ -1315,10 +1366,15 @@ int main()
         result = cb_checker._run_in_subprocess(
             source,
             ".cpp",
-            [os.getenv("CXX", "g++")]
-            + shlex.split(os.getenv("CXXFLAGS", ""))
-            + shlex.split(os.getenv("CPPFLAGS", ""))
-            + ["-I.", "-I..", "-pedantic", "-fsyntax-only"],
+            [
+                os.getenv("CXX", "g++"),
+                *shlex.split(os.getenv("CXXFLAGS", "")),
+                *shlex.split(os.getenv("CPPFLAGS", "")),
+                "-I.",
+                "-I..",
+                "-pedantic",
+                "-fsyntax-only",
+            ],
         )
 
         assert result is not None
@@ -1357,6 +1413,6 @@ int main()
             message="Error message",
         )
 
-        result = checker._parse_gcc_style_error_message(message, "<string>", False)
+        result = checker._parse_gcc_style_error_message(message, "<string>", has_column=False)
 
         assert result == error

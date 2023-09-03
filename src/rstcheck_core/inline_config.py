@@ -1,11 +1,12 @@
 """Inline config comment functionality."""
+from __future__ import annotations
+
 import functools
 import logging
 import re
 import typing as t
 
 from . import _compat as _t, types
-
 
 logger = logging.getLogger(__name__)
 
@@ -17,21 +18,21 @@ VALID_INLINE_CONFIG_KEYS = (
     "ignore-substitutions",
     "ignore-languages",
 )
-ValidInlineConfigKeys = t.Union[
-    _t.Literal["ignore-directives"],
-    _t.Literal["ignore-roles"],
-    _t.Literal["ignore-substitutions"],
-    _t.Literal["ignore-languages"],
-]
+ValidInlineConfigKeys = (
+    _t.Literal["ignore-directives"]
+    | _t.Literal["ignore-roles"]
+    | _t.Literal["ignore-substitutions"]
+    | _t.Literal["ignore-languages"]
+)
 
 RSTCHECK_FLOW_CONTROL_COMMENT_REGEX = re.compile(r"\.\. rstcheck: ([a-z-]*)$")
 VALID_INLINE_FLOW_CONTROLS = ("ignore-next-code-block",)
 
 
-@functools.lru_cache()
+@functools.lru_cache
 def get_inline_config_from_source(
-    source: str, source_origin: types.SourceFileOrString, warn_unknown_settings: bool = False
-) -> t.List[types.InlineConfig]:
+    source: str, source_origin: types.SourceFileOrString, *, warn_unknown_settings: bool = False
+) -> list[types.InlineConfig]:
     """Get rstcheck inline configs from source.
 
     Unknown configs are ignored.
@@ -42,7 +43,7 @@ def get_inline_config_from_source(
         defaults to :py:obj:`False`
     :return: A list of inline configs
     """
-    configs: t.List[types.InlineConfig] = []
+    configs: list[types.InlineConfig] = []
     for idx, line in enumerate(source.splitlines()):
         match = RSTCHECK_CONFIG_COMMENT_REGEX.search(line)
         if match is None:
@@ -54,8 +55,9 @@ def get_inline_config_from_source(
         if key not in VALID_INLINE_CONFIG_KEYS:
             if warn_unknown_settings:
                 logger.warning(
-                    f"Unknown inline config '{key}' found. "
-                    f"Source: '{source_origin}' at line {idx + 1}"
+                    "Unknown inline config '{key}' found. "
+                    "Source: '{source_origin}' at line {idx}",
+                    extra={"key": key, "source_origin": source_origin, "idx": idx + 1},
                 )
             continue
 
@@ -68,6 +70,7 @@ def _filter_config_and_split_values(
     target_config: ValidInlineConfigKeys,
     source: str,
     source_origin: types.SourceFileOrString,
+    *,
     warn_unknown_settings: bool = False,
 ) -> t.Generator[str, None, None]:
     """Get specified configs and comma split them.
@@ -88,7 +91,7 @@ def _filter_config_and_split_values(
 
 
 def find_ignored_directives(
-    source: str, source_origin: types.SourceFileOrString, warn_unknown_settings: bool = False
+    source: str, source_origin: types.SourceFileOrString, *, warn_unknown_settings: bool = False
 ) -> t.Generator[str, None, None]:
     """Search the rst source for rstcheck inline ignore-directives comments.
 
@@ -121,7 +124,7 @@ def find_ignored_directives(
 
 
 def find_ignored_roles(
-    source: str, source_origin: types.SourceFileOrString, warn_unknown_settings: bool = False
+    source: str, source_origin: types.SourceFileOrString, *, warn_unknown_settings: bool = False
 ) -> t.Generator[str, None, None]:
     """Search the rst source for rstcheck inline ignore-roles comments.
 
@@ -154,7 +157,7 @@ def find_ignored_roles(
 
 
 def find_ignored_substitutions(
-    source: str, source_origin: types.SourceFileOrString, warn_unknown_settings: bool = False
+    source: str, source_origin: types.SourceFileOrString, *, warn_unknown_settings: bool = False
 ) -> t.Generator[str, None, None]:
     """Search the rst source for rstcheck inline ignore-substitutions comments.
 
@@ -187,7 +190,7 @@ def find_ignored_substitutions(
 
 
 def find_ignored_languages(
-    source: str, source_origin: types.SourceFileOrString, warn_unknown_settings: bool = False
+    source: str, source_origin: types.SourceFileOrString, *, warn_unknown_settings: bool = False
 ) -> t.Generator[str, None, None]:
     """Search the rst source for rstcheck inline ignore-languages comments.
 
@@ -219,10 +222,10 @@ def find_ignored_languages(
     )
 
 
-@functools.lru_cache()
+@functools.lru_cache
 def get_inline_flow_control_from_source(
-    source: str, source_origin: types.SourceFileOrString, warn_unknown_settings: bool = False
-) -> t.List[types.InlineFlowControl]:
+    source: str, source_origin: types.SourceFileOrString, *, warn_unknown_settings: bool = False
+) -> list[types.InlineFlowControl]:
     """Get rstcheck inline flow control from source.
 
     Unknown flow controls are ignored.
@@ -233,7 +236,7 @@ def get_inline_flow_control_from_source(
         defaults to :py:obj:`False`
     :return: A list of inline flow controls
     """
-    configs: t.List[types.InlineFlowControl] = []
+    configs: list[types.InlineFlowControl] = []
     for idx, line in enumerate(source.splitlines()):
         match = RSTCHECK_FLOW_CONTROL_COMMENT_REGEX.search(line)
         if match is None:
@@ -245,8 +248,13 @@ def get_inline_flow_control_from_source(
         if value not in VALID_INLINE_FLOW_CONTROLS:
             if warn_unknown_settings:
                 logger.warning(
-                    f"Unknown inline flow control '{value}' found. "
-                    f"Source: '{source_origin}' at line {line_number}"
+                    "Unknown inline flow control '{value}' found. "
+                    "Source: '{source_origin}' at line {line_number}",
+                    extra={
+                        "value": value,
+                        "source_origin": source_origin,
+                        "line_number": line_number,
+                    },
                 )
             continue
 
@@ -258,6 +266,7 @@ def get_inline_flow_control_from_source(
 def find_code_block_ignore_lines(
     source: str,
     source_origin: types.SourceFileOrString,
+    *,
     warn_unknown_settings: bool = False,
 ) -> t.Generator[int, None, None]:
     """Get lines of ``ignore-next-code-block`` flow control comments.

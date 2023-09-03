@@ -9,7 +9,6 @@ import typing as t
 
 from . import _docutils, _extras
 
-
 if _extras.SPHINX_INSTALLED:
     import sphinx.application
     import sphinx.domains.c
@@ -28,7 +27,7 @@ def create_dummy_sphinx_app() -> sphinx.application.Sphinx:
     logger.debug("Create dummy sphinx application.")
     with tempfile.TemporaryDirectory() as temp_dir:
         outdir = pathlib.Path(temp_dir) / "_build"
-        sphinx_app = sphinx.application.Sphinx(
+        return sphinx.application.Sphinx(
             srcdir=temp_dir,
             confdir=None,
             outdir=str(outdir),
@@ -38,23 +37,21 @@ def create_dummy_sphinx_app() -> sphinx.application.Sphinx:
             status=None,
         )
 
-        return sphinx_app
-
 
 @contextlib.contextmanager
-def load_sphinx_if_available() -> t.Generator[t.Optional[sphinx.application.Sphinx], None, None]:
+def load_sphinx_if_available() -> t.Generator[sphinx.application.Sphinx | None, None, None]:
     """Contextmanager to register Sphinx directives and roles if sphinx is available."""
     if _extras.SPHINX_INSTALLED:
         create_dummy_sphinx_app()
         # NOTE: Hack to prevent sphinx warnings for overwriting registered nodes; see #113
         sphinx.application.builtin_extensions = [
-            e for e in sphinx.application.builtin_extensions if e != "sphinx.addnodes"  # type: ignore[assignment] # noqa: B950
+            e for e in sphinx.application.builtin_extensions if e != "sphinx.addnodes"  # type: ignore[assignment]
         ]
 
     yield None
 
 
-def get_sphinx_directives_and_roles() -> t.Tuple[t.List[str], t.List[str]]:
+def get_sphinx_directives_and_roles() -> tuple[list[str], list[str]]:
     """Return Sphinx directives and roles loaded from sphinx.
 
     :return: Tuple of directives and roles
@@ -80,22 +77,22 @@ def get_sphinx_directives_and_roles() -> t.Tuple[t.List[str], t.List[str]]:
         sphinx_roles += domain_roles + [f"{domain.name}:{item}" for item in domain_roles]
 
     sphinx_directives += list(
-        sphinx.util.docutils.directives._directives  # type: ignore[attr-defined] # pylint: disable=protected-access # noqa: B950
+        sphinx.util.docutils.directives._directives  # type: ignore[attr-defined]  # noqa: SLF001
     )
     sphinx_roles += list(
-        sphinx.util.docutils.roles._roles  # type: ignore[attr-defined] # pylint: disable=protected-access
+        sphinx.util.docutils.roles._roles  # type: ignore[attr-defined]  # noqa: SLF001
     )
 
     return (sphinx_directives, sphinx_roles)
 
 
 _DIRECTIVE_WHITELIST = ["code", "code-block", "sourcecode", "include"]
-_ROLE_WHITELIST: t.List[str] = []
+_ROLE_WHITELIST: list[str] = []
 
 
 def filter_whitelisted_directives_and_roles(
-    directives: t.List[str], roles: t.List[str]
-) -> t.Tuple[t.List[str], t.List[str]]:
+    directives: list[str], roles: list[str]
+) -> tuple[list[str], list[str]]:
     """Filter whitelisted directives and roles out of input.
 
     :param directives: Directives to filter

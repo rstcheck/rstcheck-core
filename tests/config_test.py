@@ -1,5 +1,6 @@
 """Tests for ``config`` module."""
-# pylint: disable=too-many-lines,protected-access
+from __future__ import annotations
+
 import logging
 import pathlib
 import re
@@ -10,7 +11,7 @@ import pytest
 from rstcheck_core import _extras, config
 
 
-def test_report_level_map_matches_numbers() -> None:  # noqa: AAA01
+def test_report_level_map_matches_numbers() -> None:
     """Test that the enum's values match the map's ones."""
     enum_values = [e.value for e in config.ReportLevel]
     map_values = list(config.ReportLevelMap.values())
@@ -18,10 +19,10 @@ def test_report_level_map_matches_numbers() -> None:  # noqa: AAA01
     assert map_values == enum_values
 
 
-def test_report_level_map_matches_names() -> None:  # noqa: AAA01
+def test_report_level_map_matches_names() -> None:
     """Test that the enum's name match the map's keys."""
     enum_names = [
-        e.casefold() for e in config.ReportLevel._member_names_  # pylint: disable=no-member
+        e.casefold() for e in config.ReportLevel._member_names_
     ]
     map_keys = list(config.ReportLevelMap.keys())
 
@@ -80,7 +81,7 @@ class TestSplitStrValidator:
             ("value1 , value2 , ", ["value1", "value2"]),
         ],
     )
-    def test_strings_are_transformed_to_lists(string: str, split_list: t.List[str]) -> None:
+    def test_strings_are_transformed_to_lists(string: str, split_list: list[str]) -> None:
         """Test strings are split at the ",", trailing commas are ignored and whitespace cleaned."""
         result = config._split_str_validator(string)
 
@@ -98,7 +99,7 @@ class TestSplitStrValidator:
         ],
     )
     def test_string_lists_are_whitespace_cleaned(
-        string_list: t.List[str], string_list_cleaned: t.List[str]
+        string_list: list[str], string_list_cleaned: list[str]
     ) -> None:
         """Test lists of strings are whitespace cleaned."""
         result = config._split_str_validator(string_list)
@@ -224,7 +225,7 @@ class TestSplitStrValidatorMethod:
             ("value1 , value2 , ", ["value1", "value2"]),
         ],
     )
-    def test_strings_are_transformed_to_lists(string: str, split_list: t.List[str]) -> None:
+    def test_strings_are_transformed_to_lists(string: str, split_list: list[str]) -> None:
         """Test strings are split at the ",", trailing commas are ignored and whitespace cleaned."""
         result = config.RstcheckConfigFile(
             ignore_languages=string,
@@ -251,7 +252,7 @@ class TestSplitStrValidatorMethod:
         ],
     )
     def test_string_lists_are_whitespace_cleaned(
-        string_list: t.List[str], string_list_cleaned: t.List[str]
+        string_list: list[str], string_list_cleaned: list[str]
     ) -> None:
         """Test lists of strings are whitespace cleaned."""
         result = config.RstcheckConfigFile(
@@ -353,7 +354,7 @@ class TestJoinRegexStrValidatorMethod:
     @pytest.mark.parametrize(
         ("string_list", "full_string"), [([""], ""), (["", ""], "|"), ([], "")]
     )
-    def test_list_with_empty_contents(string_list: t.List[str], full_string: str) -> None:
+    def test_list_with_empty_contents(string_list: list[str], full_string: str) -> None:
         """Test list with empty contents are parsed as regex too."""
         regex = re.compile(full_string)
 

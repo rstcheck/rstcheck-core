@@ -1,4 +1,6 @@
 """Docutils helper functions."""
+from __future__ import annotations
+
 import importlib
 import logging
 import typing as t
@@ -10,7 +12,6 @@ import docutils.writers
 
 from . import _extras
 
-
 logger = logging.getLogger(__name__)
 
 
@@ -19,22 +20,21 @@ class IgnoredDirective(docutils.parsers.rst.Directive):  # pragma: no cover
 
     has_content = True
 
-    def run(self) -> t.List:  # type: ignore[type-arg]
+    def run(self) -> list:  # type: ignore[type-arg]
         """Do nothing."""
         return []
 
 
-def ignore_role(
-    name: str,
-    rawtext: str,
-    text: str,
-    lineno: int,
-    inliner: docutils.parsers.rst.states.Inliner,
-    options: t.Optional[t.Dict[str, t.Any]] = None,
-    content: t.Optional[t.List[str]] = None,
-) -> t.Tuple[t.List, t.List]:  # type: ignore[type-arg] # pragma: no cover
+def ignore_role(  # noqa: PLR0913
+    name: str,  # noqa: ARG001
+    rawtext: str,  # noqa: ARG001
+    text: str,  # noqa: ARG001
+    lineno: int,  # noqa: ARG001
+    inliner: docutils.parsers.rst.states.Inliner,  # noqa: ARG001
+    options: dict[str, t.Any] | None = None,  # noqa: ARG001
+    content: list[str] | None = None,  # noqa: ARG001
+) -> tuple[list, list]:  # type: ignore[type-arg] # pragma: no cover
     """Stub for unknown roles."""
-    # pylint: disable=unused-argument,too-many-arguments
     return ([], [])
 
 
@@ -50,7 +50,7 @@ def clean_docutils_directives_and_roles_cache() -> None:  # pragma: no cover
     importlib.reload(docutils.parsers.rst.roles)
 
 
-def ignore_directives_and_roles(directives: t.List[str], roles: t.List[str]) -> None:
+def ignore_directives_and_roles(directives: list[str], roles: list[str]) -> None:
     """Ignore directives and roles in docutils.
 
     :param directives: Directives to ignore
@@ -69,7 +69,7 @@ class CodeBlockDirective(docutils.parsers.rst.Directive):
     has_content = True
     optional_arguments = 1
 
-    def run(self) -> t.List[docutils.nodes.literal_block]:
+    def run(self) -> list[docutils.nodes.literal_block]:
         """Run directive.
 
         :return: Literal block

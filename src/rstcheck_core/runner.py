@@ -1,4 +1,6 @@
 """Runner of rstcheck_core."""
+from __future__ import annotations
+
 import logging
 import multiprocessing
 import os
@@ -9,7 +11,6 @@ import typing as t
 
 from . import _sphinx, checker, config, types
 
-
 logger = logging.getLogger(__name__)
 
 
@@ -18,8 +19,9 @@ class RstcheckMainRunner:
 
     def __init__(
         self,
-        check_paths: t.List[pathlib.Path],
+        check_paths: list[pathlib.Path],
         rstcheck_config: config.RstcheckConfig,
+        *,
         overwrite_config: bool = True,
     ) -> None:
         """Initialize the :py:class:`RstcheckMainRunner` with a base config.
@@ -36,18 +38,18 @@ class RstcheckMainRunner:
             )
 
         self.check_paths = check_paths
-        self._files_to_check: t.List[pathlib.Path] = []
-        self._nonexisting_paths: t.List[pathlib.Path] = []
+        self._files_to_check: list[pathlib.Path] = []
+        self._nonexisting_paths: list[pathlib.Path] = []
         self.update_file_list()
 
         pool_size = multiprocessing.cpu_count()
         # NOTE: Work around https://bugs.python.org/issue45077
         self._pool_size = pool_size if sys.platform != "win32" else min(pool_size, 61)
 
-        self.errors: t.List[types.LintError] = []
+        self.errors: list[types.LintError] = []
 
     @property
-    def files_to_check(self) -> t.List[pathlib.Path]:
+    def files_to_check(self) -> list[pathlib.Path]:
         """List of files to check.
 
         This list is updated via the :py:meth:`RstcheckMainRunner.update_file_list` method.
@@ -55,7 +57,7 @@ class RstcheckMainRunner:
         return self._files_to_check
 
     @property
-    def nonexisting_paths(self) -> t.List[pathlib.Path]:
+    def nonexisting_paths(self) -> list[pathlib.Path]:
         """List of paths which do not exist.
 
         This list is updated via the :py:meth:`RstcheckMainRunner.update_file_list` method.
@@ -63,7 +65,7 @@ class RstcheckMainRunner:
         return self._nonexisting_paths
 
     def load_config_file(
-        self, config_path: pathlib.Path, warn_unknown_settings: bool = False
+        self, config_path: pathlib.Path, *, warn_unknown_settings: bool = False
     ) -> None:
         """Load config from file and merge with current config.
 
@@ -75,7 +77,9 @@ class RstcheckMainRunner:
             file;
             defaults to :py:obj:`False`
         """
-        logger.info(f"Load config file for main runner: '{config_path}'.")
+        logger.info(
+            "Load config file for main runner: '{config_path}'.", extra={"config_path": config_path}
+        )
         file_config = config.load_config_file_from_path(
             config_path, warn_unknown_settings=warn_unknown_settings
         )
@@ -86,13 +90,14 @@ class RstcheckMainRunner:
 
         logger.debug(
             "Merging config from file into main config. "
-            f"File config is dominant: {self.overwrite_config}"
+            "File config is dominant: {overwrite_config}",
+            extra={"overwrite_config": self.overwrite_config},
         )
         self.config = config.merge_configs(
             self.config, file_config, config_add_is_dominant=self.overwrite_config
         )
 
-    def update_file_list(self) -> None:  # noqa: CCR001
+    def update_file_list(self) -> None:
         """Update file path list with paths specified on initialization.
 
         Uses paths from ``RstcheckMainRunner.check_paths``, resolves all file paths and
@@ -104,7 +109,7 @@ class RstcheckMainRunner:
         Clear the current file list. Then get the file and directory paths specified with
         ``self.check_paths`` attribute set on initialization and search them for rst files
         to check. Add those files to the file list.
-        """  # noqa: Q440,Q441,Q447,Q449
+        """
         logger.debug("Updating list of files to check.")
         paths = list(self.check_paths)
         self._files_to_check = []
@@ -116,9 +121,8 @@ class RstcheckMainRunner:
 
         paths = self._filter_nonexisting_paths(paths)
 
-        checkable_rst_file: t.Callable[[pathlib.Path], bool] = (
-            lambda f: f.is_file() and not f.name.startswith(".") and f.suffix.casefold() == ".rst"
-        )
+        def checkable_rst_file(f: pathlib.Path) -> bool:
+            return f.is_file() and not f.name.startswith(".") and f.suffix.casefold() == ".rst"
 
         while paths:
             path = paths.pop(0)
@@ -137,7 +141,7 @@ class RstcheckMainRunner:
             if checkable_rst_file(resolved_path):
                 self._files_to_check.append(path)
 
-    def _filter_nonexisting_paths(self, paths: t.List[pathlib.Path]) -> t.List[pathlib.Path]:
+    def _filter_nonexisting_paths(self, paths: list[pathlib.Path]) -> list[pathlib.Path]:
         """Filter nonexisting paths out.
 
         If recursive is not active only files are allowed, else directories are also allowed.
@@ -162,41 +166,46 @@ class RstcheckMainRunner:
 
             if self.config.recursive:
                 logger.warning(
-                    f"Path does not exist or is neither a file nor a directory: '{path}'."
+                    "Path does not exist or is neither a file nor a directory: '{path}'.",
+                    extra={"path": path},
                 )
                 continue
 
-            logger.warning(f"Path does not exist or is not a file: '{path}'.")
+            logger.warning(
+                "Path does not exist or is not a file: '{path}'.",
+                extra={"path": path},
+            )
 
         return _paths
 
-    def _run_checks_sync(self) -> t.List[t.List[types.LintError]]:
+    def _run_checks_sync(self) -> list[list[types.LintError]]:
         """Check all files from the file list syncronously and return the errors.
 
         :return: List of lists of errors found per file
         """
         logger.debug("Runnning checks synchronically.")
         with _sphinx.load_sphinx_if_available():
-            results = [
+            return [
                 checker.check_file(file, self.config, self.overwrite_config)
                 for file in self._files_to_check
             ]
-        return results
 
-    def _run_checks_parallel(self) -> t.List[t.List[types.LintError]]:
+    def _run_checks_parallel(self) -> list[list[types.LintError]]:
         """Check all files from the file list in parallel and return the errors.
 
         :return: List of lists of errors found per file
         """
-        logger.debug(f"Runnning checks in parallel with pool size of {self._pool_size}.")
+        logger.debug(
+            "Runnning checks in parallel with pool size of {pool_size}.",
+            extra={"pool_size": self._pool_size},
+        )
         with _sphinx.load_sphinx_if_available(), multiprocessing.Pool(self._pool_size) as pool:
-            results = pool.starmap(
+            return pool.starmap(
                 checker.check_file,
                 [(file, self.config, self.overwrite_config) for file in self._files_to_check],
             )
-        return results
 
-    def _update_results(self, results: t.List[t.List[types.LintError]]) -> None:
+    def _update_results(self, results: list[list[types.LintError]]) -> None:
         """Take results and update error cache.
 
         Result normally come from :py:meth:`RstcheckMainRunner._run_checks_sync` or
@@ -222,7 +231,7 @@ class RstcheckMainRunner:
         )
         self._update_results(results)
 
-    def print_result(self, output_file: t.Optional[t.TextIO] = None) -> int:
+    def print_result(self, output_file: t.TextIO | None = None) -> int:
         """Print all cached error messages and return exit code.
 
         :param output_file: file to print to; defaults to sys.stderr (if ``None``)

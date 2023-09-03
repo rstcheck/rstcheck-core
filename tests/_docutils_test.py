@@ -1,6 +1,5 @@
 """Tests for ``_docutils`` module."""
-# pylint: disable=protected-access
-import typing as t
+from __future__ import annotations
 
 import docutils.parsers.rst.directives as docutils_directives
 import docutils.parsers.rst.roles as docutils_roles
@@ -16,8 +15,8 @@ class TestIgnoreDirectivesAndRoles:
     @pytest.mark.usefixtures("patch_docutils_directives_and_roles_dict")
     def test_with_empty_lists() -> None:
         """Test with empty lists."""
-        directives: t.List[str] = []
-        roles: t.List[str] = []
+        directives: list[str] = []
+        roles: list[str] = []
 
         _docutils.ignore_directives_and_roles(directives, roles)  # act
 
@@ -28,7 +27,7 @@ class TestIgnoreDirectivesAndRoles:
     @pytest.mark.usefixtures("patch_docutils_directives_and_roles_dict")
     def test_with_only_roles() -> None:
         """Test with only roles to add."""
-        directives: t.List[str] = []
+        directives: list[str] = []
         roles = ["test_role"]
 
         _docutils.ignore_directives_and_roles(directives, roles)  # act
@@ -41,7 +40,7 @@ class TestIgnoreDirectivesAndRoles:
     def test_with_only_directives() -> None:
         """Test with only directives to add."""
         directives = ["test_directive"]
-        roles: t.List[str] = []
+        roles: list[str] = []
 
         _docutils.ignore_directives_and_roles(directives, roles)  # act
 

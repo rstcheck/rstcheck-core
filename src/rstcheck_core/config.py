@@ -1,14 +1,18 @@
 """Rstcheck configuration functionality."""
+from __future__ import annotations
+
 import configparser
 import contextlib
 import enum
 import logging
-import pathlib
 import re
 import typing as t
+from pathlib import Path
 
 from . import _extras
 
+if t.TYPE_CHECKING:
+    import pathlib
 
 try:
     from pydantic import v1 as pydantic
@@ -58,7 +62,7 @@ DEFAULT_REPORT_LEVEL = ReportLevel.INFO
 """Default report level."""
 
 
-def _split_str_validator(value: t.Any) -> t.Optional[t.List[str]]:  # noqa: ANN401
+def _split_str_validator(value: t.Any) -> list[str] | None:  # noqa: ANN401
     """Validate and parse strings and string-lists.
 
     Comma separated strings are split into a list.
@@ -76,27 +80,28 @@ def _split_str_validator(value: t.Any) -> t.Optional[t.List[str]]:  # noqa: ANN4
     if isinstance(value, list) and all(isinstance(v, str) for v in value):
         return [v.strip() for v in value if v.strip()]
 
-    raise ValueError("Not a string or list of strings")
+    msg = "Not a string or list of strings"
+    raise ValueError(msg)
 
 
-class RstcheckConfigFile(pydantic.BaseModel):  # pylint: disable=no-member
+class RstcheckConfigFile(pydantic.BaseModel):
     """Rstcheck config file.
 
     :raises ValueError: If setting has incorrect value or type
     :raises pydantic.error_wrappers.ValidationError: If setting is not parsable into correct type
     """
 
-    report_level: t.Optional[ReportLevel]
-    ignore_directives: t.Optional[t.List[str]]
-    ignore_roles: t.Optional[t.List[str]]
-    ignore_substitutions: t.Optional[t.List[str]]
-    ignore_languages: t.Optional[t.List[str]]
+    report_level: ReportLevel | None
+    ignore_directives: list[str] | None
+    ignore_roles: list[str] | None
+    ignore_substitutions: list[str] | None
+    ignore_languages: list[str] | None
     # NOTE: Pattern type-arg errors pydanic: https://github.com/samuelcolvin/pydantic/issues/2636
-    ignore_messages: t.Optional[t.Pattern]  # type: ignore[type-arg]
+    ignore_messages: t.Pattern | None  # type: ignore[type-arg]
 
     @pydantic.validator("report_level", pre=True)
     @classmethod
-    def valid_report_level(cls, value: t.Any) -> t.Optional[ReportLevel]:  # noqa: ANN401
+    def valid_report_level(cls, value: t.Any) -> ReportLevel | None:  # noqa: ANN401
         """Validate the report_level setting.
 
         :param value: Value to validate
@@ -113,7 +118,8 @@ class RstcheckConfigFile(pydantic.BaseModel):  # pylint: disable=no-member
             return DEFAULT_REPORT_LEVEL
 
         if isinstance(value, bool):
-            raise ValueError("Invalid report level")
+            msg = "Invalid report level"
+            raise TypeError(msg)
 
         if isinstance(value, str):
             if value.casefold() in set(ReportLevelMap):
@@ -122,16 +128,19 @@ class RstcheckConfigFile(pydantic.BaseModel):  # pylint: disable=no-member
             with contextlib.suppress(ValueError):
                 value = int(value)
 
-        if isinstance(value, int) and 1 <= value <= 5:
+        max_report_lvl = 5
+        min_report_lvl = 1
+        if isinstance(value, int) and min_report_lvl <= value <= max_report_lvl:
             return ReportLevel(value)
 
-        raise ValueError("Invalid report level")
+        msg = "Invalid report level"
+        raise ValueError(msg)
 
     @pydantic.validator(
         "ignore_directives", "ignore_roles", "ignore_substitutions", "ignore_languages", pre=True
     )
     @classmethod
-    def split_str(cls, value: t.Any) -> t.Optional[t.List[str]]:  # noqa: ANN401
+    def split_str(cls, value: t.Any) -> list[str] | None:  # noqa: ANN401
         """Validate and parse the following ignore_* settings.
 
         - ignore_directives
@@ -149,9 +158,7 @@ class RstcheckConfigFile(pydantic.BaseModel):  # pylint: disable=no-member
 
     @pydantic.validator("ignore_messages", pre=True)
     @classmethod
-    def join_regex_str(
-        cls, value: t.Any  # noqa: ANN401
-    ) -> t.Optional[t.Union[str, t.Pattern[str]]]:
+    def join_regex_str(cls, value: t.Any) -> str | t.Pattern[str] | None:  # noqa: ANN401
         """Validate and concatenate the ignore_messages setting to a RegEx string.
 
         If a list ist given, the entries are concatenated with "|" to create an or RegEx.
@@ -173,24 +180,23 @@ class RstcheckConfigFile(pydantic.BaseModel):  # pylint: disable=no-member
         if isinstance(value, str):
             return value
 
-        raise ValueError("Not a string or list of strings")
+        msg = "Not a string or list of strings"
+        raise ValueError(msg)
 
 
-class RstcheckConfig(RstcheckConfigFile):  # pylint: disable=too-few-public-methods
+class RstcheckConfig(RstcheckConfigFile):
     """Rstcheck config.
 
     :raises ValueError: If setting has incorrect value or type
     :raises pydantic.error_wrappers.ValidationError: If setting is not parsable into correct type
     """
 
-    config_path: t.Optional[pathlib.Path]
-    recursive: t.Optional[bool]
-    warn_unknown_settings: t.Optional[bool]
+    config_path: pathlib.Path | None
+    recursive: bool | None
+    warn_unknown_settings: bool | None
 
 
-class _RstcheckConfigINIFile(
-    pydantic.BaseModel  # pylint: disable=no-member
-):  # pylint: disable=too-few-public-methods
+class _RstcheckConfigINIFile(pydantic.BaseModel):
     """Type for [rstcheck] section in INI file.
 
     The types apply to the file's data before the parsing by :py:class:`RstcheckConfig` is done.
@@ -198,12 +204,12 @@ class _RstcheckConfigINIFile(
     :raises pydantic.error_wrappers.ValidationError: If setting is not parsable into correct type
     """
 
-    report_level: pydantic.NoneStr = pydantic.Field(None)  # pylint: disable=no-member
-    ignore_directives: pydantic.NoneStr = pydantic.Field(None)  # pylint: disable=no-member
-    ignore_roles: pydantic.NoneStr = pydantic.Field(None)  # pylint: disable=no-member
-    ignore_substitutions: pydantic.NoneStr = pydantic.Field(None)  # pylint: disable=no-member
-    ignore_languages: pydantic.NoneStr = pydantic.Field(None)  # pylint: disable=no-member
-    ignore_messages: pydantic.NoneStr = pydantic.Field(None)  # pylint: disable=no-member
+    report_level: pydantic.NoneStr = pydantic.Field(None)
+    ignore_directives: pydantic.NoneStr = pydantic.Field(None)
+    ignore_roles: pydantic.NoneStr = pydantic.Field(None)
+    ignore_substitutions: pydantic.NoneStr = pydantic.Field(None)
+    ignore_languages: pydantic.NoneStr = pydantic.Field(None)
+    ignore_messages: pydantic.NoneStr = pydantic.Field(None)
 
 
 def _load_config_from_ini_file(
@@ -211,7 +217,7 @@ def _load_config_from_ini_file(
     *,
     log_missing_section_as_warning: bool = True,
     warn_unknown_settings: bool = False,
-) -> t.Optional[RstcheckConfigFile]:
+) -> RstcheckConfigFile | None:
     """Load, parse and validate rstcheck config from a ini file.
 
     :param ini_file: INI file to load config from
@@ -225,7 +231,7 @@ def _load_config_from_ini_file(
         section
         or ``NONE`` is passed as the config path.
     """
-    logger.debug(f"Try loading config from INI file: '{ini_file}'")
+    logger.debug("Try loading config from INI file: '{ini_file}'", extra={"ini_file": ini_file})
 
     if ini_file.name == "NONE":
         logger.info("Config path is set to 'NONE'. No config file is loaded.")
@@ -234,34 +240,40 @@ def _load_config_from_ini_file(
     resolved_file = ini_file.resolve()
 
     if not resolved_file.is_file():
-        raise FileNotFoundError(f"{resolved_file}")
+        msg = f"{resolved_file}"
+        raise FileNotFoundError(msg)
 
     parser = configparser.ConfigParser()
     parser.read(resolved_file)
 
     if not parser.has_section("rstcheck"):
         if log_missing_section_as_warning:
-            logger.warning(f"Config file has no [rstcheck] section: '{ini_file}'.")
+            logger.warning(
+                "Config file has no [rstcheck] section: '{ini_file}'.", extra={"ini_file": ini_file}
+            )
             return None
-        logger.info(f"Config file has no [rstcheck] section: '{ini_file}'.")
+        logger.info(
+            "Config file has no [rstcheck] section: '{ini_file}'.", extra={"ini_file": ini_file}
+        )
         return None
 
     config_values_raw = dict(parser.items("rstcheck"))
     if warn_unknown_settings:
         known_settings = _RstcheckConfigINIFile().dict().keys()
-        unknown = [s for s in config_values_raw.keys() if s not in known_settings]
+        unknown = [s for s in config_values_raw if s not in known_settings]
         if unknown:
-            logger.warning(f"Unknown setting(s) {unknown} found in file: '{ini_file}'.")
+            logger.warning(
+                "Unknown setting(s) {unknown} found in file: '{ini_file}'.",
+                extra={"ini_file": ini_file},
+            )
 
     config_values_checked = _RstcheckConfigINIFile(**config_values_raw)
-    config_values_parsed = RstcheckConfigFile(**config_values_checked.dict())
-
-    return config_values_parsed
+    return RstcheckConfigFile(**config_values_checked.dict())
 
 
 class _RstcheckConfigTOMLFile(
-    pydantic.BaseModel  # pylint: disable=no-member,
-):  # pylint: disable=too-few-public-methods
+    pydantic.BaseModel,
+):
     """Type for [tool.rstcheck] section in TOML file.
 
     The types apply to the file's data before the parsing by :py:class:`RstcheckConfig` is done.
@@ -269,12 +281,12 @@ class _RstcheckConfigTOMLFile(
     :raises pydantic.error_wrappers.ValidationError: If setting is not parsable into correct type
     """
 
-    report_level: t.Optional[str] = pydantic.Field(None)
-    ignore_directives: t.Optional[t.List[str]] = pydantic.Field(None)
-    ignore_roles: t.Optional[t.List[str]] = pydantic.Field(None)
-    ignore_substitutions: t.Optional[t.List[str]] = pydantic.Field(None)
-    ignore_languages: t.Optional[t.List[str]] = pydantic.Field(None)
-    ignore_messages: t.Optional[t.Union[str, t.List[str]]] = pydantic.Field(None)
+    report_level: str | None = pydantic.Field(None)
+    ignore_directives: list[str] | None = pydantic.Field(None)
+    ignore_roles: list[str] | None = pydantic.Field(None)
+    ignore_substitutions: list[str] | None = pydantic.Field(None)
+    ignore_languages: list[str] | None = pydantic.Field(None)
+    ignore_messages: str | list[str] | None = pydantic.Field(None)
 
 
 def _load_config_from_toml_file(
@@ -282,7 +294,7 @@ def _load_config_from_toml_file(
     *,
     log_missing_section_as_warning: bool = True,
     warn_unknown_settings: bool = False,
-) -> t.Optional[RstcheckConfigFile]:
+) -> RstcheckConfigFile | None:
     """Load, parse and validate rstcheck config from a TOML file.
 
     .. warning::
@@ -301,8 +313,10 @@ def _load_config_from_toml_file(
     :return: instance of :py:class:`RstcheckConfigFile` or :py:obj:`None` on missing config section
         or ``NONE`` is passed as the config path.
     """
-    _extras.install_guard_tomli(tomllib_imported)
-    logger.debug(f"Try loading config from TOML file: '{toml_file}'.")
+    _extras.install_guard_tomli(tomllib_imported=tomllib_imported)
+    logger.debug(
+        "Try loading config from TOML file: '{toml_file}'.", extra={"toml_file": toml_file}
+    )
 
     if toml_file.name == "NONE":
         logger.info("Config path is set to 'NONE'. No config file is loaded.")
@@ -311,36 +325,47 @@ def _load_config_from_toml_file(
     resolved_file = toml_file.resolve()
 
     if not resolved_file.is_file():
-        logging.error(f"Config file is not a file: '{toml_file}'.")
-        raise FileNotFoundError(f"{resolved_file}")
+        logging.error("Config file is not a file: '{toml_file}'.", extra={"toml_file": toml_file})
+        msg = f"{resolved_file}"
+        raise FileNotFoundError(msg)
 
     if resolved_file.suffix.casefold() != ".toml":
-        logging.error(f"Config file is not a TOML file: '{toml_file}'.")
-        raise ValueError("File is not a TOML file")
+        logging.error(
+            "Config file is not a TOML file: '{toml_file}'.", extra={"toml_file": toml_file}
+        )
+        msg = "File is not a TOML file"
+        raise ValueError(msg)
 
-    with open(resolved_file, "rb") as toml_file_handle:
+    with Path.open(resolved_file, "rb") as toml_file_handle:
         toml_dict = tomllib.load(toml_file_handle)
 
-    optional_rstcheck_section = t.Optional[t.Dict[str, t.Any]]
+    optional_rstcheck_section = dict[str, t.Any] | None
     rstcheck_section: optional_rstcheck_section = toml_dict.get("tool", {}).get("rstcheck")
 
     if rstcheck_section is None:
         if log_missing_section_as_warning:
-            logger.warning(f"Config file has no [tool.rstcheck] section: '{toml_file}'.")
+            logger.warning(
+                "Config file has no [tool.rstcheck] section: '{toml_file}'.",
+                extra={"toml_file": toml_file},
+            )
             return None
-        logger.info(f"Config file has no [tool.rstcheck] section: '{toml_file}'.")
+        logger.info(
+            "Config file has no [tool.rstcheck] section: '{toml_file}'.",
+            extra={"toml_file": toml_file},
+        )
         return None
 
     if warn_unknown_settings:
         known_settings = _RstcheckConfigTOMLFile().dict().keys()
-        unknown = [s for s in rstcheck_section.keys() if s not in known_settings]
+        unknown = [s for s in rstcheck_section if s not in known_settings]
         if unknown:
-            logger.warning(f"Unknown setting(s) {unknown} found in file: '{toml_file}'.")
+            logger.warning(
+                "Unknown setting(s) {unknown} found in file: '{toml_file}'.",
+                extra={"toml_file": toml_file},
+            )
 
     config_values_checked = _RstcheckConfigTOMLFile(**rstcheck_section)
-    config_values_parsed = RstcheckConfigFile(**config_values_checked.dict())
-
-    return config_values_parsed
+    return RstcheckConfigFile(**config_values_checked.dict())
 
 
 def load_config_file(
@@ -348,7 +373,7 @@ def load_config_file(
     *,
     log_missing_section_as_warning: bool = True,
     warn_unknown_settings: bool = False,
-) -> t.Optional[RstcheckConfigFile]:
+) -> RstcheckConfigFile | None:
     """Load, parse and validate rstcheck config from a file.
 
     .. caution::
@@ -390,7 +415,7 @@ def load_config_file_from_dir(
     *,
     log_missing_section_as_warning: bool = False,
     warn_unknown_settings: bool = False,
-) -> t.Optional[RstcheckConfigFile]:
+) -> RstcheckConfigFile | None:
     """Search, load, parse and validate rstcheck config from a directory.
 
     Searches files from :py:data:`CONFIG_FILES` in the directory. If a file is found, try to load
@@ -406,7 +431,9 @@ def load_config_file_from_dir(
         :py:obj:`None` if no file is found or no file has a rstcheck section
         or ``NONE`` is passed as the config path.
     """
-    logger.debug(f"Try loading config file from directory: '{dir_path}'.")
+    logger.debug(
+        "Try loading config file from directory: '{dir_path}'.", extra={"dir_path": dir_path}
+    )
 
     if dir_path.name == "NONE":
         logger.info("Config path is set to 'NONE'. No config file is loaded.")
@@ -429,7 +456,8 @@ def load_config_file_from_dir(
 
     if config is None:
         logger.info(
-            f"No config section in supported config files found in directory: '{dir_path}'."
+            "No config section in supported config files found in directory: '{dir_path}'.",
+            extra={"dir_path": dir_path},
         )
 
     return config
@@ -440,7 +468,7 @@ def load_config_file_from_dir_tree(
     *,
     log_missing_section_as_warning: bool = False,
     warn_unknown_settings: bool = False,
-) -> t.Optional[RstcheckConfigFile]:
+) -> RstcheckConfigFile | None:
     """Search, load, parse and validate rstcheck config from a directory tree.
 
     Searches files from :py:data:`CONFIG_FILES` in the directory. If a file is found, try to load
@@ -457,7 +485,9 @@ def load_config_file_from_dir_tree(
         :py:obj:`None` if no file is found or no file has a rstcheck section
         or ``NONE`` is passed as the config path.
     """
-    logger.debug(f"Try loading config file from directory tree: '{dir_path}'.")
+    logger.debug(
+        "Try loading config file from directory tree: '{dir_path}'.", extra={"dir_path": dir_path}
+    )
 
     if dir_path.name == "NONE":
         logger.info("Config path is set to 'NONE'. No config file is loaded.")
@@ -484,7 +514,8 @@ def load_config_file_from_dir_tree(
 
     if config is None:
         logger.info(
-            f"No config section in supported config files found in directory tree: '{dir_path}'."
+            "No config section in supported config files found in directory tree: '{dir_path}'.",
+            extra={"dir_path": dir_path},
         )
 
     return config
@@ -497,7 +528,7 @@ def load_config_file_from_path(
     log_missing_section_as_warning_for_file: bool = True,
     log_missing_section_as_warning_for_dir: bool = False,
     warn_unknown_settings: bool = False,
-) -> t.Optional[RstcheckConfigFile]:
+) -> RstcheckConfigFile | None:
     """Analyse the path and call the correct config file loader.
 
     :param path: Path to load config file from; can be a file or directory
@@ -519,7 +550,7 @@ def load_config_file_from_path(
         :py:obj:`None` if no file is found or no file has a rstcheck section
         or ``NONE`` is passed as the config path.
     """
-    logger.debug(f"Try loading config file from path: '{path}'.")
+    logger.debug("Try loading config file from path: '{path}'.", extra={"path": path})
 
     if path.name == "NONE":
         logger.info("Config path is set to 'NONE'. No config file is loaded.")
@@ -552,7 +583,7 @@ def load_config_file_from_path(
 
 def merge_configs(
     config_base: RstcheckConfig,
-    config_add: t.Union[RstcheckConfig, RstcheckConfigFile],
+    config_add: RstcheckConfig | RstcheckConfigFile,
     *,
     config_add_is_dominant: bool = True,
 ) -> RstcheckConfig:
@@ -565,13 +596,13 @@ def merge_configs(
     :return: New merged config
     """
     logger.debug("Merging configs.")
-    sub_config: t.Union[RstcheckConfig, RstcheckConfigFile] = config_base
+    sub_config: RstcheckConfig | RstcheckConfigFile = config_base
     sub_config_dict = sub_config.dict()
     for setting in dict(sub_config_dict):
         if sub_config_dict[setting] is None:
             del sub_config_dict[setting]
 
-    dom_config: t.Union[RstcheckConfig, RstcheckConfigFile] = config_add
+    dom_config: RstcheckConfig | RstcheckConfigFile = config_add
     dom_config_dict = dom_config.dict()
     for setting in dict(dom_config_dict):
         if dom_config_dict[setting] is None:

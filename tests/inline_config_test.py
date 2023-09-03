@@ -1,5 +1,6 @@
 """Tests for ``inline_config`` module."""
-# pylint: disable=protected-access
+from __future__ import annotations
+
 import typing as t
 
 import pytest
@@ -205,12 +206,12 @@ Example
         assert result == ["cpp", "json", "python"]
 
 
-class FindIgnoreFn(_t.Protocol):  # pylint: disable=too-few-public-methods # noqa: D101
+class FindIgnoreFn(_t.Protocol):  # noqa: D101
     def __call__(  # noqa: D102
         self,
         source: str,
         source_origin: types.SourceFileOrString,
-        warn_unknown_settings: bool = False,
+        warn_unknown_settings: bool = False,  # noqa: FBT002
     ) -> t.Generator[str, None, None]:
         ...
 

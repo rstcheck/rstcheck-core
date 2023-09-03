@@ -1,5 +1,6 @@
 """Tests for ``_sphinx`` module."""
-# pylint: disable=protected-access
+from __future__ import annotations
+
 import typing as t
 
 import docutils.parsers.rst.directives as docutils_directives
@@ -7,7 +8,6 @@ import docutils.parsers.rst.roles as docutils_roles
 import pytest
 
 from rstcheck_core import _extras, _sphinx
-
 
 if _extras.SPHINX_INSTALLED:
     import sphinx.application
@@ -24,7 +24,7 @@ def test_dummy_app_creator() -> None:
 class TestContextManager:
     """Test ``load_sphinx_if_available`` context manager."""
 
-    @staticmethod  # noqa: AAA01
+    @staticmethod
     @pytest.mark.skipif(_extras.SPHINX_INSTALLED, reason="Test without sphinx extra.")
     @pytest.mark.usefixtures("patch_docutils_directives_and_roles_dict")
     def test_yield_nothing_with_sphinx_missing() -> None:
@@ -34,7 +34,7 @@ class TestContextManager:
             assert not docutils_directives._directives
             assert not docutils_roles._roles
 
-    @staticmethod  # noqa: AAA01
+    @staticmethod
     @pytest.mark.skipif(not _extras.SPHINX_INSTALLED, reason="Depends on sphinx extra.")
     @pytest.mark.usefixtures("patch_docutils_directives_and_roles_dict")
     def test_yield_nothing_with_sphinx_installed() -> None:
@@ -108,9 +108,9 @@ class TestSphinxDirectiveAndRoleGetter:
     @pytest.mark.skipif(not _extras.SPHINX_INSTALLED, reason="Depends on sphinx extra.")
     def test_docutils_state_dict_is_loaded(monkeypatch: pytest.MonkeyPatch) -> None:
         """Test docutils' state is loaded."""
-        test_dict_directives: t.Dict[str, t.Any] = {"test-directive": "test-directive"}
+        test_dict_directives: dict[str, t.Any] = {"test-directive": "test-directive"}
         monkeypatch.setattr("sphinx.util.docutils.directives._directives", test_dict_directives)
-        test_dict_roles: t.Dict[str, t.Any] = {"test-role": "test-role"}
+        test_dict_roles: dict[str, t.Any] = {"test-role": "test-role"}
         monkeypatch.setattr("sphinx.util.docutils.roles._roles", test_dict_roles)
 
         (result_directives, result_roles) = _sphinx.get_sphinx_directives_and_roles()  # act

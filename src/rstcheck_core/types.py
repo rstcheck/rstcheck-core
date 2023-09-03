@@ -1,11 +1,12 @@
 """Helper types."""
+from __future__ import annotations
+
 import pathlib
 import typing as t
 
 from . import _compat as _t
 
-
-SourceFileOrString = t.Union[pathlib.Path, _t.Literal["<string>"], _t.Literal["<stdin>"]]
+SourceFileOrString = pathlib.Path | _t.Literal["<string>"] | _t.Literal["<stdin>"]
 """Path to source file or if it is a string then '<string>' or '<stdin>'."""
 
 
@@ -25,20 +26,20 @@ class IgnoreDict(_t.TypedDict):
     """Dict with ignore information."""
 
     # NOTE: Pattern type-arg errors pydanic: https://github.com/samuelcolvin/pydantic/issues/2636
-    messages: t.Optional[t.Pattern]  # type: ignore[type-arg]
-    languages: t.List[str]
-    directives: t.List[str]
-    roles: t.List[str]
-    substitutions: t.List[str]
+    messages: t.Pattern | None  # type: ignore[type-arg]
+    languages: list[str]
+    directives: list[str]
+    roles: list[str]
+    substitutions: list[str]
 
 
 def construct_ignore_dict(
     # NOTE: Pattern type-arg errors pydanic: https://github.com/samuelcolvin/pydantic/issues/2636
-    messages: t.Optional[t.Pattern] = None,  # type: ignore[type-arg]
-    languages: t.Optional[t.List[str]] = None,
-    directives: t.Optional[t.List[str]] = None,
-    roles: t.Optional[t.List[str]] = None,
-    substitutions: t.Optional[t.List[str]] = None,
+    messages: t.Pattern | None = None,  # type: ignore[type-arg]
+    languages: list[str] | None = None,
+    directives: list[str] | None = None,
+    roles: list[str] | None = None,
+    substitutions: list[str] | None = None,
 ) -> IgnoreDict:
     """Create an :py:class:`IgnoreDict` with passed values or defaults.
 

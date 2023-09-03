@@ -1,5 +1,6 @@
 """Fixtures for integration tests."""
-import re
+from __future__ import annotations
 
+import re
 
 ERROR_CODE_REGEX = re.compile(r"\([A-Z]*?/\d\)")
