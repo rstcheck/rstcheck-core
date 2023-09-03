@@ -26,6 +26,10 @@ dependencies = [
   "importlib-metadata >=1.6; python_version<='3.8'",
   "typing-extensions >=3.7.4; python_version<='3.8'",
 ]
+
+[project.optional-dependencies]
+sphinx = ["sphinx >=4.0"]
+toml = ["tomli >=2.0; python_version<='3.10'"]
 testing = [
     "pytest >=7.2",
     "pytest-cov >=3.0",
