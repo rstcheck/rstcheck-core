@@ -78,9 +78,7 @@ class RstcheckMainRunner:
             file;
             defaults to :py:obj:`False`
         """
-        logger.info(
-            "Load config file for main runner: '%s'.", config_path
-        )
+        logger.info("Load config file for main runner: '%s'.", config_path)
         file_config = config.load_config_file_from_path(
             config_path, warn_unknown_settings=warn_unknown_settings
         )
@@ -90,8 +88,7 @@ class RstcheckMainRunner:
             return
 
         logger.debug(
-            "Merging config from file into main config. "
-            "File config is dominant: %s",
+            "Merging config from file into main config. File config is dominant: %s",
             self.overwrite_config,
         )
         self.config = config.merge_configs(
@@ -186,7 +183,10 @@ class RstcheckMainRunner:
         """
         logger.debug("Runnning checks synchronically.")
         with _sphinx.load_sphinx_if_available():
-            return [checker.check_file(file, self.config) for file in self._files_to_check]
+            return [
+                checker.check_file(file, self.config, self.overwrite_config)
+                for file in self._files_to_check
+            ]
 
     def _run_checks_parallel(self) -> list[list[types.LintError]]:
         """Check all files from the file list in parallel and return the errors.

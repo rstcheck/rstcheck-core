@@ -121,7 +121,7 @@ class TestSplitStrValidator:
     )
     def test_invalid_settings(value: str) -> None:
         """Test invalid settings."""
-        with pytest.raises(ValueError, match="Not a string or list of strings"):
+        with pytest.raises(TypeError, match="^Not a string or list of strings$"):
             config._split_str_validator(value)
 
 
@@ -174,7 +174,7 @@ class TestReportLevelValidatorMethod:
     )
     def test_invalid_report_levels(level: t.Any) -> None:  # noqa: ANN401
         """Test invalid report levels not accepted by docutils."""
-        with pytest.raises(ValueError, match="Invalid report level"):
+        with pytest.raises(TypeError, match="^Invalid report level$"):
             config.RstcheckConfigFile(report_level=level)
 
 
@@ -283,7 +283,7 @@ class TestSplitStrValidatorMethod:
     )
     def test_invalid_settings(value: str) -> None:
         """Test invalid settings."""
-        with pytest.raises(ValueError, match="Not a string or list of strings"):
+        with pytest.raises(TypeError, match="^Not a string or list of strings$"):
             config.RstcheckConfigFile(
                 ignore_languages=value,
                 ignore_directives=value,
@@ -378,7 +378,7 @@ class TestJoinRegexStrValidatorMethod:
     )
     def test_invalid_settings(value: str) -> None:
         """Test invalid ignore_messages settings."""
-        with pytest.raises(ValueError, match="Not a string or list of strings"):
+        with pytest.raises(TypeError, match="^Not a string or list of strings$"):
             config.RstcheckConfigFile(ignore_messages=value)
 
 
@@ -651,7 +651,7 @@ class TestTomlFileLoader:
         conf_file = tmp_path / "config.ini"
         conf_file.touch()
 
-        with pytest.raises(ValueError, match="File is not a TOML file"):
+        with pytest.raises(ValueError, match="^File is not a TOML file$"):
             config._load_config_from_toml_file(conf_file)
 
     @staticmethod
@@ -1232,7 +1232,7 @@ class TestConfigPathLoader:
         """Test raises FileNotFoundError on path that is not a file or directory."""
         conf_file = pathlib.Path("does-not-exist-cfg")
 
-        with pytest.raises(FileNotFoundError, match=re.compile("Passed config path not found.")):
+        with pytest.raises(FileNotFoundError, match="Passed config path not found"):
             config.load_config_file_from_path(conf_file)
 
     @staticmethod

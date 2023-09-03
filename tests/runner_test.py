@@ -28,7 +28,7 @@ class TestRstcheckMainRunnerInit:
 
         runner.RstcheckMainRunner([], init_config)  # act
 
-        mocked_loader.assert_called_once_with(config_file_path, False)  # noqa: FBT003
+        mocked_loader.assert_called_once_with(config_file_path, warn_unknown_settings=False)
 
     @staticmethod
     def test_no_load_config_file_if_unset(mocker: pytest_mock.MockerFixture) -> None:
@@ -324,7 +324,7 @@ def test__run_checks_sync_method(
 
     Test results are returned.
     """
-    monkeypatch.setattr(checker, "check_file", lambda _0, _1, _2: lint_errors)
+    monkeypatch.setattr(checker, "check_file", lambda _0, _1, _3: lint_errors)
     test_file1 = tmp_path / "rst.rst"
     test_file1.touch()
     test_file2 = tmp_path / "rst2.rst"

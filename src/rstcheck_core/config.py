@@ -75,7 +75,7 @@ def _split_str_validator(value: t.Any) -> list[str] | None:  # noqa: ANN401
         return [v.strip() for v in value if v.strip()]
 
     msg = "Not a string or list of strings"
-    raise ValueError(msg)
+    raise TypeError(msg)
 
 
 class RstcheckConfigFile(pydantic.BaseModel):
@@ -86,12 +86,12 @@ class RstcheckConfigFile(pydantic.BaseModel):
     """
 
     report_level: t.Optional[ReportLevel] = None  # noqa: UP007
-    ignore_directives: list[str] | None = None
-    ignore_roles: list[str] | None = None
-    ignore_substitutions: list[str] | None = None
-    ignore_languages: list[str] | None = None
+    ignore_directives: t.Optional[t.List[str]] = None  # noqa: UP007,UP006
+    ignore_roles: t.Optional[t.List[str]] = None  # noqa: UP007,UP006
+    ignore_substitutions: t.Optional[t.List[str]] = None  # noqa: UP007,UP006
+    ignore_languages: t.Optional[t.List[str]] = None  # noqa: UP007,UP006
     # NOTE: Pattern type-arg errors pydanic: https://github.com/samuelcolvin/pydantic/issues/2636
-    ignore_messages: t.Pattern | None = None  # type: ignore[type-arg]
+    ignore_messages: t.Optional[t.Pattern] = None  # type: ignore[type-arg]   # noqa: UP007
 
     @pydantic.field_validator("report_level", mode="before")
     @classmethod
@@ -128,7 +128,7 @@ class RstcheckConfigFile(pydantic.BaseModel):
             return ReportLevel(value)
 
         msg = "Invalid report level"
-        raise ValueError(msg)
+        raise TypeError(msg)
 
     @pydantic.field_validator(
         "ignore_directives",
@@ -179,7 +179,7 @@ class RstcheckConfigFile(pydantic.BaseModel):
             return value
 
         msg = "Not a string or list of strings"
-        raise ValueError(msg)
+        raise TypeError(msg)
 
 
 class RstcheckConfig(RstcheckConfigFile):
@@ -189,9 +189,9 @@ class RstcheckConfig(RstcheckConfigFile):
     :raises pydantic.error_wrappers.ValidationError: If setting is not parsable into correct type
     """
 
-    config_path: pathlib.Path | None = None
-    recursive: bool | None = None
-    warn_unknown_settings: bool | None = None
+    config_path: t.Optional[pathlib.Path] = None  # noqa: UP007
+    recursive: t.Optional[bool] = None  # noqa: UP007
+    warn_unknown_settings: t.Optional[bool] = None  # noqa: UP007
 
 
 class _RstcheckConfigINIFile(pydantic.BaseModel):
@@ -202,12 +202,12 @@ class _RstcheckConfigINIFile(pydantic.BaseModel):
     :raises pydantic.error_wrappers.ValidationError: If setting is not parsable into correct type
     """
 
-    report_level: str | None = None
-    ignore_directives: str | None = None
-    ignore_roles: str | None = None
-    ignore_substitutions: str | None = None
-    ignore_languages: str | None = None
-    ignore_messages: str | None = None
+    report_level: t.Union[str, int, None] = None  # noqa: UP007
+    ignore_directives: t.Optional[str] = None  # noqa: UP007
+    ignore_roles: t.Optional[str] = None  # noqa: UP007
+    ignore_substitutions: t.Optional[str] = None  # noqa: UP007
+    ignore_languages: t.Optional[str] = None  # noqa: UP007
+    ignore_messages: t.Optional[str] = None  # noqa: UP007
 
 
 def _load_config_from_ini_file(
@@ -282,12 +282,12 @@ class _RstcheckConfigTOMLFile(
     :raises pydantic.error_wrappers.ValidationError: If setting is not parsable into correct type
     """
 
-    report_level: str | None = None
-    ignore_directives: list[str] | None = None
-    ignore_roles: list[str] | None = None
-    ignore_substitutions: list[str] | None = None
-    ignore_languages: list[str] | None = None
-    ignore_messages: str | list[str] | None = None
+    report_level: t.Union[str, int, None] = None  # noqa: UP007
+    ignore_directives: t.Optional[t.List[str]] = None  # noqa: UP006, UP007
+    ignore_roles: t.Optional[t.List[str]] = None  # noqa: UP006, UP007
+    ignore_substitutions: t.Optional[t.List[str]] = None  # noqa: UP006, UP007
+    ignore_languages: t.Optional[t.List[str]] = None  # noqa: UP006, UP007
+    ignore_messages: t.Union[t.List[str], str, None] = None  # noqa: UP006, UP007
 
 
 def _load_config_from_toml_file(
@@ -336,7 +336,7 @@ def _load_config_from_toml_file(
     with pathlib.Path(resolved_file).open("rb") as toml_file_handle:
         toml_dict = tomllib.load(toml_file_handle)
 
-    optional_rstcheck_section = dict[str, t.Any] | None
+    optional_rstcheck_section = t.Optional[dict[str, t.Any]]  # noqa: UP007
     rstcheck_section: optional_rstcheck_section = toml_dict.get("tool", {}).get("rstcheck")
 
     if rstcheck_section is None:

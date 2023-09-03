@@ -37,8 +37,7 @@ MARKDOWN_LINK_REGEX = re.compile(r"\[[^\]]+\]\([^\)]+\)")
 def check_file(
     source_file: pathlib.Path,
     rstcheck_config: config.RstcheckConfig,
-    *,
-    overwrite_with_file_config: bool = True,
+    overwrite_with_file_config: bool = True,  # noqa: FBT001,FBT002
 ) -> list[types.LintError]:
     """Check the given file for issues.
 

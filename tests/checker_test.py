@@ -1386,7 +1386,7 @@ int main()
         """Test ``_parse_gcc_style_error_message`` method raises ``ValueError`` on bad format."""
         message = "Foo bar"
 
-        with pytest.raises(ValueError, match="Message cannot be parsed."):
+        with pytest.raises(ValueError, match="^Message cannot be parsed.$"):
             checker._parse_gcc_style_error_message(message, "<string>")
 
     @staticmethod
