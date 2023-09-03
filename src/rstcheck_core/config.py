@@ -5,14 +5,11 @@ import configparser
 import contextlib
 import enum
 import logging
+import pathlib
 import re
 import typing as t
-from pathlib import Path
 
 from . import _extras
-
-if t.TYPE_CHECKING:
-    import pathlib
 
 try:
     from pydantic import v1 as pydantic
@@ -336,7 +333,7 @@ def _load_config_from_toml_file(
         msg = "File is not a TOML file"
         raise ValueError(msg)
 
-    with Path.open(resolved_file, "rb") as toml_file_handle:
+    with pathlib.Path(resolved_file).open("rb") as toml_file_handle:
         toml_dict = tomllib.load(toml_file_handle)
 
     optional_rstcheck_section = dict[str, t.Any] | None

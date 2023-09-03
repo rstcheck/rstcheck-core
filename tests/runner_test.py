@@ -477,7 +477,7 @@ class TestRstcheckMainRunnerResultPrinter:
         init_config = config.RstcheckConfig()
         _runner = runner.RstcheckMainRunner([], init_config)
         # fmt: off
-        with Path.open(out_file, encoding="utf-8", mode="w") as out_file_handle:
+        with Path(out_file).open(encoding="utf-8", mode="w") as out_file_handle:
 
             _runner.print_result(output_file=out_file_handle)  # act
 
@@ -534,7 +534,7 @@ class TestRstcheckMainRunnerResultPrinter:
             [[types.LintError(source_origin="<string>", line_number=0, message="Some error.")]]
         )
         # fmt: off
-        with Path.open(out_file, encoding="utf-8", mode="w") as out_file_handle:
+        with Path(out_file).open(encoding="utf-8", mode="w") as out_file_handle:
 
             _runner.print_result(output_file=out_file_handle)  # act
 

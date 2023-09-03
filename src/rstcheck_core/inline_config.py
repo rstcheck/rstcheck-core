@@ -80,7 +80,9 @@ def _filter_config_and_split_values(
     :return: None
     :yield: Single values for the ``target_config``
     """
-    inline_configs = get_inline_config_from_source(source, source_origin, warn_unknown_settings)
+    inline_configs = get_inline_config_from_source(
+        source, source_origin, warn_unknown_settings=warn_unknown_settings
+    )
     for inline_config in inline_configs:
         if inline_config["key"] == target_config:
             for language in inline_config["value"].split(","):
