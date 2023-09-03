@@ -21,15 +21,44 @@ keywords = ["restructuredtext", "rst", "linter", "static-analysis"]
 dynamic = ["version"]
 
 dependencies = [
-  "docutils >=0.7, <0.20",
+  "docutils >=0.7",
   "pydantic >=1.2, <2.0",
-  "importlib-metadata >=1.6, <5.0; python_version<='3.8'",
-  "typing-extensions >=3.7.4, <5.0; python_version<='3.8'",
+  "importlib-metadata >=1.6; python_version<='3.8'",
+  "typing-extensions >=3.7.4; python_version<='3.8'",
 ]
 
 [project.optional-dependencies]
-sphinx = ["sphinx >=4.0, <6.0"]
-toml = ["tomli >=2.0, <3.0; python_version<='3.10'"]
+sphinx = ["sphinx >=4.0"]
+toml = ["tomli >=2.0; python_version<='3.10'"]
+testing = [
+    "pytest >=7.2",
+    "pytest-cov >=3.0",
+    "pytest-sugar >=0.9.5",
+    "pytest-randomly >=3.0",
+    "pytest-mock >=3.7",
+    "rstcheck-core[coverage]",
+]
+coverage = [
+    "coverage[toml] >=6.0",
+    "coverage-conditional-plugin >=0.5",
+]
+docs = [
+    "sphinx >=4.0",
+    "m2r2 >=0.3.2",
+    "sphinx-rtd-theme >=1.2",
+    "sphinx-autodoc-typehints >=1.15",
+    "sphinxcontrib-apidoc >=0.3",
+    "sphinxcontrib-spelling >=7.3",
+    "sphinx-autobuild >=2021.3.14",
+]
+type_check = [
+  "mypy >=1.0",
+  "types-docutils >=0.18",
+]
+dev = [
+  "rstcheck-core[sphinx,toml,testing,docs,type_check]",
+  "tox >=3.15",
+]
 
 [project.urls]
 Documentation = "https://rstcheck-core.readthedocs.io/en/latest/"
