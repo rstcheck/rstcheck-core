@@ -102,4 +102,3 @@ installed to allow IDEs to use them for inline error messages. Their config is i
 .. _pipenv: https://pipenv.pypa.io/en/latest/
 .. _pipx: https://pypa.github.io/pipx/
 .. _tox: https://tox.wiki/en/latest/index.html
-.. _virtualenv manual: https://packaging.python.org/en/latest/guides/installing-using-pip-and-virtual-environments/
