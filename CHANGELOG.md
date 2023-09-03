@@ -30,6 +30,7 @@ NOTE: please use them in this order.
 - Drop support for Sphinx v2 and v3 ([#51](https://github.com/rstcheck/rstcheck-core/pull/51))
 - Add tox environments for v6 adn v7 ([#51](https://github.com/rstcheck/rstcheck-core/pull/51))
 - Update Sphinx Theme Version and remove outdated Dark Mode Lib ([#51](https://github.com/rstcheck/rstcheck-core/pull/51))
+- Switch from poetry to setuptools ([#59](https://github.com/rstcheck/rstcheck-core/pull/59))
 
 ## [1.0.3 (2022-11-12)](https://github.com/rstcheck/rstcheck-core/releases/v1.0.3)
 
