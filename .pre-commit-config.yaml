@@ -210,12 +210,6 @@ repos:
         types: [python]
         require_serial: true
 
-  # poetry - python dependency management
-  - repo: https://github.com/Cielquan/mirrors-poetry
-    rev: 922851ade62d12cd103513b8c1046db0992d6a39 # frozen: 1.5.1
-    hooks:
-      - id: poetry-check
-
   # ----------------------------------------------
   # Shell script
   # ----------------------------------------------
