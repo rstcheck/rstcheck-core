@@ -19,7 +19,7 @@ try:
     tomllib_imported = True
 except ModuleNotFoundError:
     if _extras.TOMLI_INSTALLED:  # pragma: no cover
-        import tomli as tomllib  # type: ignore[import,no-redef]
+        import tomli as tomllib  # type: ignore[no-redef]
 
 
 logger = logging.getLogger(__name__)
