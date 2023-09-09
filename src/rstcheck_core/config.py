@@ -82,7 +82,7 @@ class RstcheckConfigFile(pydantic.BaseModel):
     """Rstcheck config file.
 
     :raises ValueError: If setting has incorrect value or type
-    :raises pydantic.error_wrappers.ValidationError: If setting is not parsable into correct type
+    :raises pydantic.ValidationError: If setting is not parsable into correct type
     """
 
     report_level: t.Optional[ReportLevel] = None  # noqa: UP007
@@ -185,7 +185,7 @@ class RstcheckConfig(RstcheckConfigFile):
     """Rstcheck config.
 
     :raises ValueError: If setting has incorrect value or type
-    :raises pydantic.error_wrappers.ValidationError: If setting is not parsable into correct type
+    :raises pydantic.ValidationError: If setting is not parsable into correct type
     """
 
     config_path: t.Optional[pathlib.Path] = None  # noqa: UP007
@@ -198,7 +198,7 @@ class _RstcheckConfigINIFile(pydantic.BaseModel):
 
     The types apply to the file's data before the parsing by :py:class:`RstcheckConfig` is done.
 
-    :raises pydantic.error_wrappers.ValidationError: If setting is not parsable into correct type
+    :raises pydantic.ValidationError: If setting is not parsable into correct type
     """
 
     report_level: t.Union[str, int, None] = None  # noqa: UP007
@@ -278,7 +278,7 @@ class _RstcheckConfigTOMLFile(
 
     The types apply to the file's data before the parsing by :py:class:`RstcheckConfig` is done.
 
-    :raises pydantic.error_wrappers.ValidationError: If setting is not parsable into correct type
+    :raises pydantic.ValidationError: If setting is not parsable into correct type
     """
 
     report_level: t.Union[str, int, None] = None  # noqa: UP007
