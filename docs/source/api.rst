@@ -2,7 +2,7 @@
 API
 ===
 
-.. spelling::
+.. spelling:word-list::
 
     apidoc
     autoapidoc
