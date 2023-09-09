@@ -814,7 +814,9 @@ class CodeBlockChecker:
             (output, temp_file_name) = result
             for line in output.splitlines():
                 try:
-                    yield _parse_gcc_style_error_message(line, source_origin=temp_file_name)
+                    yield _parse_gcc_style_error_message(
+                        line, source_origin=self.source_origin, temp_file_name=temp_file_name
+                    )
                 except ValueError:
                     continue
 
@@ -864,7 +866,11 @@ class CodeBlockChecker:
 
 
 def _parse_gcc_style_error_message(
-    message: str, source_origin: types.SourceFileOrString, *, has_column: bool = True
+    message: str,
+    source_origin: types.SourceFileOrString,
+    *,
+    temp_file_name: pathlib.Path | None = None,
+    has_column: bool = True,
 ) -> types.LintError:
     """Parse GCC-style error message.
 
@@ -872,13 +878,14 @@ def _parse_gcc_style_error_message(
     parsed.
 
     :param message: Message to parse
-    :param filename: File the message is associated with
+    :param filename: File the code block producing the errors comes from
+    :param temp_file_name: File the message is associated with
     :param has_column: The the message has a column number; defaults to :py:obj:`True`
     :raises ValueError: If the message cannot be parsed
     :return: Parsed message
     """
     colons = 2 if has_column else 1
-    prefix = str(source_origin) + ":"
+    prefix = str(temp_file_name or source_origin) + ":"
     if not message.startswith(prefix):
         logger.debug("Skipping unparsable message: '%s'.", message)
         msg = "Message cannot be parsed."
