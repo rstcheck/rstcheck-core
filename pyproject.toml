@@ -40,7 +40,7 @@ testing = [
     "pytest-mock >=3.7",
 ]
 docs = [
-    "sphinx >=4.0",
+    "sphinx >=4.0, !=7.2.5",
     "m2r2 >=0.3.2",
     "sphinx-rtd-theme >=1.2",
     "sphinx-autodoc-typehints >=1.15",
