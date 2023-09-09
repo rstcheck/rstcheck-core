@@ -220,6 +220,7 @@ def check_source(
         # Sphinx will sometimes throw an `AttributeError` trying to access
         # "self.state.document.settings.env". Ignore this for now until we
         # figure out a better approach.
+        # https://github.com/rstcheck/rstcheck-core/issues/3
         try:
             docutils.core.publish_string(
                 source,
