@@ -25,7 +25,7 @@ YieldedLintError = t.Generator[LintError, None, None]
 class IgnoreDict(_t.TypedDict):
     """Dict with ignore information."""
 
-    messages: t.Pattern | None  # type: ignore[type-arg]
+    messages: t.Pattern[str] | None
     languages: list[str]
     directives: list[str]
     roles: list[str]
