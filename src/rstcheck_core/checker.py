@@ -848,15 +848,15 @@ class CodeBlockChecker:
             temporary_file.flush()
             temporary_file.close()
 
-            result = subprocess.run(
+            subprocess.run(
                 [*arguments, temporary_file.name],  # noqa: S603
                 capture_output=True,
                 cwd=source_origin_path.parent,
                 check=True,
             )
-
-            if result.returncode != 0:
-                return (result.stderr.decode(encoding), temporary_file_path)
+        except subprocess.CalledProcessError as exc:
+            return (exc.stderr.decode(encoding), temporary_file_path)
+        else:
             return None
         finally:
             temporary_file_path.unlink()
