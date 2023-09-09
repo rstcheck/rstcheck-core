@@ -1391,6 +1391,22 @@ int main()
             checker._parse_gcc_style_error_message(message, "<string>")
 
     @staticmethod
+    def test__parse_gcc_style_error_message_with_tempfile() -> None:
+        """Test ``_parse_gcc_style_error_message`` method with tempfile."""
+        message = "tempfile.cpp:16:32: Error message"
+        error = types.LintError(
+            source_origin="source.rst",
+            line_number=16,
+            message="Error message",
+        )
+
+        result = checker._parse_gcc_style_error_message(
+            message, "source.rst", temp_file_name="tempfile.cpp"
+        )
+
+        assert result == error
+
+    @staticmethod
     def test__parse_gcc_style_error_message_with_column() -> None:
         """Test ``_parse_gcc_style_error_message`` method with column."""
         message = "<string>:16:32: Error message"
