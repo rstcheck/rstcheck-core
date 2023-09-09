@@ -23,6 +23,9 @@ NOTE: please use them in this order.
 
 - Auto discover pyproject.toml file on py311 and up
 
+### Documentation
+- Update inv file for pydantic links ([#60](https://github.com/rstcheck/rstcheck-core/pull/60))
+
 ### Miscellaneous
 
 - Ignore "no newline at end of file" errors when C++ code is checked by clang (such as on macOS) ([#45](https://github.com/rstcheck/rstcheck-core/pull/45))
