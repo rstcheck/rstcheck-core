@@ -28,7 +28,7 @@ def test_report_level_map_matches_names() -> None:
 
 
 def test_default_values_for_config_file() -> None:
-    """Test default values of  ``RstcheckConfigFile``."""
+    """Test default values of ``RstcheckConfigFile``."""
     result = config.RstcheckConfigFile()
 
     assert result.report_level is None
@@ -40,7 +40,7 @@ def test_default_values_for_config_file() -> None:
 
 
 def test_default_values_for_config() -> None:
-    """Test default values of  ``RstcheckConfig``."""
+    """Test default values of ``RstcheckConfig``."""
     result = config.RstcheckConfig()
 
     assert result.report_level is None
