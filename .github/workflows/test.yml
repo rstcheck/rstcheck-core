@@ -51,8 +51,16 @@ jobs:
       - name: Install tox via pipx
         run: pipx install tox
 
-      - name: Run tests via tox
+      - name: Run tests via tox (linux/macos)
+        if: runner.os != 'Windows'
         run: |
           major=$(python -c "import sys;print(sys.version_info[0])")
           minor=$(python -c "import sys;print(sys.version_info[1])")
+          tox -m py${major}.${minor}
+
+      - name: Run tests via tox (windows)
+        if: runner.os == 'Windows'
+        run: |
+          $major = python -c "import sys;print(sys.version_info[0])"
+          $minor = python -c "import sys;print(sys.version_info[1])"
           tox -m py${major}.${minor}
