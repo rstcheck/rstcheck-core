@@ -149,7 +149,7 @@ def _create_ignore_dict_from_config(rstcheck_config: config.RstcheckConfig) -> t
 
 def check_source(
     source: str,
-    source_file: pathlib.Path | None = None,
+    source_file: types.SourceFileOrString | None = None,
     ignores: types.IgnoreDict | None = None,
     report_level: config.ReportLevel = config.DEFAULT_REPORT_LEVEL,
     *,

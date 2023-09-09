@@ -1395,13 +1395,13 @@ int main()
         """Test ``_parse_gcc_style_error_message`` method with tempfile."""
         message = "tempfile.cpp:16:32: Error message"
         error = types.LintError(
-            source_origin="source.rst",
+            source_origin=pathlib.Path("source.rst"),
             line_number=16,
             message="Error message",
         )
 
         result = checker._parse_gcc_style_error_message(
-            message, "source.rst", temp_file_name="tempfile.cpp"
+            message, pathlib.Path("source.rst"), temp_file_name=pathlib.Path("tempfile.cpp")
         )
 
         assert result == error
