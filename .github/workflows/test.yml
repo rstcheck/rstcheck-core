@@ -52,4 +52,7 @@ jobs:
         run: pipx install tox
 
       - name: Run tests via tox
-        run: tox -m py${{ matrix.python-version }}
+        run: |
+          major=$(python -c "import sys;print(sys.version_info[0])")
+          minor=$(python -c "import sys;print(sys.version_info[1])")
+          tox -m py${major}.${minor}
