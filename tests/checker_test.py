@@ -705,9 +705,9 @@ print(
         assert "'(' was never closed" in result[0]["message"]
 
     @staticmethod
-    @pytest.mark.skipif(sys.version_info[0:2] > (3, 7), reason="Requires python3.7 or lower")
-    def test_check_python_returns_no_error_on_syntax_warning_pre38() -> None:
-        """Test ``check_python`` returns no error on SyntaxWarning.
+    @pytest.mark.skipif(sys.version_info < (3, 8), reason="Requires python3.8 or higher")
+    def test_check_python_returns_error_on_syntax_warning() -> None:
+        """Test ``check_python`` returns error on SyntaxWarning.
 
         With python 3.8 a SyntaxWarning is logged for '"is" with literals'.
 
@@ -721,7 +721,8 @@ if mystring is "ok":
 
         result = list(cb_checker.check_python(source))
 
-        assert not result
+        assert len(result) == 1
+        assert '"is" with a literal' in result[0]["message"]
 
     @staticmethod
     @pytest.mark.skipif(sys.version_info < (3, 8), reason="Requires python3.8 or higher")
