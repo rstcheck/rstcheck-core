@@ -698,7 +698,7 @@ class CodeBlockChecker:
         logger.debug("Check RST source.")
         yield from check_source(
             source_code,
-            source_file=None,
+            source_file=self.source_origin,
             ignores=self.ignores,
             report_level=self.report_level,
             warn_unknown_settings=self.warn_unknown_settings,
