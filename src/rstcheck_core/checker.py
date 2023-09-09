@@ -235,12 +235,14 @@ def check_source(
         except AttributeError:
             if not _extras.SPHINX_INSTALLED:
                 raise
-            logger.critical(
-                "An `AttributeError` error occured. This is most propably due to a code block "
+            logger.warning(
+                "An `AttributeError` error occured. This is most probably due to a code block "
                 "directive (code/code-block/sourcecode) without a specified language. "
                 "This may result in a false negative for source: '%s'. "
-                "See https://rstcheck-core.readthedocs.io/en/latest/faq/"
-                "#code-blocks-without-language-sphinx for more information.",
+                "The reason can also be another directive. "
+                "For more information see the FAQ (https://rstcheck-core.rtfd.io/en/latest/faq) "
+                "or the corresponding github issue: "
+                "https://github.com/rstcheck/rstcheck-core/issues/3.",
                 source_origin,
             )
 

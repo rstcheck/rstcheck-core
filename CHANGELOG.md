@@ -19,6 +19,10 @@ NOTE: please use them in this order.
 
 [diff v1.1.0...main](https://github.com/rstcheck/rstcheck-core/compare/v1.1.0...main)
 
+### Misc
+
+- Reduce log level and make message more clear for the AttributeError issue ([#63](https://github.com/rstcheck/rstcheck-core/issues/63))
+
 ## [1.1.0 (2023-09-09)](https://github.com/rstcheck/rstcheck-core/releases/v1.1.0)
 
 [diff vv1.0.3...v1.1.0](https://github.com/rstcheck/rstcheck-core/compare/vv1.0.3...v1.1.0)
