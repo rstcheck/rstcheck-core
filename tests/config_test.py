@@ -1,5 +1,6 @@
 """Tests for ``config`` module."""
-# pylint: disable=too-many-lines,protected-access
+from __future__ import annotations
+
 import logging
 import pathlib
 import re
@@ -10,7 +11,7 @@ import pytest
 from rstcheck_core import _extras, config
 
 
-def test_report_level_map_matches_numbers() -> None:  # noqa: AAA01
+def test_report_level_map_matches_numbers() -> None:
     """Test that the enum's values match the map's ones."""
     enum_values = [e.value for e in config.ReportLevel]
     map_values = list(config.ReportLevelMap.values())
@@ -18,18 +19,16 @@ def test_report_level_map_matches_numbers() -> None:  # noqa: AAA01
     assert map_values == enum_values
 
 
-def test_report_level_map_matches_names() -> None:  # noqa: AAA01
+def test_report_level_map_matches_names() -> None:
     """Test that the enum's name match the map's keys."""
-    enum_names = [
-        e.casefold() for e in config.ReportLevel._member_names_  # pylint: disable=no-member
-    ]
+    enum_names = [e.casefold() for e in config.ReportLevel._member_names_]
     map_keys = list(config.ReportLevelMap.keys())
 
     assert enum_names == map_keys
 
 
 def test_default_values_for_config_file() -> None:
-    """Test default values of  ``RstcheckConfigFile``."""
+    """Test default values of ``RstcheckConfigFile``."""
     result = config.RstcheckConfigFile()
 
     assert result.report_level is None
@@ -41,11 +40,12 @@ def test_default_values_for_config_file() -> None:
 
 
 def test_default_values_for_config() -> None:
-    """Test default values of  ``RstcheckConfig``."""
+    """Test default values of ``RstcheckConfig``."""
     result = config.RstcheckConfig()
 
     assert result.report_level is None
-    assert result.ignore_directives is None
+    # TODO:#i# find reason for false positiv on unreachable error from mypy
+    assert result.ignore_directives is None  # type: ignore[unreachable]
     assert result.ignore_roles is None
     assert result.ignore_substitutions is None
     assert result.ignore_languages is None
@@ -80,7 +80,7 @@ class TestSplitStrValidator:
             ("value1 , value2 , ", ["value1", "value2"]),
         ],
     )
-    def test_strings_are_transformed_to_lists(string: str, split_list: t.List[str]) -> None:
+    def test_strings_are_transformed_to_lists(string: str, split_list: list[str]) -> None:
         """Test strings are split at the ",", trailing commas are ignored and whitespace cleaned."""
         result = config._split_str_validator(string)
 
@@ -98,7 +98,7 @@ class TestSplitStrValidator:
         ],
     )
     def test_string_lists_are_whitespace_cleaned(
-        string_list: t.List[str], string_list_cleaned: t.List[str]
+        string_list: list[str], string_list_cleaned: list[str]
     ) -> None:
         """Test lists of strings are whitespace cleaned."""
         result = config._split_str_validator(string_list)
@@ -122,7 +122,7 @@ class TestSplitStrValidator:
     )
     def test_invalid_settings(value: str) -> None:
         """Test invalid settings."""
-        with pytest.raises(ValueError, match="Not a string or list of strings"):
+        with pytest.raises(TypeError, match="^Not a string or list of strings$"):
             config._split_str_validator(value)
 
 
@@ -175,7 +175,7 @@ class TestReportLevelValidatorMethod:
     )
     def test_invalid_report_levels(level: t.Any) -> None:  # noqa: ANN401
         """Test invalid report levels not accepted by docutils."""
-        with pytest.raises(ValueError, match="Invalid report level"):
+        with pytest.raises(TypeError, match="^Invalid report level$"):
             config.RstcheckConfigFile(report_level=level)
 
 
@@ -224,7 +224,7 @@ class TestSplitStrValidatorMethod:
             ("value1 , value2 , ", ["value1", "value2"]),
         ],
     )
-    def test_strings_are_transformed_to_lists(string: str, split_list: t.List[str]) -> None:
+    def test_strings_are_transformed_to_lists(string: str, split_list: list[str]) -> None:
         """Test strings are split at the ",", trailing commas are ignored and whitespace cleaned."""
         result = config.RstcheckConfigFile(
             ignore_languages=string,
@@ -251,7 +251,7 @@ class TestSplitStrValidatorMethod:
         ],
     )
     def test_string_lists_are_whitespace_cleaned(
-        string_list: t.List[str], string_list_cleaned: t.List[str]
+        string_list: list[str], string_list_cleaned: list[str]
     ) -> None:
         """Test lists of strings are whitespace cleaned."""
         result = config.RstcheckConfigFile(
@@ -284,7 +284,7 @@ class TestSplitStrValidatorMethod:
     )
     def test_invalid_settings(value: str) -> None:
         """Test invalid settings."""
-        with pytest.raises(ValueError, match="Not a string or list of strings"):
+        with pytest.raises(TypeError, match="^Not a string or list of strings$"):
             config.RstcheckConfigFile(
                 ignore_languages=value,
                 ignore_directives=value,
@@ -353,7 +353,7 @@ class TestJoinRegexStrValidatorMethod:
     @pytest.mark.parametrize(
         ("string_list", "full_string"), [([""], ""), (["", ""], "|"), ([], "")]
     )
-    def test_list_with_empty_contents(string_list: t.List[str], full_string: str) -> None:
+    def test_list_with_empty_contents(string_list: list[str], full_string: str) -> None:
         """Test list with empty contents are parsed as regex too."""
         regex = re.compile(full_string)
 
@@ -379,7 +379,7 @@ class TestJoinRegexStrValidatorMethod:
     )
     def test_invalid_settings(value: str) -> None:
         """Test invalid ignore_messages settings."""
-        with pytest.raises(ValueError, match="Not a string or list of strings"):
+        with pytest.raises(TypeError, match="^Not a string or list of strings$"):
             config.RstcheckConfigFile(ignore_messages=value)
 
 
@@ -652,7 +652,7 @@ class TestTomlFileLoader:
         conf_file = tmp_path / "config.ini"
         conf_file.touch()
 
-        with pytest.raises(ValueError, match="File is not a TOML file"):
+        with pytest.raises(ValueError, match="^File is not a TOML file$"):
             config._load_config_from_toml_file(conf_file)
 
     @staticmethod
@@ -1233,7 +1233,7 @@ class TestConfigPathLoader:
         """Test raises FileNotFoundError on path that is not a file or directory."""
         conf_file = pathlib.Path("does-not-exist-cfg")
 
-        with pytest.raises(FileNotFoundError, match=re.compile("Passed config path not found.")):
+        with pytest.raises(FileNotFoundError, match="Passed config path not found"):
             config.load_config_file_from_path(conf_file)
 
     @staticmethod

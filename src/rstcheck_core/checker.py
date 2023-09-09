@@ -1,4 +1,6 @@
 """Checking functionality."""
+from __future__ import annotations
+
 import contextlib
 import copy
 import doctest
@@ -10,12 +12,12 @@ import os
 import pathlib
 import re
 import shlex
-import subprocess  # noqa: S404
+import subprocess
 import sys
 import tempfile
 import typing as t
 import warnings
-import xml.etree.ElementTree  # noqa: S405
+import xml.etree.ElementTree
 
 import docutils.core
 import docutils.io
@@ -23,7 +25,6 @@ import docutils.nodes
 import docutils.utils
 
 from . import _docutils, _extras, _sphinx, config, inline_config, types
-
 
 logger = logging.getLogger(__name__)
 
@@ -36,8 +37,8 @@ MARKDOWN_LINK_REGEX = re.compile(r"\[[^\]]+\]\([^\)]+\)")
 def check_file(
     source_file: pathlib.Path,
     rstcheck_config: config.RstcheckConfig,
-    overwrite_with_file_config: bool = True,
-) -> t.List[types.LintError]:
+    overwrite_with_file_config: bool = True,  # noqa: FBT001,FBT002
+) -> list[types.LintError]:
     """Check the given file for issues.
 
     On every call docutils' caches for roles and directives are cleared by reloading their modules.
@@ -49,8 +50,10 @@ def check_file(
         defaults to :py:obj:`True`
     :return: A list of found issues
     """
-    logger.info(f"Check file'{source_file}'")
-    run_config = _load_run_config(source_file.parent, rstcheck_config, overwrite_with_file_config)
+    logger.info("Check file'%s'", source_file)
+    run_config = _load_run_config(
+        source_file.parent, rstcheck_config, overwrite_config=overwrite_with_file_config
+    )
     ignore_dict = _create_ignore_dict_from_config(run_config)
 
     source = _get_source(source_file)
@@ -58,22 +61,21 @@ def check_file(
     _docutils.clean_docutils_directives_and_roles_cache()
 
     with _sphinx.load_sphinx_if_available():
-        all_errors = []
-        for error in check_source(
-            source,
-            source_file=source_file,
-            ignores=ignore_dict,
-            report_level=run_config.report_level or config.DEFAULT_REPORT_LEVEL,
-            warn_unknown_settings=run_config.warn_unknown_settings or False,
-        ):
-            all_errors.append(error)
-
-    return all_errors
+        return list(
+            check_source(
+                source,
+                source_file=source_file,
+                ignores=ignore_dict,
+                report_level=run_config.report_level or config.DEFAULT_REPORT_LEVEL,
+                warn_unknown_settings=run_config.warn_unknown_settings or False,
+            )
+        )
 
 
 def _load_run_config(
     source_file_dir: pathlib.Path,
     rstcheck_config: config.RstcheckConfig,
+    *,
     overwrite_config: bool = True,
 ) -> config.RstcheckConfig:
     """Load file specific config file and create run config.
@@ -96,10 +98,9 @@ def _load_run_config(
     if file_config is None:
         return rstcheck_config
 
-    run_config = config.merge_configs(
+    return config.merge_configs(
         copy.copy(rstcheck_config), file_config, config_add_is_dominant=overwrite_config
     )
-    return run_config
 
 
 def _get_source(source_file: pathlib.Path) -> str:
@@ -119,7 +120,7 @@ def _get_source(source_file: pathlib.Path) -> str:
         return input_file.read()
 
 
-def _replace_ignored_substitutions(source: str, ignore_substitutions: t.List[str]) -> str:
+def _replace_ignored_substitutions(source: str, ignore_substitutions: list[str]) -> str:
     """Replace rst substitutions from the ignore list with a dummy.
 
     :param source: Source to replace substitutions in
@@ -146,11 +147,12 @@ def _create_ignore_dict_from_config(rstcheck_config: config.RstcheckConfig) -> t
     )
 
 
-def check_source(  # noqa: CCR001
+def check_source(
     source: str,
-    source_file: t.Optional[pathlib.Path] = None,
-    ignores: t.Optional[types.IgnoreDict] = None,
+    source_file: pathlib.Path | None = None,
+    ignores: types.IgnoreDict | None = None,
     report_level: config.ReportLevel = config.DEFAULT_REPORT_LEVEL,
+    *,
     warn_unknown_settings: bool = False,
 ) -> types.YieldedLintError:
     """Check the given rst source for issues.
@@ -168,19 +170,27 @@ def check_source(  # noqa: CCR001
     source_origin: types.SourceFileOrString = source_file or "<string>"
     if isinstance(source_origin, pathlib.Path) and source_origin.name == "-":
         source_origin = "<stdin>"
-    logger.info(f"Check source from '{source_origin}'")
+    logger.info("Check source from '%s'", source_origin)
     ignores = ignores or types.construct_ignore_dict()
     ignores["directives"].extend(
-        inline_config.find_ignored_directives(source, source_origin, warn_unknown_settings)
+        inline_config.find_ignored_directives(
+            source, source_origin, warn_unknown_settings=warn_unknown_settings
+        )
     )
     ignores["roles"].extend(
-        inline_config.find_ignored_roles(source, source_origin, warn_unknown_settings)
+        inline_config.find_ignored_roles(
+            source, source_origin, warn_unknown_settings=warn_unknown_settings
+        )
     )
     ignores["substitutions"].extend(
-        inline_config.find_ignored_substitutions(source, source_origin, warn_unknown_settings)
+        inline_config.find_ignored_substitutions(
+            source, source_origin, warn_unknown_settings=warn_unknown_settings
+        )
     )
     ignores["languages"].extend(
-        inline_config.find_ignored_languages(source, source_origin, warn_unknown_settings)
+        inline_config.find_ignored_languages(
+            source, source_origin, warn_unknown_settings=warn_unknown_settings
+        )
     )
 
     source = _replace_ignored_substitutions(source, ignores["substitutions"])
@@ -227,9 +237,10 @@ def check_source(  # noqa: CCR001
             logger.critical(
                 "An `AttributeError` error occured. This is most propably due to a code block "
                 "directive (code/code-block/sourcecode) without a specified language. "
-                f"This may result in a false negative for source: '{source_origin}'. "
+                "This may result in a false negative for source: '%s'. "
                 "See https://rstcheck-core.readthedocs.io/en/latest/faq/"
-                "#code-blocks-without-language-sphinx for more information."
+                "#code-blocks-without-language-sphinx for more information.",
+                source_origin,
             )
 
     yield from _run_code_checker_and_filter_errors(writer.checkers, ignores["messages"])
@@ -243,9 +254,9 @@ def check_source(  # noqa: CCR001
 
 
 def _run_code_checker_and_filter_errors(
-    checker_list: t.List[types.CheckerRunFunction],
+    checker_list: list[types.CheckerRunFunction],
     # NOTE: Pattern type-arg errors pydanic: https://github.com/samuelcolvin/pydantic/issues/2636
-    ignore_messages: t.Optional[t.Pattern] = None,  # type: ignore[type-arg]
+    ignore_messages: t.Pattern[str] | None = None,
 ) -> types.YieldedLintError:
     """Run all code block checker functions.
 
@@ -266,7 +277,7 @@ def _parse_and_filter_rst_errors(
     rst_errors: str,
     # NOTE: Pattern type-arg errors pydanic: https://github.com/samuelcolvin/pydantic/issues/2636
     source_origin: types.SourceFileOrString,
-    ignore_messages: t.Optional[t.Pattern] = None,  # type: ignore[type-arg]
+    ignore_messages: t.Pattern[str] | None = None,
 ) -> types.YieldedLintError:
     """Parse rst errors and yield filtered :py:class:`rstcheck_core.types.LintError`.
 
@@ -289,12 +300,13 @@ def _parse_and_filter_rst_errors(
 class _CheckWriter(docutils.writers.Writer):
     """Runs CheckTranslator on code blocks."""
 
-    def __init__(  # pylint: disable=too-many-arguments
+    def __init__(
         self,
         source: str,
         source_origin: types.SourceFileOrString,
-        ignores: t.Optional[types.IgnoreDict] = None,
+        ignores: types.IgnoreDict | None = None,
         report_level: config.ReportLevel = config.DEFAULT_REPORT_LEVEL,
+        *,
         warn_unknown_settings: bool = False,
     ) -> None:
         """Inititalize :py:class:`_CheckWriter`.
@@ -309,7 +321,7 @@ class _CheckWriter(docutils.writers.Writer):
             defaults to :py:obj:`False`
         """
         docutils.writers.Writer.__init__(self)
-        self.checkers: t.List[types.CheckerRunFunction] = []
+        self.checkers: list[types.CheckerRunFunction] = []
         self.source = source
         self.source_origin = source_origin
         self.ignores = ignores
@@ -330,16 +342,17 @@ class _CheckWriter(docutils.writers.Writer):
         self.checkers += visitor.checkers
 
 
-class _CheckTranslator(docutils.nodes.NodeVisitor):  # pylint: disable=too-many-instance-attributes
+class _CheckTranslator(docutils.nodes.NodeVisitor):
     """Visits code blocks and checks for syntax errors in code."""
 
-    def __init__(  # pylint: disable=too-many-arguments
+    def __init__(  # noqa: PLR0913
         self,
         document: docutils.nodes.document,
         source: str,
         source_origin: types.SourceFileOrString,
-        ignores: t.Optional[types.IgnoreDict] = None,
+        ignores: types.IgnoreDict | None = None,
         report_level: config.ReportLevel = config.DEFAULT_REPORT_LEVEL,
+        *,
         warn_unknown_settings: bool = False,
     ) -> None:
         """Inititalize :py:class:`_CheckTranslator`.
@@ -355,14 +368,14 @@ class _CheckTranslator(docutils.nodes.NodeVisitor):  # pylint: disable=too-many-
             defaults to :py:obj:`False`
         """
         docutils.nodes.NodeVisitor.__init__(self, document)
-        self.checkers: t.List[types.CheckerRunFunction] = []
+        self.checkers: list[types.CheckerRunFunction] = []
         self.source = source
         self.source_origin = source_origin
         self.ignores = ignores or types.construct_ignore_dict()
         self.report_level = report_level
         self.warn_unknown_settings = warn_unknown_settings
         self.code_block_checker = CodeBlockChecker(
-            source_origin, ignores, report_level, warn_unknown_settings
+            source_origin, ignores, report_level, warn_unknown_settings=warn_unknown_settings
         )
         self.code_block_ignore_lines = list(
             inline_config.find_code_block_ignore_lines(
@@ -407,15 +420,17 @@ class _CheckTranslator(docutils.nodes.NodeVisitor):  # pylint: disable=too-many-
         directive_line = _get_code_block_directive_line(node, self.source)
         if directive_line is None:
             logger.error(
-                "Could not find line for literal block directive. "
-                f"Source: '{self.source_origin}' at line {node.line}"
+                "Could not find line for literal block directive. Source: '%s' at line %s",
+                self.source_origin,
+                node.line,
             )
             return
 
         if directive_line - 1 in self.code_block_ignore_lines:
             logger.debug(
-                "Skipping code-block due to skip comment. "
-                f"Source: '{self.source_origin}' at line {node.line}"
+                "Skipping code-block due to skip comment. Source: '%s' at line %s",
+                self.source_origin,
+                node.line,
             )
             return
 
@@ -445,11 +460,12 @@ class _CheckTranslator(docutils.nodes.NodeVisitor):  # pylint: disable=too-many-
                 "(rst) Link is formatted in Markdown style.", base_node=node
             )
 
-    def _add_check(  # noqa: CCR001
+    def _add_check(
         self,
         node: docutils.nodes.Element,
         run: types.CheckerRunFunction,
         language: str,
+        *,
         is_code_node: bool,
     ) -> None:
         """Add node checker that will be run.
@@ -460,7 +476,7 @@ class _CheckTranslator(docutils.nodes.NodeVisitor):  # pylint: disable=too-many-
         :param is_code_node: If it is a code block node
         """
 
-        def run_check() -> types.YieldedLintError:  # noqa: CCR001
+        def run_check() -> types.YieldedLintError:
             """Yield found issues."""
             all_results = run()
             if all_results is not None:
@@ -496,7 +512,7 @@ class _CheckTranslator(docutils.nodes.NodeVisitor):  # pylint: disable=too-many-
 
 
 def _beginning_of_code_block(
-    node: docutils.nodes.Element, line_number: int, full_contents: str, is_code_node: bool
+    node: docutils.nodes.Element, line_number: int, full_contents: str, *, is_code_node: bool
 ) -> int:
     """Get line number of beginning of code block.
 
@@ -533,9 +549,7 @@ def _beginning_of_code_block(
 CODE_BLOCK_RE = re.compile(r"\.\. code::|\.\. code-block::|\.\. sourcecode::")
 
 
-def _get_code_block_directive_line(
-    node: docutils.nodes.Element, full_contents: str
-) -> t.Optional[int]:
+def _get_code_block_directive_line(node: docutils.nodes.Element, full_contents: str) -> int | None:
     """Find line of code block directive.
 
     :param node: The code block node
@@ -563,8 +577,9 @@ class CodeBlockChecker:
     def __init__(
         self,
         source_origin: types.SourceFileOrString,
-        ignores: t.Optional[types.IgnoreDict] = None,
+        ignores: types.IgnoreDict | None = None,
         report_level: config.ReportLevel = config.DEFAULT_REPORT_LEVEL,
+        *,
         warn_unknown_settings: bool = False,
     ) -> None:
         """Inititalize CodeBlockChecker.
@@ -608,7 +623,7 @@ class CodeBlockChecker:
         :yield: Found issues
         """
         checker_function = t.Callable[[str], types.YieldedLintError]
-        checker: t.Optional[checker_function] = getattr(self, f"check_{language}", None)
+        checker: checker_function | None = getattr(self, f"check_{language}", None)
         if checker is None:
             return None
 
@@ -748,10 +763,13 @@ class CodeBlockChecker:
         return self._gcc_checker(
             source_code,
             ".c",
-            [os.getenv("CC", "gcc")]
-            + shlex.split(os.getenv("CFLAGS", ""))
-            + shlex.split(os.getenv("CPPFLAGS", ""))
-            + ["-I.", "-I.."],
+            [
+                os.getenv("CC", "gcc"),
+                *shlex.split(os.getenv("CFLAGS", "")),
+                *shlex.split(os.getenv("CPPFLAGS", "")),
+                "-I.",
+                "-I..",
+            ],
         )
 
     def check_cpp(self, source_code: str) -> types.YieldedLintError:
@@ -767,14 +785,17 @@ class CodeBlockChecker:
             # that are reported using clang (e.g. on macOS).
             source_code + "\n",
             ".cpp",
-            [os.getenv("CXX", "g++")]
-            + shlex.split(os.getenv("CXXFLAGS", ""))
-            + shlex.split(os.getenv("CPPFLAGS", ""))
-            + ["-I.", "-I.."],
+            [
+                os.getenv("CXX", "g++"),
+                *shlex.split(os.getenv("CXXFLAGS", "")),
+                *shlex.split(os.getenv("CPPFLAGS", "")),
+                "-I.",
+                "-I..",
+            ],
         )
 
     def _gcc_checker(
-        self, source_code: str, filename_suffix: str, arguments: t.List[str]
+        self, source_code: str, filename_suffix: str, arguments: list[str]
     ) -> types.YieldedLintError:
         """Check code blockes using gcc (Helper function).
 
@@ -785,7 +806,7 @@ class CodeBlockChecker:
         :yield: Found issues
         """
         result = self._run_in_subprocess(
-            source_code, filename_suffix, arguments + ["-pedantic", "-fsyntax-only"]
+            source_code, filename_suffix, [*arguments, "-pedantic", "-fsyntax-only"]
         )
 
         if result:
@@ -800,8 +821,8 @@ class CodeBlockChecker:
         self,
         code: str,
         filename_suffix: str,
-        arguments: t.List[str],
-    ) -> t.Optional[t.Tuple[str, pathlib.Path]]:
+        arguments: list[str],
+    ) -> tuple[str, pathlib.Path] | None:
         """Run checker in a subprocess (Helper function).
 
         :param source_code: Source code to check
@@ -818,7 +839,7 @@ class CodeBlockChecker:
 
         # NOTE: On windows a file cannot be opened twice.
         # Therefore close it before using it in subprocess.
-        temporary_file = tempfile.NamedTemporaryFile(  # pylint: disable=consider-using-with
+        temporary_file = tempfile.NamedTemporaryFile(
             mode="wb", suffix=filename_suffix, delete=False
         )
         temporary_file_path = pathlib.Path(temporary_file.name)
@@ -827,21 +848,22 @@ class CodeBlockChecker:
             temporary_file.flush()
             temporary_file.close()
 
-            result = subprocess.run(  # pylint: disable=subprocess-run-check # noqa: S603
-                arguments + [temporary_file.name],
+            subprocess.run(
+                [*arguments, temporary_file.name],  # noqa: S603
                 capture_output=True,
                 cwd=source_origin_path.parent,
+                check=True,
             )
-
-            if result.returncode != 0:
-                return (result.stderr.decode(encoding), temporary_file_path)
+        except subprocess.CalledProcessError as exc:
+            return (exc.stderr.decode(encoding), temporary_file_path)
+        else:
             return None
         finally:
             temporary_file_path.unlink()
 
 
 def _parse_gcc_style_error_message(
-    message: str, source_origin: types.SourceFileOrString, has_column: bool = True
+    message: str, source_origin: types.SourceFileOrString, *, has_column: bool = True
 ) -> types.LintError:
     """Parse GCC-style error message.
 
@@ -857,8 +879,9 @@ def _parse_gcc_style_error_message(
     colons = 2 if has_column else 1
     prefix = str(source_origin) + ":"
     if not message.startswith(prefix):
-        logger.debug(f"Skipping unparsable message: '{message}'.")
-        raise ValueError("Message cannot be parsed.")
+        logger.debug("Skipping unparsable message: '%s'.", message)
+        msg = "Message cannot be parsed."
+        raise ValueError(msg)
     message = message[len(prefix) :]
     split_message = message.split(":", colons)
     line_number = int(split_message[0])

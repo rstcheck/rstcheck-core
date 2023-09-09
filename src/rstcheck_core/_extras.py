@@ -18,28 +18,29 @@ Example usage:
         _extras.install_guard("sphinx")
         print(sphinx.version_info)
 """
+from __future__ import annotations
+
 import importlib
 import logging
 import typing as t
 
 from . import _compat as _t
 
-
 logger = logging.getLogger(__name__)
 
 
-ExtraDependencies = _t.Literal["sphinx", "tomli"]
+ExtraDependencies = t.Literal["sphinx", "tomli"]
 """List of all dependencies installable through extras."""
 
 
 class DependencyInfos(_t.TypedDict):
     """Information about a dependency."""
 
-    min_version: t.Tuple[int, ...]
+    min_version: tuple[int, ...]
     extra: str
 
 
-ExtraDependenciesInfos: t.Dict[ExtraDependencies, DependencyInfos] = {
+ExtraDependenciesInfos: dict[ExtraDependencies, DependencyInfos] = {
     "sphinx": DependencyInfos(min_version=(2, 0), extra="sphinx"),
     "tomli": DependencyInfos(min_version=(2, 0), extra="toml"),
 }
@@ -52,7 +53,10 @@ def is_installed_with_supported_version(package: ExtraDependencies) -> bool:
     :param package: Name of packge to check
     :return: Bool if package is installed with supported version
     """
-    logger.debug(f"Check if package is installed with supported version: '{package}'.")
+    logger.debug(
+        "Check if package is installed with supported version: '%s'.",
+        package,
+    )
     try:
         importlib.import_module(package)
     except ImportError:
@@ -68,7 +72,7 @@ SPHINX_INSTALLED = is_installed_with_supported_version("sphinx")
 TOMLI_INSTALLED = is_installed_with_supported_version("tomli")
 
 
-ExtraDependenciesInstalled: t.Dict[ExtraDependencies, bool] = {
+ExtraDependenciesInstalled: dict[ExtraDependencies, bool] = {
     "sphinx": SPHINX_INSTALLED,
     "tomli": TOMLI_INSTALLED,
 }
@@ -87,14 +91,14 @@ def install_guard(package: ExtraDependencies) -> None:
 
     extra = ExtraDependenciesInfos[package]
 
-    raise ModuleNotFoundError(
-        f"No supported version of {package} installed. "
-        f"Install rstcheck with {extra} extra (rstcheck[{extra}]) or "
-        f"install a supported version of {package} yourself."
+    msg = (
+        f"No supported version of {package} installed. Install rstcheck with "
+        f"{extra} extra (rstcheck[{extra}]) or install a supported version of {package} yourself."
     )
+    raise ModuleNotFoundError(msg)
 
 
-def install_guard_tomli(tomllib_imported: bool) -> None:
+def install_guard_tomli(*, tomllib_imported: bool) -> None:
     """Specific version of :py:func:`install_guard` for ``tomli``.
 
     :param tomllib_imported: If tomllib is imported
@@ -105,8 +109,9 @@ def install_guard_tomli(tomllib_imported: bool) -> None:
 
     extra = ExtraDependenciesInfos["tomli"]
 
-    raise ModuleNotFoundError(
-        "tomllib could not be imported and no supported version of tomli installed. "
-        f"Install rstcheck with {extra} extra (rstcheck[{extra}]) or "
-        f"install a supported version of tomli yourself."
+    msg = (
+        f"tomllib could not be imported and no supported version of tomli installed. "
+        f"Install rstcheck with {extra} extra (rstcheck[{extra}]) or install a "
+        "supported version of tomli yourself."
     )
+    raise ModuleNotFoundError(msg)

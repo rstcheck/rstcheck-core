@@ -1,15 +1,19 @@
 """Tests for ``runner`` module."""
-# pylint: disable=protected-access
+from __future__ import annotations
+
 import contextlib
 import multiprocessing
 import pathlib
 import sys
 import typing as t
+from pathlib import Path
 
 import pytest
-import pytest_mock
 
 from rstcheck_core import checker, config, runner, types
+
+if t.TYPE_CHECKING:
+    import pytest_mock
 
 
 class TestRstcheckMainRunnerInit:
@@ -24,7 +28,7 @@ class TestRstcheckMainRunnerInit:
 
         runner.RstcheckMainRunner([], init_config)  # act
 
-        mocked_loader.assert_called_once_with(config_file_path, False)
+        mocked_loader.assert_called_once_with(config_file_path, warn_unknown_settings=False)
 
     @staticmethod
     def test_no_load_config_file_if_unset(mocker: pytest_mock.MockerFixture) -> None:
@@ -86,7 +90,7 @@ class TestRstcheckMainRunnerFileListUpdater:
     @staticmethod
     def test_empty_file_list() -> None:
         """Test empty file list results in no changes."""
-        file_list: t.List[pathlib.Path] = []
+        file_list: list[pathlib.Path] = []
         init_config = config.RstcheckConfig()
         _runner = runner.RstcheckMainRunner(file_list, init_config)
 
@@ -205,7 +209,7 @@ class TestRstcheckMainRunnerFileListFilter:
     @staticmethod
     def test_empty_file_list() -> None:
         """Test empty file list results in no changes."""
-        file_list: t.List[pathlib.Path] = []
+        file_list: list[pathlib.Path] = []
         init_config = config.RstcheckConfig()
         _runner = runner.RstcheckMainRunner(file_list, init_config)
 
@@ -314,13 +318,13 @@ class TestRstcheckMainRunnerFileListFilter:
     [[], [types.LintError(source_origin="<string>", line_number=0, message="message")]],
 )
 def test__run_checks_sync_method(
-    lint_errors: t.List[types.LintError], monkeypatch: pytest.MonkeyPatch, tmp_path: pathlib.Path
+    lint_errors: list[types.LintError], monkeypatch: pytest.MonkeyPatch, tmp_path: pathlib.Path
 ) -> None:
     """Test ``RstcheckMainRunner._run_checks_sync`` method.
 
     Test results are returned.
     """
-    monkeypatch.setattr(checker, "check_file", lambda _0, _1, _2: lint_errors)
+    monkeypatch.setattr(checker, "check_file", lambda _0, _1, _3: lint_errors)
     test_file1 = tmp_path / "rst.rst"
     test_file1.touch()
     test_file2 = tmp_path / "rst2.rst"
@@ -341,30 +345,27 @@ def test__run_checks_sync_method(
     [[], [types.LintError(source_origin="<string>", line_number=0, message="message")]],
 )
 def test__run_checks_parallel_method(
-    lint_errors: t.List[types.LintError], monkeypatch: pytest.MonkeyPatch, tmp_path: pathlib.Path
-) -> None:  # noqa: AAA05
+    lint_errors: list[types.LintError], monkeypatch: pytest.MonkeyPatch, tmp_path: pathlib.Path
+) -> None:
     """Test ``RstcheckMainRunner._run_checks_parallel`` method.
 
     Test results are returned.
     The multiprocessing.Pool needs to be mocked, because it interferes with pytest-xdist.
     """
 
-    class MockedPool:  # pylint: disable=too-few-public-methods
+    class MockedPool:
         """Mocked instance of ``multiprocessing.Pool``."""
 
-        # noqa: AAA05
         @staticmethod
-        def starmap(_0, _1) -> t.List[t.List[types.LintError]]:  # noqa: ANN001
+        def starmap(_0, _1) -> list[list[types.LintError]]:
             """Mock for ``multiprocessing.Pool.starmap`` method."""
             return [lint_errors, lint_errors]
 
-    # noqa: AAA05
     @contextlib.contextmanager
-    def mock_pool(_) -> t.Generator[MockedPool, None, None]:  # noqa: ANN001
+    def mock_pool(_) -> t.Generator[MockedPool, None, None]:
         """Mock context manager for ``multiprocessing.Pool``."""
         yield MockedPool()
 
-    # noqa: AAA05
     monkeypatch.setattr(multiprocessing, "Pool", mock_pool)
     test_file1 = tmp_path / "rst.rst"
     test_file1.touch()
@@ -385,7 +386,7 @@ def test__run_checks_parallel_method(
     ("results", "error_count"),
     [([], 0), ([[types.LintError(source_origin="<string>", line_number=0, message="message")]], 1)],
 )
-def test__update_results_method(results: t.List[t.List[types.LintError]], error_count: int) -> None:
+def test__update_results_method(results: list[list[types.LintError]], error_count: int) -> None:
     """Test ``RstcheckMainRunner._update_results`` method.
 
     Test results are set.
@@ -476,7 +477,7 @@ class TestRstcheckMainRunnerResultPrinter:
         init_config = config.RstcheckConfig()
         _runner = runner.RstcheckMainRunner([], init_config)
         # fmt: off
-        with open(out_file, encoding="utf-8", mode="w") as out_file_handle:
+        with Path(out_file).open(encoding="utf-8", mode="w") as out_file_handle:
 
             _runner.print_result(output_file=out_file_handle)  # act
 
@@ -533,7 +534,7 @@ class TestRstcheckMainRunnerResultPrinter:
             [[types.LintError(source_origin="<string>", line_number=0, message="Some error.")]]
         )
         # fmt: off
-        with open(out_file, encoding="utf-8", mode="w") as out_file_handle:
+        with Path(out_file).open(encoding="utf-8", mode="w") as out_file_handle:
 
             _runner.print_result(output_file=out_file_handle)  # act
 
