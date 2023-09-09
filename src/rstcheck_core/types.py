@@ -25,7 +25,6 @@ YieldedLintError = t.Generator[LintError, None, None]
 class IgnoreDict(_t.TypedDict):
     """Dict with ignore information."""
 
-    # NOTE: Pattern type-arg errors pydanic: https://github.com/samuelcolvin/pydantic/issues/2636
     messages: t.Pattern | None  # type: ignore[type-arg]
     languages: list[str]
     directives: list[str]
@@ -34,7 +33,6 @@ class IgnoreDict(_t.TypedDict):
 
 
 def construct_ignore_dict(
-    # NOTE: Pattern type-arg errors pydanic: https://github.com/samuelcolvin/pydantic/issues/2636
     messages: t.Pattern[str] | None = None,
     languages: list[str] | None = None,
     directives: list[str] | None = None,
