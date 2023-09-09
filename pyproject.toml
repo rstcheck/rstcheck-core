@@ -232,7 +232,7 @@ max-complexity = 20
 
 [tool.ruff.pep8-naming]
 classmethod-decorators = [
-  "pydantic.validator",
+  "pydantic.field_validator",
 ]
 staticmethod-decorators = []
 
