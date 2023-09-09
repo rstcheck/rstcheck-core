@@ -90,8 +90,7 @@ class RstcheckConfigFile(pydantic.BaseModel):
     ignore_roles: t.Optional[t.List[str]] = None  # noqa: UP007,UP006
     ignore_substitutions: t.Optional[t.List[str]] = None  # noqa: UP007,UP006
     ignore_languages: t.Optional[t.List[str]] = None  # noqa: UP007,UP006
-    # NOTE: Pattern type-arg errors pydanic: https://github.com/samuelcolvin/pydantic/issues/2636
-    ignore_messages: t.Optional[t.Pattern] = None  # type: ignore[type-arg]   # noqa: UP007
+    ignore_messages: t.Optional[t.Pattern[str]] = None  # noqa: UP007
 
     @pydantic.field_validator("report_level", mode="before")
     @classmethod

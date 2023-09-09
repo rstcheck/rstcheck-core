@@ -35,7 +35,7 @@ class IgnoreDict(_t.TypedDict):
 
 def construct_ignore_dict(
     # NOTE: Pattern type-arg errors pydanic: https://github.com/samuelcolvin/pydantic/issues/2636
-    messages: t.Pattern | None = None,  # type: ignore[type-arg]
+    messages: t.Pattern[str] | None = None,
     languages: list[str] | None = None,
     directives: list[str] | None = None,
     roles: list[str] | None = None,

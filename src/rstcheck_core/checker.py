@@ -256,7 +256,7 @@ def check_source(
 def _run_code_checker_and_filter_errors(
     checker_list: list[types.CheckerRunFunction],
     # NOTE: Pattern type-arg errors pydanic: https://github.com/samuelcolvin/pydantic/issues/2636
-    ignore_messages: t.Pattern | None = None,  # type: ignore[type-arg]
+    ignore_messages: t.Pattern[str] | None = None,
 ) -> types.YieldedLintError:
     """Run all code block checker functions.
 
@@ -277,7 +277,7 @@ def _parse_and_filter_rst_errors(
     rst_errors: str,
     # NOTE: Pattern type-arg errors pydanic: https://github.com/samuelcolvin/pydantic/issues/2636
     source_origin: types.SourceFileOrString,
-    ignore_messages: t.Pattern | None = None,  # type: ignore[type-arg]
+    ignore_messages: t.Pattern[str] | None = None,
 ) -> types.YieldedLintError:
     """Parse rst errors and yield filtered :py:class:`rstcheck_core.types.LintError`.
 
