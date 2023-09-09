@@ -19,7 +19,11 @@ NOTE: please use them in this order.
 
 [diff v1.1.0...main](https://github.com/rstcheck/rstcheck-core/compare/v1.1.0...main)
 
-### Misc
+### Bugfixes
+
+- Use real filename instead of tempfile name for C/C++/rst code blocks ([#64](https://github.com/rstcheck/rstcheck-core/issues/64))
+
+### Miscellaneous
 
 - Reduce log level and make message more clear for the AttributeError issue ([#63](https://github.com/rstcheck/rstcheck-core/issues/63))
 
