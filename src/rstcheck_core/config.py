@@ -336,8 +336,9 @@ def _load_config_from_toml_file(
     with pathlib.Path(resolved_file).open("rb") as toml_file_handle:
         toml_dict = tomllib.load(toml_file_handle)
 
-    optional_rstcheck_section = t.Optional[dict[str, t.Any]]  # noqa: UP007
-    rstcheck_section: optional_rstcheck_section = toml_dict.get("tool", {}).get("rstcheck")
+    rstcheck_section: t.Optional[dict[str, t.Any]] = toml_dict.get("tool", {}).get(  # noqa: UP007
+        "rstcheck"
+    )
 
     if rstcheck_section is None:
         if log_missing_section_as_warning:
