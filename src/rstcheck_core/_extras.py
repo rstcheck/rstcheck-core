@@ -21,10 +21,9 @@ Example usage:
 from __future__ import annotations
 
 import importlib
+import importlib.metadata
 import logging
 import typing as t
-
-from . import _compat as _t
 
 logger = logging.getLogger(__name__)
 
@@ -33,7 +32,7 @@ ExtraDependencies = t.Literal["sphinx", "tomli"]
 """List of all dependencies installable through extras."""
 
 
-class DependencyInfos(_t.TypedDict):
+class DependencyInfos(t.TypedDict):
     """Information about a dependency."""
 
     min_version: tuple[int, ...]
@@ -62,7 +61,7 @@ def is_installed_with_supported_version(package: ExtraDependencies) -> bool:
     except ImportError:
         return False
 
-    version: str = _t.version(package)
+    version: str = importlib.metadata.version(package)
     version_tuple = tuple(int(v) for v in version.split(".")[:3])
 
     return version_tuple >= ExtraDependenciesInfos[package]["min_version"]

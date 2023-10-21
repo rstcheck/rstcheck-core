@@ -1,9 +1,11 @@
 """Tests for ``_extras`` module."""
 from __future__ import annotations
 
+import importlib.metadata
+
 import pytest
 
-from rstcheck_core import _compat, _extras
+from rstcheck_core import _extras
 
 
 class TestInstallChecker:
@@ -29,7 +31,7 @@ class TestInstallChecker:
     @pytest.mark.skipif(not _extras.SPHINX_INSTALLED, reason="Depends on sphinx extra.")
     def test_false_on_installed_sphinx_package_too_old(monkeypatch: pytest.MonkeyPatch) -> None:
         """Test install-checker returns ``False`` when ``sphinx`` is installed with bad version."""
-        monkeypatch.setattr(_compat, "version", lambda _: "0.0")
+        monkeypatch.setattr(importlib.metadata, "version", lambda _: "0.0")
 
         result = _extras.is_installed_with_supported_version("sphinx")
 

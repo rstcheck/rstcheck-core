@@ -19,9 +19,13 @@ NOTE: please use them in this order.
 
 [diff v1.1.1...main](https://github.com/rstcheck/rstcheck-core/compare/v1.1.1...main)
 
+### Miscellaneous
+
+- Remove unused pre python 3.8 compatibility code ([#74](https://github.com/rstcheck/rstcheck/pull/74))
+
 ## [1.1.1 (2023-09-09)](https://github.com/rstcheck/rstcheck-core/releases/v1.1.1)
 
-[diff vv1.1.0...v1.1.1](https://github.com/rstcheck/rstcheck-core/compare/vv1.1.0...v1.1.1)
+[diff v1.1.0...v1.1.1](https://github.com/rstcheck/rstcheck-core/compare/v1.1.0...v1.1.1)
 
 ### Bugfixes
 
@@ -33,7 +37,7 @@ NOTE: please use them in this order.
 
 ## [1.1.0 (2023-09-09)](https://github.com/rstcheck/rstcheck-core/releases/v1.1.0)
 
-[diff vv1.0.3...v1.1.0](https://github.com/rstcheck/rstcheck-core/compare/vv1.0.3...v1.1.0)
+[diff v1.0.3...v1.1.0](https://github.com/rstcheck/rstcheck-core/compare/v1.0.3...v1.1.0)
 
 ### Bugfixes
 

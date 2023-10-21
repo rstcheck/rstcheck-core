@@ -4,13 +4,11 @@ from __future__ import annotations
 import pathlib
 import typing as t
 
-from . import _compat as _t
-
 SourceFileOrString = t.Union[pathlib.Path, t.Literal["<string>", "<stdin>"]]  # noqa: UP007
 """Path to source file or if it is a string then '<string>' or '<stdin>'."""
 
 
-class LintError(_t.TypedDict):
+class LintError(t.TypedDict):
     """Dict with information about an linting error."""
 
     source_origin: SourceFileOrString
@@ -22,7 +20,7 @@ YieldedLintError = t.Generator[LintError, None, None]
 """Yielded version of type :py:class:`LintError`."""
 
 
-class IgnoreDict(_t.TypedDict):
+class IgnoreDict(t.TypedDict):
     """Dict with ignore information."""
 
     messages: t.Pattern[str] | None
@@ -67,14 +65,14 @@ Returned by :py:meth:`rstcheck_core.checker.CodeBlockChecker.create_checker`.
 """
 
 
-class InlineConfig(_t.TypedDict):
+class InlineConfig(t.TypedDict):
     """Dict with a config key and config value comming from a inline config comment."""
 
     key: str
     value: str
 
 
-class InlineFlowControl(_t.TypedDict):
+class InlineFlowControl(t.TypedDict):
     """Dict with a flow control value and line number comming from a inline config comment."""
 
     value: str

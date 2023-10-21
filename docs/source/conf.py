@@ -6,19 +6,15 @@ import os
 import re
 import shutil
 import typing as t
+from importlib.metadata import metadata
 from importlib.util import find_spec
 from pathlib import Path
 
-import sphinx_rtd_theme  # type: ignore[import]
+import sphinx_rtd_theme  # type: ignore[import-untyped]
 
 if t.TYPE_CHECKING:
     import sphinx.ext.autodoc
     from sphinx.application import Sphinx
-
-try:
-    from importlib.metadata import metadata
-except ModuleNotFoundError:  # pragma: py-gte-38
-    from importlib_metadata import metadata  # type: ignore[import,no-redef]
 
 
 needs_sphinx = "3.1"  #: Minimum Sphinx version to build the docs
@@ -108,7 +104,7 @@ extensions.append("sphinx.ext.intersphinx")
 intersphinx_mapping = {
     "python": ("https://docs.python.org/3/", None),
     "pattern": ("https://docs.python.org/3/library/", "objects.pattern.inv"),
-    "pydantic": ("https://docs.pydantic.dev/latest/usage/", "objects.pydantic.inv"),
+    "pydantic": ("https://docs.pydantic.dev/latest/", "objects.pydantic.inv"),
     "sphinx": ("https://www.sphinx-doc.org/en/master/extdev/", "objects.sphinx.inv"),
 }
 

@@ -5,7 +5,7 @@ import typing as t
 
 import pytest
 
-from rstcheck_core import _compat as _t, inline_config, types
+from rstcheck_core import inline_config, types
 
 
 class TestInlineConfigGetter:
@@ -206,7 +206,7 @@ Example
         assert result == ["cpp", "json", "python"]
 
 
-class FindIgnoreFn(_t.Protocol):  # noqa: D101
+class FindIgnoreFn(t.Protocol):  # noqa: D101
     def __call__(  # noqa: D102
         self,
         source: str,
