@@ -30,6 +30,7 @@ dependencies = [
 [project.optional-dependencies]
 sphinx = ["sphinx >=4.0"]
 toml = ["tomli >=2.0; python_version<='3.10'"]
+yaml = ["pyyaml >= 6.0.0"]
 testing = [
     "pytest >=7.2",
     "pytest-cov >=3.0",
@@ -53,7 +54,7 @@ type-check = [
   "types-docutils >=0.18",
 ]
 dev = [
-  "rstcheck-core[sphinx,toml,testing,docs,type-check]",
+  "rstcheck-core[sphinx,toml,testing,docs,type-check,yaml]",
   "tox >=3.15",
 ]
 

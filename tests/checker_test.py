@@ -7,6 +7,7 @@ import re
 import shlex
 import sys
 from inspect import isfunction
+from unittest import mock
 
 import docutils.io
 import docutils.nodes
@@ -772,6 +773,61 @@ if mystring is "ok":
 
         assert len(result) == 1
         assert "Expecting value:" in result[0]["message"]
+
+    @staticmethod
+    def test_check_yaml_returns_none_on_ok_code_block_no_pyyaml() -> None:
+        """Test ``check_json`` returns ``None`` on ok code block."""
+        source = """
+spam: ham
+eggs: ham
+"""
+        with mock.patch.object(checker, "yaml", None):
+            cb_checker = checker.CodeBlockChecker("<string>")
+
+            result = list(cb_checker.check_yaml(source))
+
+        assert not result
+
+    @staticmethod
+    def test_check_yaml_returns_ok_on_bad_code_block_no_pyyaml() -> None:
+        """Test ``check_json`` returns error on bad code block."""
+        source = """
+spam: ham
+  eggs: ham
+"""
+        with mock.patch.object(checker, "yaml", None):
+            cb_checker = checker.CodeBlockChecker("<string>")
+
+            result = list(cb_checker.check_yaml(source))
+
+        assert not result
+
+    @staticmethod
+    def test_check_yaml_returns_none_on_ok_code_block() -> None:
+        """Test ``check_json`` returns ``None`` on ok code block."""
+        source = """
+spam: ham
+eggs: ham
+"""
+        cb_checker = checker.CodeBlockChecker("<string>")
+
+        result = list(cb_checker.check_yaml(source))
+
+        assert not result
+
+    @staticmethod
+    def test_check_yaml_returns_error_on_bad_code_block() -> None:
+        """Test ``check_json`` returns error on bad code block."""
+        source = """
+spam: ham
+  eggs: ham
+"""
+        cb_checker = checker.CodeBlockChecker("<string>")
+
+        result = list(cb_checker.check_yaml(source))
+
+        assert len(result) == 1
+        assert "mapping values are not allowed here" in result[0]["message"]
 
     @staticmethod
     def test_check_xml_returns_none_on_ok_code_block() -> None:

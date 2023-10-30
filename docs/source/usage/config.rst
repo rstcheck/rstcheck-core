@@ -302,6 +302,7 @@ Supported languages are:
 - XML
 - Python
 - reStructuredText
+- YAML
 
 
 Ignore specific error messages

@@ -44,6 +44,9 @@ To add sphinx support::
 
     $ pip install rstcheck_core[sphinx]
 
+To add YAML checking support::
+
+    $ pip install rstcheck_core[yaml]
 
 Supported languages in code blocks
 ==================================
@@ -56,6 +59,7 @@ Supported languages in code blocks
 - XML
 - Python
 - reStructuredText
+- YAML
 
 
 .. _read-the-docs: https://rstcheck-core.readthedocs.io
