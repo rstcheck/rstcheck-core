@@ -24,12 +24,15 @@ import docutils.io
 import docutils.nodes
 import docutils.utils
 
+from . import _docutils, _extras, _sphinx, config, inline_config, types
+
 try:
     import yaml
-except ImportError:
-    yaml = None
 
-from . import _docutils, _extras, _sphinx, config, inline_config, types
+    yaml_imported = True
+except ImportError:
+    yaml_imported = False
+
 
 logger = logging.getLogger(__name__)
 
@@ -681,7 +684,7 @@ class CodeBlockChecker:
         :return: :py:obj:`None`
         :yield: Found issues
         """
-        if not yaml:
+        if not yaml_imported:
             logger.debug("PyYAML is not installed, ignoring YAML source.")
             return
         logger.debug("Check YAML source.")
