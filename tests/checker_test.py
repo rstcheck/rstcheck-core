@@ -6,8 +6,8 @@ import pathlib
 import re
 import shlex
 import sys
+import typing as t
 from inspect import isfunction
-from unittest import mock
 
 import docutils.io
 import docutils.nodes
@@ -15,6 +15,9 @@ import docutils.utils
 import pytest
 
 from rstcheck_core import _extras, _sphinx, checker, config, types
+
+if t.TYPE_CHECKING:
+    import pytest_mock
 
 
 def test_check_file(monkeypatch: pytest.MonkeyPatch) -> None:
@@ -775,30 +778,34 @@ if mystring is "ok":
         assert "Expecting value:" in result[0]["message"]
 
     @staticmethod
-    def test_check_yaml_returns_none_on_ok_code_block_no_pyyaml() -> None:
+    def test_check_yaml_returns_none_on_ok_code_block_no_pyyaml(
+        mocker: pytest_mock.MockerFixture,
+    ) -> None:
         """Test ``check_json`` returns ``None`` on ok code block."""
         source = """
 spam: ham
 eggs: ham
 """
-        with mock.patch.object(checker, "yaml", None):
-            cb_checker = checker.CodeBlockChecker("<string>")
+        mocker.patch.object(checker, "yaml_imported", False)  # noqa: FBT003
+        cb_checker = checker.CodeBlockChecker("<string>")
 
-            result = list(cb_checker.check_yaml(source))
+        result = list(cb_checker.check_yaml(source))
 
         assert not result
 
     @staticmethod
-    def test_check_yaml_returns_ok_on_bad_code_block_no_pyyaml() -> None:
+    def test_check_yaml_returns_ok_on_bad_code_block_no_pyyaml(
+        mocker: pytest_mock.MockerFixture,
+    ) -> None:
         """Test ``check_json`` returns error on bad code block."""
         source = """
 spam: ham
   eggs: ham
 """
-        with mock.patch.object(checker, "yaml", None):
-            cb_checker = checker.CodeBlockChecker("<string>")
+        mocker.patch.object(checker, "yaml_imported", False)  # noqa: FBT003
+        cb_checker = checker.CodeBlockChecker("<string>")
 
-            result = list(cb_checker.check_yaml(source))
+        result = list(cb_checker.check_yaml(source))
 
         assert not result
 
