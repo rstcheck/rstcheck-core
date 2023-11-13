@@ -52,6 +52,7 @@ docs = [
 type-check = [
   "mypy >=1.0",
   "types-docutils >=0.18",
+  "types-PyYAML >=6.0.0",
 ]
 dev = [
   "rstcheck-core[sphinx,toml,testing,docs,type-check,yaml]",
