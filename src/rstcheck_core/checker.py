@@ -428,10 +428,14 @@ class _CheckTranslator(docutils.nodes.NodeVisitor):
 
         directive_line = _get_code_block_directive_line(node, self.source)
         if directive_line is None:
-            logger.error(
-                "Could not find line for literal block directive. Source: '%s' at line %s",
+            logger.warning(
+                "Could not find line for literal block directive. "
+                "This could be due to an indented code block. "
+                "This message only warns about the missing line number "
+                "and is no error of itself. "
+                "Source: '%s'%s",
                 self.source_origin,
-                node.line,
+                f" at line {node.line}" if node.line is not None else "",
             )
             return
 
