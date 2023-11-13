@@ -10,6 +10,7 @@ Steven Myint <git@stevenmyint.com>
 Additional contributions by (sorted by name)
 --------------------------------------------
 - Changxu Wang <Changxu.mail@gmail.com>
+- Christian Riedel <cannotguessit+github@protonmail.com>
 - Christian Riedel <christian.riedel@siegwerk.com>
 - Christian Riedel <cielquan@protonmail.com>
 - Daniel M. Capella <polyzen@archlinux.org>
@@ -27,6 +28,7 @@ Additional contributions by (sorted by name)
 - Michael Goerz <goerz@stanford.edu>
 - Nicolas Vuillamy <nicolas.vuillamy@gmail.com>
 - NicolasVuillamy <nicolas.vuillamy@gmail.com>
+- Pavlo Shchelokovskyy <shchelokovskyy@gmail.com>
 - Peter Cock <p.j.a.cock@googlemail.com>
 - Qeole <qeole@outlook.com>
 - Ross Patterson <me@rpatterson.net>
