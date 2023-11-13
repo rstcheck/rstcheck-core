@@ -29,6 +29,7 @@ Additional contributions by (sorted by name)
 - NicolasVuillamy <nicolas.vuillamy@gmail.com>
 - Peter Cock <p.j.a.cock@googlemail.com>
 - Qeole <qeole@outlook.com>
+- Ross Patterson <me@rpatterson.net>
 - Sameer Singh <sam7thegreat@gmail.com>
 - Santos Gallegos <santos_g@outlook.com>
 - Svintsov Dmitry <root@uralbash.ru>
