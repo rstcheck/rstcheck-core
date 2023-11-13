@@ -22,6 +22,7 @@ NOTE: please use them in this order.
 ### Miscellaneous
 
 - Remove unused pre python 3.8 compatibility code ([#74](https://github.com/rstcheck/rstcheck/pull/74))
+- Add optional YAML code block support ([#77](https://github.com/rstcheck/rstcheck-core/issues/77))
 
 ## [1.1.1 (2023-09-09)](https://github.com/rstcheck/rstcheck-core/releases/v1.1.1)
 

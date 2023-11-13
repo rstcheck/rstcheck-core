@@ -26,6 +26,14 @@ import docutils.utils
 
 from . import _docutils, _extras, _sphinx, config, inline_config, types
 
+try:
+    import yaml
+
+    yaml_imported = True
+except ImportError:
+    yaml_imported = False
+
+
 logger = logging.getLogger(__name__)
 
 
@@ -661,6 +669,28 @@ class CodeBlockChecker:
         try:
             json.loads(source_code)
         except ValueError as exception:
+            message = f"{exception}"
+            found = EXCEPTION_LINE_NO_REGEX.search(message)
+            line_number = int(found.group(1)) if found else 0
+
+            yield types.LintError(
+                source_origin=self.source_origin, line_number=int(line_number), message=message
+            )
+
+    def check_yaml(self, source_code: str) -> types.YieldedLintError:
+        """Check YAML source for syntax errors.
+
+        :param source: JSON source code to check
+        :return: :py:obj:`None`
+        :yield: Found issues
+        """
+        if not yaml_imported:
+            logger.debug("PyYAML is not installed, ignoring YAML source.")
+            return
+        logger.debug("Check YAML source.")
+        try:
+            yaml.safe_load(source_code)
+        except yaml.error.YAMLError as exception:
             message = f"{exception}"
             found = EXCEPTION_LINE_NO_REGEX.search(message)
             line_number = int(found.group(1)) if found else 0
