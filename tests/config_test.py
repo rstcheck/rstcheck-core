@@ -203,7 +203,7 @@ class TestSplitStrValidatorMethod:
             ignore_directives=None,
             ignore_roles=None,
             ignore_substitutions=None,
-            add_directives=None
+            add_directives=None,
         )
 
         assert result is not None
@@ -236,7 +236,7 @@ class TestSplitStrValidatorMethod:
             ignore_directives=string,
             ignore_roles=string,
             ignore_substitutions=string,
-            add_directives=string
+            add_directives=string,
         )
 
         assert result is not None
@@ -266,7 +266,7 @@ class TestSplitStrValidatorMethod:
             ignore_directives=string_list,
             ignore_roles=string_list,
             ignore_substitutions=string_list,
-            add_directives=string_list
+            add_directives=string_list,
         )
 
         assert result is not None
@@ -299,7 +299,7 @@ class TestSplitStrValidatorMethod:
                 ignore_directives=value,
                 ignore_roles=value,
                 ignore_substitutions=value,
-                add_directives=value
+                add_directives=value,
             )
 
 

@@ -54,11 +54,10 @@ def load_sphinx_if_available() -> t.Generator[sphinx.application.Sphinx | None, 
             "sphinx.addnodes",
             "sphinx.domains.math",
             "sphinx.domains.index",
-            "sphinx.domains.changeset"
+            "sphinx.domains.changeset",
         ]
         sphinx.application.builtin_extensions = [
-            e for e in sphinx.application.builtin_extensions
-            if e not in overridden_extensions
+            e for e in sphinx.application.builtin_extensions if e not in overridden_extensions
         ]
 
     yield None
@@ -132,7 +131,6 @@ def load_sphinx_ignores() -> None:  # pragma: no cover
 app = None
 
 if _extras.SPHINX_INSTALLED:
-
     with load_sphinx_if_available() as loaded_sphinx_app:
         if loaded_sphinx_app is not None:
             app = loaded_sphinx_app
@@ -142,7 +140,7 @@ if _extras.SPHINX_INSTALLED:
     class AddSphinxDirective(SphinxDirective):
         has_content = True
 
-        def run(self) -> t.List:
+        def run(self) -> list:
             return self.parse_rst(self.content)
 
         def parse_rst(self, text):
@@ -163,11 +161,11 @@ else:
     class AddSphinxDirective(docutils.parsers.rst.Directive):
         has_content = True
 
-        def run(self) -> t.List:  # type: ignore[type-arg]
+        def run(self) -> list:  # type: ignore[type-arg]
             return []
 
 
-def add_sphinx_directives(directives: t.Optional[t.List[str]]) -> None:
+def add_sphinx_directives(directives: t.Optional[list[str]]) -> None:
     if directives is None:
         return
     _extras.install_guard("sphinx")

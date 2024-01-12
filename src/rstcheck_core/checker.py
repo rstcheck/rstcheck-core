@@ -76,7 +76,7 @@ def check_file(
                 ignores=ignore_dict,
                 report_level=run_config.report_level or config.DEFAULT_REPORT_LEVEL,
                 warn_unknown_settings=run_config.warn_unknown_settings or False,
-                add_directives=run_config.add_directives
+                add_directives=run_config.add_directives,
             )
         )
 
@@ -163,7 +163,7 @@ def check_source(
     report_level: config.ReportLevel = config.DEFAULT_REPORT_LEVEL,
     *,
     warn_unknown_settings: bool = False,
-    add_directives: t.Optional[t.List[str]] = []
+    add_directives: t.Optional[list[str]] = [],
 ) -> types.YieldedLintError:
     """Check the given rst source for issues.
 
