@@ -21,7 +21,7 @@ NOTE: please use them in this order.
 
 ## [1.2.0 (2023-11-13)](https://github.com/rstcheck/rstcheck-core/releases/v1.2.0)
 
-[diff vv1.1.1...v1.2.0](https://github.com/rstcheck/rstcheck-core/compare/vv1.1.1...v1.2.0)
+[diff v1.1.1...v1.2.0](https://github.com/rstcheck/rstcheck-core/compare/vv1.1.1...v1.2.0)
 
 ### Miscellaneous
 
