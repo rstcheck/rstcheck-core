@@ -167,27 +167,26 @@ class TestDirectiveAndRoleFilter:
 
 
 class TestAddSphinxDirectives:
-    """Test add_directives option in rstcheck""" 
+    """Test add_directives option in rstcheck."""
 
     @staticmethod
     @pytest.mark.skipif(not _extras.SPHINX_INSTALLED, reason="Depends on sphinx extra.")
     def test_unknown_directive_type(capsys: pytest.CaptureFixture[str]) -> None:
         test_file = EXAMPLES_DIR / "sphinx" / "unknown_directive_test.rst"
         init_config = config.RstcheckConfig()
-        all_errors: t.List[types.LintError] = list(checker.check_file(test_file, init_config))
+        all_errors: list[types.LintError] = list(checker.check_file(test_file, init_config))
         assert all_errors
 
         error_req = 'Unknown directive type "req"'
-        assert any(error_req in res['message'] for res in all_errors)
+        assert any(error_req in res["message"] for res in all_errors)
 
     @staticmethod
     @pytest.mark.skipif(not _extras.SPHINX_INSTALLED, reason="Depends on sphinx extra.")
     def test_add_directives(capsys: pytest.CaptureFixture[str]) -> None:
-        """If add_directives were added to config, lint error must be raised"""
         test_file = EXAMPLES_DIR / "sphinx" / "add_directive_test.rst"
         init_config = config.RstcheckConfig(add_directives=["req", "spec"])
-        all_errors: t.List[types.LintError] = list(checker.check_file(test_file, init_config))
+        all_errors: list[types.LintError] = list(checker.check_file(test_file, init_config))
         assert all_errors
 
-        error_req = '(ERROR/3) Unexpected indentation'
-        assert any(error_req in res['message'] for res in all_errors)
+        error_req = "(ERROR/3) Unexpected indentation"
+        assert any(error_req in res["message"] for res in all_errors)

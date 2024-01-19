@@ -54,11 +54,10 @@ def load_sphinx_if_available() -> t.Generator[sphinx.application.Sphinx | None, 
             "sphinx.addnodes",
             "sphinx.domains.math",
             "sphinx.domains.index",
-            "sphinx.domains.changeset"
+            "sphinx.domains.changeset",
         ]
         sphinx.application.builtin_extensions = [
-            e for e in sphinx.application.builtin_extensions
-            if e not in overridden_extensions
+            e for e in sphinx.application.builtin_extensions if e not in overridden_extensions  # type: ignore[assignment]
         ]
 
     yield None
@@ -132,20 +131,19 @@ def load_sphinx_ignores() -> None:  # pragma: no cover
 app = None
 
 if _extras.SPHINX_INSTALLED:
-
     with load_sphinx_if_available() as loaded_sphinx_app:
-        if loaded_sphinx_app is not None:
-            app = loaded_sphinx_app
-        else:
-            app = create_dummy_sphinx_app()
+        app = loaded_sphinx_app if loaded_sphinx_app is not None else create_dummy_sphinx_app()
 
     class AddSphinxDirective(SphinxDirective):
         has_content = True
 
-        def run(self) -> t.List:
+        def run(self) -> list:  # type: ignore[type-arg]
             return self.parse_rst(self.content)
 
-        def parse_rst(self, text):
+        def parse_rst(self, text: str) -> list:  # type: ignore[type-arg]
+            if app is None:
+                return []
+
             parser = RSTParser()
             parser.set_application(app)
 
@@ -160,21 +158,18 @@ if _extras.SPHINX_INSTALLED:
 
 else:
 
-    class AddSphinxDirective(docutils.parsers.rst.Directive):
+    class AddSphinxDirective(docutils.parsers.rst.Directive):  # type: ignore[no-redef]
         has_content = True
 
-        def run(self) -> t.List:  # type: ignore[type-arg]
+        def run(self) -> list:  # type: ignore[type-arg]
             return []
 
 
-def add_sphinx_directives(directives: t.Optional[t.List[str]]) -> None:
+def add_sphinx_directives(directives: list[str] | None = None) -> None:
     if directives is None:
         return
     _extras.install_guard("sphinx")
 
     if _extras.SPHINX_INSTALLED and app is not None:
         for directive in directives:
-            if directive in docutils.parsers.rst.directives._directives:
-                continue
-
-            app.add_directive(directive, AddSphinxDirective)
+            app.add_directive(directive, AddSphinxDirective, override=False)
