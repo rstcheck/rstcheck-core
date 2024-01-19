@@ -19,7 +19,6 @@ NOTE: please use them in this order.
 
 [diff v1.2.0...main](https://github.com/rstcheck/rstcheck-core/compare/v1.2.0...main)
 
-
 ### New features
 
 - Support for linting of non-standard sphinx directives with rst content ([#68](https://github.com/rstcheck/rstcheck-core/issues/68))
