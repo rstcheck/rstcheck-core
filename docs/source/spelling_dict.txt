@@ -68,6 +68,7 @@ pre
 py
 pyproject
 pytest
+pyyaml
 rc
 rd
 reStructuredText
@@ -98,3 +99,4 @@ venv
 virtualenv
 whitespace
 xml
+yaml

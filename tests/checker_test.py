@@ -780,6 +780,7 @@ if mystring is "ok":
         assert "Expecting value:" in result[0]["message"]
 
     @staticmethod
+    @pytest.mark.skipif(checker.yaml_imported is False, reason="Requires pyyaml to be installed")
     def test_check_yaml_returns_none_on_ok_code_block_no_pyyaml(
         mocker: pytest_mock.MockerFixture,
     ) -> None:
@@ -796,6 +797,7 @@ eggs: ham
         assert not result
 
     @staticmethod
+    @pytest.mark.skipif(checker.yaml_imported is False, reason="Requires pyyaml to be installed")
     def test_check_yaml_returns_ok_on_bad_code_block_no_pyyaml(
         mocker: pytest_mock.MockerFixture,
     ) -> None:
@@ -812,6 +814,7 @@ spam: ham
         assert not result
 
     @staticmethod
+    @pytest.mark.skipif(checker.yaml_imported is False, reason="Requires pyyaml to be installed")
     def test_check_yaml_returns_none_on_ok_code_block() -> None:
         """Test ``check_json`` returns ``None`` on ok code block."""
         source = """
@@ -825,6 +828,7 @@ eggs: ham
         assert not result
 
     @staticmethod
+    @pytest.mark.skipif(checker.yaml_imported is False, reason="Requires pyyaml to be installed")
     def test_check_yaml_returns_error_on_bad_code_block() -> None:
         """Test ``check_json`` returns error on bad code block."""
         source = """
