@@ -7,6 +7,10 @@ import pathlib
 import tempfile
 import typing as t
 
+import docutils.parsers.rst.directives
+from docutils.frontend import OptionParser
+from docutils.utils import new_document
+
 from . import _docutils, _extras
 
 if _extras.SPHINX_INSTALLED:
@@ -17,6 +21,8 @@ if _extras.SPHINX_INSTALLED:
     import sphinx.domains.python
     import sphinx.domains.std
     import sphinx.util.docutils
+    from sphinx.parsers import RSTParser
+    from sphinx.util.docutils import SphinxDirective
 
 
 logger = logging.getLogger(__name__)
@@ -44,8 +50,14 @@ def load_sphinx_if_available() -> t.Generator[sphinx.application.Sphinx | None, 
     if _extras.SPHINX_INSTALLED:
         create_dummy_sphinx_app()
         # NOTE: Hack to prevent sphinx warnings for overwriting registered nodes; see #113
+        overridden_extensions = [
+            "sphinx.addnodes",
+            "sphinx.domains.math",
+            "sphinx.domains.index",
+            "sphinx.domains.changeset",
+        ]
         sphinx.application.builtin_extensions = [
-            e for e in sphinx.application.builtin_extensions if e != "sphinx.addnodes"  # type: ignore[assignment]
+            e for e in sphinx.application.builtin_extensions if e not in overridden_extensions  # type: ignore[assignment]
         ]
 
     yield None
@@ -114,3 +126,50 @@ def load_sphinx_ignores() -> None:  # pragma: no cover
     (directives, roles) = filter_whitelisted_directives_and_roles(directives, roles)
 
     _docutils.ignore_directives_and_roles(directives, roles)
+
+
+app = None
+
+if _extras.SPHINX_INSTALLED:
+    with load_sphinx_if_available() as loaded_sphinx_app:
+        app = loaded_sphinx_app if loaded_sphinx_app is not None else create_dummy_sphinx_app()
+
+    class AddSphinxDirective(SphinxDirective):
+        has_content = True
+
+        def run(self) -> list:  # type: ignore[type-arg]
+            return self.parse_rst(self.content)
+
+        def parse_rst(self, text: str) -> list:  # type: ignore[type-arg]
+            if app is None:
+                return []
+
+            parser = RSTParser()
+            parser.set_application(app)
+
+            settings = OptionParser(
+                defaults={},
+                components=(RSTParser,),
+                read_config_files=True,
+            ).get_default_values()
+            document = new_document("<rst-doc>", settings=settings)
+            parser.parse(text, document)
+            return document.children
+
+else:
+
+    class AddSphinxDirective(docutils.parsers.rst.Directive):  # type: ignore[no-redef]
+        has_content = True
+
+        def run(self) -> list:  # type: ignore[type-arg]
+            return []
+
+
+def add_sphinx_directives(directives: list[str] | None = None) -> None:
+    if directives is None:
+        return
+    _extras.install_guard("sphinx")
+
+    if _extras.SPHINX_INSTALLED and app is not None:
+        for directive in directives:
+            app.add_directive(directive, AddSphinxDirective, override=False)

@@ -37,6 +37,7 @@ def test_default_values_for_config_file() -> None:
     assert result.ignore_substitutions is None
     assert result.ignore_languages is None
     assert result.ignore_messages is None
+    assert result.add_directives is None
 
 
 def test_default_values_for_config() -> None:
@@ -52,6 +53,7 @@ def test_default_values_for_config() -> None:
     assert result.ignore_messages is None
     assert result.config_path is None
     assert result.recursive is None
+    assert result.add_directives is None
 
 
 class TestSplitStrValidator:
@@ -188,6 +190,7 @@ class TestSplitStrValidatorMethod:
     - ``ignore_roles``
     - ``ignore_substitutions``
     - ``ignore_languages``
+    - ``add_directives``
 
     settings.
     """
@@ -200,6 +203,7 @@ class TestSplitStrValidatorMethod:
             ignore_directives=None,
             ignore_roles=None,
             ignore_substitutions=None,
+            add_directives=None,
         )
 
         assert result is not None
@@ -207,6 +211,7 @@ class TestSplitStrValidatorMethod:
         assert result.ignore_directives is None
         assert result.ignore_roles is None
         assert result.ignore_substitutions is None
+        assert result.add_directives is None
 
     @staticmethod
     @pytest.mark.parametrize(
@@ -231,6 +236,7 @@ class TestSplitStrValidatorMethod:
             ignore_directives=string,
             ignore_roles=string,
             ignore_substitutions=string,
+            add_directives=string,
         )
 
         assert result is not None
@@ -238,6 +244,7 @@ class TestSplitStrValidatorMethod:
         assert result.ignore_directives == split_list
         assert result.ignore_roles == split_list
         assert result.ignore_substitutions == split_list
+        assert result.add_directives == split_list
 
     @staticmethod
     @pytest.mark.parametrize(
@@ -259,6 +266,7 @@ class TestSplitStrValidatorMethod:
             ignore_directives=string_list,
             ignore_roles=string_list,
             ignore_substitutions=string_list,
+            add_directives=string_list,
         )
 
         assert result is not None
@@ -266,6 +274,7 @@ class TestSplitStrValidatorMethod:
         assert result.ignore_directives == string_list_cleaned
         assert result.ignore_roles == string_list_cleaned
         assert result.ignore_substitutions == string_list_cleaned
+        assert result.add_directives == string_list_cleaned
 
     @staticmethod
     @pytest.mark.parametrize(
@@ -290,6 +299,7 @@ class TestSplitStrValidatorMethod:
                 ignore_directives=value,
                 ignore_roles=value,
                 ignore_substitutions=value,
+                add_directives=value,
             )
 
 
@@ -446,6 +456,7 @@ class TestIniFileLoader:
         ignore_substitutions=substitution
         ignore_languages=language
         ignore_messages=message
+        add_directives=add_directive
         """
         conf_file.write_text(file_content)
         regex = re.compile("message")
@@ -459,6 +470,7 @@ class TestIniFileLoader:
         assert result.ignore_substitutions == ["substitution"]
         assert result.ignore_languages == ["language"]
         assert result.ignore_messages == regex
+        assert result.add_directives == ["add_directive"]
 
     @staticmethod
     def test_multiline_strings(tmp_path: pathlib.Path) -> None:
@@ -470,6 +482,7 @@ class TestIniFileLoader:
             role1,
             role2,
             role3
+        add_directives=add_directive
         """
         conf_file.write_text(file_content)
 
@@ -478,6 +491,7 @@ class TestIniFileLoader:
         assert result is not None
         assert result.ignore_directives == ["directive"]
         assert result.ignore_roles == ["role1", "role2", "role3"]
+        assert result.add_directives == ["add_directive"]
 
     @staticmethod
     def test_multiline_strings_trailing_comma(tmp_path: pathlib.Path) -> None:
@@ -489,6 +503,7 @@ class TestIniFileLoader:
             role1,
             role2,
             role3,
+        add_directives=add_directive
         """
         conf_file.write_text(file_content)
 
@@ -497,6 +512,7 @@ class TestIniFileLoader:
         assert result is not None
         assert result.ignore_directives == ["directive"]
         assert result.ignore_roles == ["role1", "role2", "role3"]
+        assert result.add_directives == ["add_directive"]
 
     @staticmethod
     def test_file_with_mixed_supported_settings(tmp_path: pathlib.Path) -> None:
@@ -506,6 +522,7 @@ class TestIniFileLoader:
         report_level=3
         ignore_directives=directive
         unsupported_feature=True
+        add_directives=req,req-sw
         """
         conf_file.write_text(file_content)
 
@@ -514,6 +531,7 @@ class TestIniFileLoader:
         assert result is not None
         assert result.report_level == config.ReportLevel.ERROR
         assert result.ignore_directives == ["directive"]
+        assert result.add_directives == ["req", "req-sw"]
 
     @staticmethod
     def test_file_with_mixed_supported_sections(tmp_path: pathlib.Path) -> None:
@@ -523,6 +541,7 @@ class TestIniFileLoader:
         report_level=3
         ignore_directives=directive
         unsupported_feature=True
+        add_directives=req,req-sw
 
         [not-rstcheck]
         report_level=2
@@ -536,6 +555,7 @@ class TestIniFileLoader:
         assert result is not None
         assert result.report_level == config.ReportLevel.ERROR
         assert result.ignore_directives == ["directive"]
+        assert result.add_directives == ["req", "req-sw"]
 
     @staticmethod
     def test_warning_is_logged_on_missing_section_by_default(

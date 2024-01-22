@@ -76,6 +76,7 @@ def check_file(
                 ignores=ignore_dict,
                 report_level=run_config.report_level or config.DEFAULT_REPORT_LEVEL,
                 warn_unknown_settings=run_config.warn_unknown_settings or False,
+                add_directives=run_config.add_directives,
             )
         )
 
@@ -162,6 +163,7 @@ def check_source(
     report_level: config.ReportLevel = config.DEFAULT_REPORT_LEVEL,
     *,
     warn_unknown_settings: bool = False,
+    add_directives: list[str] | None = None,
 ) -> types.YieldedLintError:
     """Check the given rst source for issues.
 
@@ -213,6 +215,7 @@ def check_source(
 
     if _extras.SPHINX_INSTALLED:
         _sphinx.load_sphinx_ignores()
+        _sphinx.add_sphinx_directives(add_directives)
 
     writer = _CheckWriter(source, source_origin, ignores, report_level)
 
@@ -224,7 +227,7 @@ def check_source(
     with contextlib.suppress(UnicodeError):
         source = source.encode("utf-8").decode("utf-8-sig")
 
-    with contextlib.suppress(docutils.utils.SystemMessage):
+    with contextlib.redirect_stderr(string_io):
         # Sphinx will sometimes throw an `AttributeError` trying to access
         # "self.state.document.settings.env". Ignore this for now until we
         # figure out a better approach.
