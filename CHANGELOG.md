@@ -22,6 +22,7 @@ NOTE: please use them in this order.
 ### Miscellaneous
 
 - Fixed yaml tests running even when pyyaml is not installed ([#84](https://github.com/rstcheck/rstcheck-core/issues/84))
+- Drop support for sphinx v4 ([#90](https://github.com/rstcheck/rstcheck/pull/90))
 
 ## [1.2.0 (2023-11-13)](https://github.com/rstcheck/rstcheck-core/releases/v1.2.0)
 
