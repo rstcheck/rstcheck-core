@@ -22,6 +22,7 @@ NOTE: please use them in this order.
 ### Miscellaneous
 
 - Fixed yaml tests running even when pyyaml is not installed ([#84](https://github.com/rstcheck/rstcheck-core/issues/84))
+- Drop support for sphinx v4 ([#90](https://github.com/rstcheck/rstcheck-core/pull/90))
 
 ## [1.2.0 (2023-11-13)](https://github.com/rstcheck/rstcheck-core/releases/v1.2.0)
 
@@ -29,7 +30,7 @@ NOTE: please use them in this order.
 
 ### Miscellaneous
 
-- Remove unused pre python 3.8 compatibility code ([#74](https://github.com/rstcheck/rstcheck/pull/74))
+- Remove unused pre python 3.8 compatibility code ([#74](https://github.com/rstcheck-core/rstcheck/pull/74))
 - Add optional YAML code block support ([#77](https://github.com/rstcheck/rstcheck-core/issues/77))
 - Improve log message content and reduce log level to warning for missing line numbers in
   literal blocks ([#81](https://github.com/rstcheck/rstcheck-core/issues/81))

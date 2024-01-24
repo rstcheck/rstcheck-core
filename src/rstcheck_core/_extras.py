@@ -40,7 +40,7 @@ class DependencyInfos(t.TypedDict):
 
 
 ExtraDependenciesInfos: dict[ExtraDependencies, DependencyInfos] = {
-    "sphinx": DependencyInfos(min_version=(2, 0), extra="sphinx"),
+    "sphinx": DependencyInfos(min_version=(5, 0), extra="sphinx"),
     "tomli": DependencyInfos(min_version=(2, 0), extra="toml"),
 }
 """Dependency map with their min. supported version and extra by which they can be installed."""
