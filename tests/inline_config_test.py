@@ -1,4 +1,5 @@
 """Tests for ``inline_config`` module."""
+
 from __future__ import annotations
 
 import typing as t
@@ -212,8 +213,7 @@ class FindIgnoreFn(t.Protocol):  # noqa: D101
         source: str,
         source_origin: types.SourceFileOrString,
         warn_unknown_settings: bool = False,  # noqa: FBT002
-    ) -> t.Generator[str, None, None]:
-        ...
+    ) -> t.Generator[str, None, None]: ...
 
 
 class TestFindIgnoredFunctions:

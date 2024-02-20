@@ -18,6 +18,7 @@ Example usage:
         _extras.install_guard("sphinx")
         print(sphinx.version_info)
 """
+
 from __future__ import annotations
 
 import importlib

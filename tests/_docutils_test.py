@@ -1,4 +1,5 @@
 """Tests for ``_docutils`` module."""
+
 from __future__ import annotations
 
 import docutils.parsers.rst.directives as docutils_directives
