@@ -1,4 +1,5 @@
 """Runner of rstcheck_core."""
+
 from __future__ import annotations
 
 import logging

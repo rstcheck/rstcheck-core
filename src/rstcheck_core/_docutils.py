@@ -1,4 +1,5 @@
 """Docutils helper functions."""
+
 from __future__ import annotations
 
 import importlib
@@ -31,9 +32,11 @@ def ignore_role(  # noqa: PLR0913
     text: str,  # noqa: ARG001
     lineno: int,  # noqa: ARG001
     inliner: docutils.parsers.rst.states.Inliner,  # noqa: ARG001
-    options: dict[str, t.Any] | None = None,  # noqa: ARG001
-    content: list[str] | None = None,  # noqa: ARG001
-) -> tuple[list, list]:  # type: ignore[type-arg] # pragma: no cover
+    options: t.Mapping[str, t.Any] | None = None,  # noqa: ARG001
+    content: t.Sequence[str] | None = None,  # noqa: ARG001
+) -> tuple[
+    t.Sequence[docutils.nodes.reference], t.Sequence[docutils.nodes.reference]
+]:  # pragma: no cover
     """Stub for unknown roles."""
     return ([], [])
 

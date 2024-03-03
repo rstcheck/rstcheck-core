@@ -1,4 +1,5 @@
 """Integration test for the main runner."""
+
 from __future__ import annotations
 
 import io
