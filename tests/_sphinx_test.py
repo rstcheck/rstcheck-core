@@ -33,7 +33,7 @@ class TestContextManager:
         with _sphinx.load_sphinx_if_available() as ctx_manager:
             assert ctx_manager is None
             assert not docutils_directives._directives
-            assert not docutils_roles._roles
+            assert not docutils_roles._roles  # type: ignore[attr-defined]
 
     @staticmethod
     @pytest.mark.skipif(not _extras.SPHINX_INSTALLED, reason="Depends on sphinx extra.")
@@ -43,7 +43,7 @@ class TestContextManager:
         with _sphinx.load_sphinx_if_available() as ctx_manager:
             assert ctx_manager is None
             assert docutils_directives._directives
-            assert docutils_roles._roles
+            assert docutils_roles._roles  # type: ignore[attr-defined]
             assert "sphinx.addnodes" not in sphinx.application.builtin_extensions
 
 
