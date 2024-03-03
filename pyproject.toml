@@ -45,6 +45,8 @@ docs = [
     "m2r2 >=0.3.2",
     "sphinx-rtd-theme >=1.2",
     "sphinx-autodoc-typehints >=1.15",
+    # "autodoc-pydantic >= 2.0",
+    "autodoc-pydantic @ git+https://github.com/j-carson/autodoc_pydantic.git@f55e3207da9d228e0a3675ff2f6c91b214b0b7dd",
     "sphinxcontrib-apidoc >=0.3",
     "sphinxcontrib-spelling >=7.3",
     "sphinx-autobuild >=2021.3.14",
