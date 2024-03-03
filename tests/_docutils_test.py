@@ -22,7 +22,7 @@ class TestIgnoreDirectivesAndRoles:
         _docutils.ignore_directives_and_roles(directives, roles)  # act
 
         assert not docutils_directives._directives
-        assert not docutils_roles._roles
+        assert not docutils_roles._roles  # type: ignore[attr-defined]
 
     @staticmethod
     @pytest.mark.usefixtures("patch_docutils_directives_and_roles_dict")
@@ -34,7 +34,7 @@ class TestIgnoreDirectivesAndRoles:
         _docutils.ignore_directives_and_roles(directives, roles)  # act
 
         assert not docutils_directives._directives
-        assert "test_role" in docutils_roles._roles
+        assert "test_role" in docutils_roles._roles  # type: ignore[attr-defined]
 
     @staticmethod
     @pytest.mark.usefixtures("patch_docutils_directives_and_roles_dict")
@@ -46,7 +46,7 @@ class TestIgnoreDirectivesAndRoles:
         _docutils.ignore_directives_and_roles(directives, roles)  # act
 
         assert "test_directive" in docutils_directives._directives
-        assert not docutils_roles._roles
+        assert not docutils_roles._roles  # type: ignore[attr-defined]
 
     @staticmethod
     @pytest.mark.usefixtures("patch_docutils_directives_and_roles_dict")
@@ -58,7 +58,7 @@ class TestIgnoreDirectivesAndRoles:
         _docutils.ignore_directives_and_roles(directives, roles)  # act
 
         assert "test_directive" in docutils_directives._directives
-        assert "test_role" in docutils_roles._roles
+        assert "test_role" in docutils_roles._roles  # type: ignore[attr-defined]
 
 
 class TestRegisterCodeRirective:
