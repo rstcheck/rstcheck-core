@@ -146,6 +146,12 @@ autodoc_mock_imports: list[str] = []
 autodoc_default_options = {"members": True}
 
 
+#: -- AUTODOC PYDANTIC -----------------------------------------------------------------
+extensions.append("sphinxcontrib.autodoc_pydantic")
+autodoc_pydantic_model_erdantic_figure = False
+autodoc_pydantic_model_show_json = False
+
+
 def _remove_module_docstring(
     app: Sphinx,  # noqa: ARG001
     what: str,
