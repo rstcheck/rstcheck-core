@@ -21,7 +21,7 @@ class TestIgnoreDirectivesAndRoles:
 
         _docutils.ignore_directives_and_roles(directives, roles)  # act
 
-        assert not docutils_directives._directives
+        assert not docutils_directives._directives  # type: ignore[attr-defined]
         assert not docutils_roles._roles  # type: ignore[attr-defined]
 
     @staticmethod
@@ -33,7 +33,7 @@ class TestIgnoreDirectivesAndRoles:
 
         _docutils.ignore_directives_and_roles(directives, roles)  # act
 
-        assert not docutils_directives._directives
+        assert not docutils_directives._directives  # type: ignore[attr-defined]
         assert "test_role" in docutils_roles._roles  # type: ignore[attr-defined]
 
     @staticmethod
@@ -45,7 +45,7 @@ class TestIgnoreDirectivesAndRoles:
 
         _docutils.ignore_directives_and_roles(directives, roles)  # act
 
-        assert "test_directive" in docutils_directives._directives
+        assert "test_directive" in docutils_directives._directives  # type: ignore[attr-defined]
         assert not docutils_roles._roles  # type: ignore[attr-defined]
 
     @staticmethod
@@ -57,7 +57,7 @@ class TestIgnoreDirectivesAndRoles:
 
         _docutils.ignore_directives_and_roles(directives, roles)  # act
 
-        assert "test_directive" in docutils_directives._directives
+        assert "test_directive" in docutils_directives._directives  # type: ignore[attr-defined]
         assert "test_role" in docutils_roles._roles  # type: ignore[attr-defined]
 
 
@@ -71,9 +71,9 @@ class TestRegisterCodeRirective:
         """Test function does nothing when sphinx is installed."""
         _docutils.register_code_directive()  # act
 
-        assert "code" not in docutils_directives._directives
-        assert "code-block" not in docutils_directives._directives
-        assert "sourcecode" not in docutils_directives._directives
+        assert "code" not in docutils_directives._directives  # type: ignore[attr-defined]
+        assert "code-block" not in docutils_directives._directives  # type: ignore[attr-defined]
+        assert "sourcecode" not in docutils_directives._directives  # type: ignore[attr-defined]
 
     @staticmethod
     @pytest.mark.skipif(_extras.SPHINX_INSTALLED, reason="Test without sphinx extra.")
@@ -82,9 +82,9 @@ class TestRegisterCodeRirective:
         """Test function registers all directives when sphinx is missing."""
         _docutils.register_code_directive()  # act
 
-        assert "code" in docutils_directives._directives
-        assert "code-block" in docutils_directives._directives
-        assert "sourcecode" in docutils_directives._directives
+        assert "code" in docutils_directives._directives  # type: ignore[attr-defined]
+        assert "code-block" in docutils_directives._directives  # type: ignore[attr-defined]
+        assert "sourcecode" in docutils_directives._directives  # type: ignore[attr-defined]
 
     @staticmethod
     @pytest.mark.skipif(_extras.SPHINX_INSTALLED, reason="Test without sphinx extra.")
@@ -97,9 +97,9 @@ class TestRegisterCodeRirective:
             ignore_sourcecode_directive=True,
         )
 
-        assert "code" not in docutils_directives._directives
-        assert "code-block" not in docutils_directives._directives
-        assert "sourcecode" not in docutils_directives._directives
+        assert "code" not in docutils_directives._directives  # type: ignore[attr-defined]
+        assert "code-block" not in docutils_directives._directives  # type: ignore[attr-defined]
+        assert "sourcecode" not in docutils_directives._directives  # type: ignore[attr-defined]
 
     @staticmethod
     @pytest.mark.skipif(_extras.SPHINX_INSTALLED, reason="Test without sphinx extra.")
@@ -110,9 +110,9 @@ class TestRegisterCodeRirective:
             ignore_codeblock_directive=True, ignore_sourcecode_directive=True
         )
 
-        assert "code" in docutils_directives._directives
-        assert "code-block" not in docutils_directives._directives
-        assert "sourcecode" not in docutils_directives._directives
+        assert "code" in docutils_directives._directives  # type: ignore[attr-defined]
+        assert "code-block" not in docutils_directives._directives  # type: ignore[attr-defined]
+        assert "sourcecode" not in docutils_directives._directives  # type: ignore[attr-defined]
 
     @staticmethod
     @pytest.mark.skipif(_extras.SPHINX_INSTALLED, reason="Test without sphinx extra.")
@@ -123,9 +123,9 @@ class TestRegisterCodeRirective:
             ignore_code_directive=True, ignore_sourcecode_directive=True
         )
 
-        assert "code" not in docutils_directives._directives
-        assert "code-block" in docutils_directives._directives
-        assert "sourcecode" not in docutils_directives._directives
+        assert "code" not in docutils_directives._directives  # type: ignore[attr-defined]
+        assert "code-block" in docutils_directives._directives  # type: ignore[attr-defined]
+        assert "sourcecode" not in docutils_directives._directives  # type: ignore[attr-defined]
 
     @staticmethod
     @pytest.mark.skipif(_extras.SPHINX_INSTALLED, reason="Test without sphinx extra.")
@@ -136,6 +136,6 @@ class TestRegisterCodeRirective:
             ignore_code_directive=True, ignore_codeblock_directive=True
         )
 
-        assert "code" not in docutils_directives._directives
-        assert "code-block" not in docutils_directives._directives
-        assert "sourcecode" in docutils_directives._directives
+        assert "code" not in docutils_directives._directives  # type: ignore[attr-defined]
+        assert "code-block" not in docutils_directives._directives  # type: ignore[attr-defined]
+        assert "sourcecode" in docutils_directives._directives  # type: ignore[attr-defined]
