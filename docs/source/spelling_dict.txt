@@ -1,7 +1,9 @@
 api
+apidoc
 arg
 args
 attr
+autoapidoc
 bool
 boolean
 bugfixes
@@ -80,6 +82,7 @@ rstcheck
 rtd
 sdist
 setter
+sphinxcontrib
 st
 stdin
 submodule

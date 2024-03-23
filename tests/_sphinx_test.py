@@ -32,7 +32,7 @@ class TestContextManager:
         """Test for ``None`` yield and no action when sphinx is missing."""
         with _sphinx.load_sphinx_if_available() as ctx_manager:
             assert ctx_manager is None
-            assert not docutils_directives._directives
+            assert not docutils_directives._directives  # type: ignore[attr-defined]
             assert not docutils_roles._roles  # type: ignore[attr-defined]
 
     @staticmethod
@@ -42,7 +42,7 @@ class TestContextManager:
         """Test for ``None`` yield but action when sphinx is installed."""
         with _sphinx.load_sphinx_if_available() as ctx_manager:
             assert ctx_manager is None
-            assert docutils_directives._directives
+            assert docutils_directives._directives  # type: ignore[attr-defined]
             assert docutils_roles._roles  # type: ignore[attr-defined]
             assert "sphinx.addnodes" not in sphinx.application.builtin_extensions
 
