@@ -170,7 +170,7 @@ spelling_word_list_filename = "spelling_dict.txt"
 spelling_show_suggestions = True
 spelling_exclude_patterns = ["autoapi/**", "autoapidoc/**"]
 
-if find_spec("sphinxcontrib.spelling") is not None and os.environ["SPHINX_SPELLING"] == "true":
+if find_spec("sphinxcontrib.spelling") is not None and os.environ.get("SPHINX_SPELLING") == "true":
     extensions.append("sphinxcontrib.spelling")
 else:
     NOT_LOADED_MSGS.append("## 'sphinxcontrib-spelling' extension not loaded - not installed")
