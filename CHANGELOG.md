@@ -23,6 +23,10 @@ NOTE: please use them in this order.
 
 [diff vv1.2.0...v1.2.1](https://github.com/rstcheck/rstcheck-core/compare/vv1.2.0...v1.2.1)
 
+### New features
+
+- Support for linting of non-standard sphinx directives with rst content ([#68](https://github.com/rstcheck/rstcheck-core/issues/68))
+
 ### Miscellaneous
 
 - Fixed yaml tests running even when pyyaml is not installed ([#84](https://github.com/rstcheck/rstcheck-core/issues/84))

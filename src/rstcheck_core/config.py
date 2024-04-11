@@ -92,6 +92,7 @@ class RstcheckConfigFile(pydantic.BaseModel):
     ignore_substitutions: t.Optional[t.List[str]] = None  # noqa: UP007,UP006
     ignore_languages: t.Optional[t.List[str]] = None  # noqa: UP007,UP006
     ignore_messages: t.Optional[t.Pattern[str]] = None  # noqa: UP007
+    add_directives: t.Optional[t.List[str]] = None  # noqa: UP007,UP006
 
     @pydantic.field_validator("report_level", mode="before")
     @classmethod
@@ -135,6 +136,7 @@ class RstcheckConfigFile(pydantic.BaseModel):
         "ignore_roles",
         "ignore_substitutions",
         "ignore_languages",
+        "add_directives",
         mode="before",
     )
     @classmethod
@@ -145,6 +147,7 @@ class RstcheckConfigFile(pydantic.BaseModel):
         - ignore_roles
         - ignore_substitutions
         - ignore_languages
+        - add_directives
 
         Comma separated strings are split into a list.
 
@@ -208,6 +211,7 @@ class _RstcheckConfigINIFile(pydantic.BaseModel):
     ignore_substitutions: t.Optional[str] = None  # noqa: UP007
     ignore_languages: t.Optional[str] = None  # noqa: UP007
     ignore_messages: t.Optional[str] = None  # noqa: UP007
+    add_directives: t.Optional[str] = None  # noqa: UP007
 
 
 def _load_config_from_ini_file(
@@ -288,6 +292,7 @@ class _RstcheckConfigTOMLFile(
     ignore_substitutions: t.Optional[t.List[str]] = None  # noqa: UP006, UP007
     ignore_languages: t.Optional[t.List[str]] = None  # noqa: UP006, UP007
     ignore_messages: t.Union[t.List[str], str, None] = None  # noqa: UP006, UP007
+    add_directives: t.Optional[t.List[str]] = None  # noqa: UP006, UP007
 
 
 def _load_config_from_toml_file(
