@@ -42,7 +42,7 @@ testing = [
 ]
 docs = [
     "sphinx >=5.0, !=7.2.5",
-    "m2r2 >=0.3.2",
+    "myst-parser >=3",
     "sphinx-rtd-theme >=1.2",
     "sphinx-autodoc-typehints >=1.15",
     "sphinxcontrib-apidoc >=0.3",
