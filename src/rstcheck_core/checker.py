@@ -331,7 +331,7 @@ class _CheckWriter(docutils.writers.Writer):
             file;
             defaults to :py:obj:`False`
         """
-        docutils.writers.Writer.__init__(self)
+        super().__init__()
         self.checkers: list[types.CheckerRunFunction] = []
         self.source = source
         self.source_origin = source_origin
