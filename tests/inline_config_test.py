@@ -75,7 +75,7 @@ Example
 
     @staticmethod
     def test_source_with_known_and_unknown_config() -> None:
-        """Test unknown config comments are ignored when mixed with valid confg."""
+        """Test unknown config comments are ignored when mixed with valid config."""
         source = """
 Example
 =======
@@ -127,7 +127,7 @@ Example
     def test_source_with_correct_config_whitespace() -> None:
         """Test giving source with correct config comment results in configs found.
 
-        Test whitspace around equal sign.
+        Test whitespace around equal sign.
         """
         source = """
 Example
@@ -149,7 +149,7 @@ Example
     def test_source_with_multiple_correct_configs() -> None:
         """Test source with multiple correct configs.
 
-        Test whitspace around equal sign.
+        Test whitespace around equal sign.
         """
         source = """
 Example

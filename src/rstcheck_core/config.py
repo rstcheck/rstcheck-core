@@ -100,7 +100,7 @@ class RstcheckConfigFile(pydantic.BaseModel):
 
         :param value: Value to validate
         :raises ValueError: If ``value`` is not a valid docutils report level
-        :return: Instance of :py:class:`ReportLevel` or None if emptry string.
+        :return: Instance of :py:class:`ReportLevel` or None if empty string.
         """
         if value is None:
             return None
@@ -159,7 +159,7 @@ class RstcheckConfigFile(pydantic.BaseModel):
     def join_regex_str(cls, value: t.Any) -> str | t.Pattern[str] | None:  # noqa: ANN401
         """Validate and concatenate the ignore_messages setting to a RegEx string.
 
-        If a list ist given, the entries are concatenated with "|" to create an or RegEx.
+        If a list is given, the entries are concatenated with "|" to create an or RegEx.
 
         :param value: Value to validate
         :raises ValueError: If not a :py:class:`str` or :py:class:`list` of :py:class:`str`
@@ -524,7 +524,7 @@ def load_config_file_from_path(
     log_missing_section_as_warning_for_dir: bool = False,
     warn_unknown_settings: bool = False,
 ) -> RstcheckConfigFile | None:
-    """Analyse the path and call the correct config file loader.
+    """Analyze the path and call the correct config file loader.
 
     :param path: Path to load config file from; can be a file or directory
     :param search_dir_tree: If the directory tree should be searched;
@@ -536,7 +536,7 @@ def load_config_file_from_path(
         defaults to :py:obj:`True`
     :param log_missing_section_as_warning_for_dir: If a missing config section in a config file
         should be logged at ``WARNING`` (:py:obj:`True`) or ``INFO`` (:py:obj:`False`) level when
-        the given file is a direcotry;
+        the given file is a directory;
         defaults to :py:obj:`False`
     :param warn_unknown_settings: If a warning should be logged for unknown settings in config file;
         defaults to :py:obj:`False`

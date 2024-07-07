@@ -100,7 +100,7 @@ def filter_whitelisted_directives_and_roles(
 
     :param directives: Directives to filter
     :param roles: Roles to filter
-    :return: Tuple of fitlered directives and roles
+    :return: Tuple of filtered directives and roles
     """
     directives = list(filter(lambda d: d not in _DIRECTIVE_WHITELIST, directives))
     roles = list(filter(lambda r: r not in _ROLE_WHITELIST, roles))

@@ -1,6 +1,6 @@
 """Central place for install-checker and guards for 'extras' dependencies.
 
-The ``*_INSTALLED`` constansts reveal wether the dependency is installed with a supported version.
+The ``*_INSTALLED`` constants reveal whether the dependency is installed with a supported version.
 The :py:func:`install_guard` guard function is intended for use inside functions which need specific
 extra packages installed.
 
@@ -50,7 +50,7 @@ ExtraDependenciesInfos: dict[ExtraDependencies, DependencyInfos] = {
 def is_installed_with_supported_version(package: ExtraDependencies) -> bool:
     """Check if the package is installed and has the minimum required version.
 
-    :param package: Name of packge to check
+    :param package: Name of package to check
     :return: Bool if package is installed with supported version
     """
     logger.debug(
@@ -83,7 +83,7 @@ def install_guard(package: ExtraDependencies) -> None:
 
     See example in module docstring.
 
-    :param package: Name of packge to check
+    :param package: Name of package to check
     :raises ModuleNotFoundError: When the package is not installed.
     """
     if ExtraDependenciesInstalled[package] is True:

@@ -67,14 +67,14 @@ Returned by :py:meth:`rstcheck_core.checker.CodeBlockChecker.create_checker`.
 
 
 class InlineConfig(t.TypedDict):
-    """Dict with a config key and config value comming from a inline config comment."""
+    """Dict with a config key and config value coming from a inline config comment."""
 
     key: str
     value: str
 
 
 class InlineFlowControl(t.TypedDict):
-    """Dict with a flow control value and line number comming from a inline config comment."""
+    """Dict with a flow control value and line number coming from a inline config comment."""
 
     value: str
     line_number: int

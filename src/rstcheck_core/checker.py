@@ -319,7 +319,7 @@ class _CheckWriter(docutils.writers.Writer):
         *,
         warn_unknown_settings: bool = False,
     ) -> None:
-        """Inititalize :py:class:`_CheckWriter`.
+        """Initialize :py:class:`_CheckWriter`.
 
         :param source: Rst source to check
         :param source_origin: Path to file the source comes from
@@ -365,7 +365,7 @@ class _CheckTranslator(docutils.nodes.NodeVisitor):
         *,
         warn_unknown_settings: bool = False,
     ) -> None:
-        """Inititalize :py:class:`_CheckTranslator`.
+        """Initialize :py:class:`_CheckTranslator`.
 
         :param document: Document node
         :param source: Rst source to check
@@ -586,7 +586,7 @@ def _get_code_block_directive_line(node: docutils.nodes.Element, full_contents: 
 
 
 class CodeBlockChecker:
-    """Checker for code blockes with different languages."""
+    """Checker for code blocks with different languages."""
 
     def __init__(
         self,
@@ -596,7 +596,7 @@ class CodeBlockChecker:
         *,
         warn_unknown_settings: bool = False,
     ) -> None:
-        """Inititalize CodeBlockChecker.
+        """Initialize CodeBlockChecker.
 
         :param source_origin: Path to file the source comes from
         :param ignores: Ignore information; defaults to :py:obj:`None`
@@ -615,7 +615,7 @@ class CodeBlockChecker:
         """Check if given language can be checked.
 
         :param language: Language to check
-        :return: If langauge can be checked
+        :return: If language can be checked
         """
         return getattr(self, f"check_{language}", None) is not None
 
@@ -629,7 +629,7 @@ class CodeBlockChecker:
         return lambda: self.check(source_code, language)
 
     def check(self, source_code: str, language: str) -> types.YieldedLintError:
-        """Call the appropiate checker function for the given langauge to check given source.
+        """Call the appropriate checker function for the given language to check given source.
 
         :param source: Source code to check
         :param language: Language of the source code
@@ -833,7 +833,7 @@ class CodeBlockChecker:
     def _gcc_checker(
         self, source_code: str, filename_suffix: str, arguments: list[str]
     ) -> types.YieldedLintError:
-        """Check code blockes using gcc (Helper function).
+        """Check code blocks using gcc (Helper function).
 
         :param source_code: Source code to check
         :param filename_suffix: File suffix for language of the source code
