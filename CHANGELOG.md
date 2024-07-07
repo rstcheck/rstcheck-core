@@ -19,16 +19,16 @@ NOTE: please use them in this order.
 
 [diff v1.2.1...main](https://github.com/rstcheck/rstcheck-core/compare/v1.2.1...main)
 
-## [1.2.1 (2024-03-23)](https://github.com/rstcheck/rstcheck-core/releases/v1.2.1)
+## [v1.2.1 (2024-03-23)](https://github.com/rstcheck/rstcheck-core/releases/v1.2.1)
 
-[diff vv1.2.0...v1.2.1](https://github.com/rstcheck/rstcheck-core/compare/vv1.2.0...v1.2.1)
+[diff v1.2.0...v1.2.1](https://github.com/rstcheck/rstcheck-core/compare/v1.2.0...v1.2.1)
 
 ### Miscellaneous
 
 - Fixed yaml tests running even when pyyaml is not installed ([#84](https://github.com/rstcheck/rstcheck-core/issues/84))
 - Drop support for sphinx v4 ([#90](https://github.com/rstcheck/rstcheck-core/pull/90))
 
-## [1.2.0 (2023-11-13)](https://github.com/rstcheck/rstcheck-core/releases/v1.2.0)
+## [v1.2.0 (2023-11-13)](https://github.com/rstcheck/rstcheck-core/releases/v1.2.0)
 
 [diff v1.1.1...v1.2.0](https://github.com/rstcheck/rstcheck-core/compare/v1.1.1...v1.2.0)
 
@@ -39,7 +39,7 @@ NOTE: please use them in this order.
 - Improve log message content and reduce log level to warning for missing line numbers in
   literal blocks ([#81](https://github.com/rstcheck/rstcheck-core/issues/81))
 
-## [1.1.1 (2023-09-09)](https://github.com/rstcheck/rstcheck-core/releases/v1.1.1)
+## [v1.1.1 (2023-09-09)](https://github.com/rstcheck/rstcheck-core/releases/v1.1.1)
 
 [diff v1.1.0...v1.1.1](https://github.com/rstcheck/rstcheck-core/compare/v1.1.0...v1.1.1)
 
@@ -51,7 +51,7 @@ NOTE: please use them in this order.
 
 - Reduce log level and make message more clear for the AttributeError issue ([#63](https://github.com/rstcheck/rstcheck-core/issues/63))
 
-## [1.1.0 (2023-09-09)](https://github.com/rstcheck/rstcheck-core/releases/v1.1.0)
+## [v1.1.0 (2023-09-09)](https://github.com/rstcheck/rstcheck-core/releases/v1.1.0)
 
 [diff v1.0.3...v1.1.0](https://github.com/rstcheck/rstcheck-core/compare/v1.0.3...v1.1.0)
 
@@ -77,7 +77,7 @@ NOTE: please use them in this order.
 - Drop pydantic v1 support ([#60](https://github.com/rstcheck/rstcheck-core/pull/60))
 - Add python 3.12 to CI ([#60](https://github.com/rstcheck/rstcheck-core/pull/60))
 
-## [1.0.3 (2022-11-12)](https://github.com/rstcheck/rstcheck-core/releases/v1.0.3)
+## [v1.0.3 (2022-11-12)](https://github.com/rstcheck/rstcheck-core/releases/v1.0.3)
 
 [diff v1.0.2...v1.0.3](https://github.com/rstcheck/rstcheck-core/compare/v1.0.2...v1.0.3)
 
@@ -95,7 +95,7 @@ NOTE: please use them in this order.
 - Add support for python 3.11 ([#21](https://github.com/rstcheck/rstcheck-core/issues/21))
 - Update docutils version constraint ([#20](https://github.com/rstcheck/rstcheck-core/issues/20))
 
-## [1.0.2 (2022-05-30)](https://pypi.org/project/rstcheck-core/1.0.2)
+## [v1.0.2 (2022-05-30)](https://pypi.org/project/rstcheck-core/1.0.2)
 
 [diff v1.0.1.post2...v1.0.2](https://github.com/rstcheck/rstcheck-core/compare/v1.0.1.post2...v1.0.2)
 
@@ -124,7 +124,7 @@ NOTE: please use them in this order.
 
 - Update changelog with missing notes
 
-## [1.0.1 (2022-05-30)](https://pypi.org/project/rstcheck-core/1.0.1)
+## [v1.0.1 (2022-05-30)](https://pypi.org/project/rstcheck-core/1.0.1)
 
 [diff v1.0.0...v1.0.1](https://github.com/rstcheck/rstcheck-core/compare/v1.0.0...v1.0.1)
 
