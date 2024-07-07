@@ -358,12 +358,12 @@ def test__run_checks_parallel_method(
         """Mocked instance of ``multiprocessing.Pool``."""
 
         @staticmethod
-        def starmap(_0, _1) -> list[list[types.LintError]]:
+        def starmap(_0: t.Any, _1: t.Any) -> list[list[types.LintError]]:  # noqa: ANN401
             """Mock for ``multiprocessing.Pool.starmap`` method."""
             return [lint_errors, lint_errors]
 
     @contextlib.contextmanager
-    def mock_pool(_) -> t.Generator[MockedPool, None, None]:
+    def mock_pool(_: t.Any) -> t.Generator[MockedPool, None, None]:  # noqa: ANN401
         """Mock context manager for ``multiprocessing.Pool``."""
         yield MockedPool()
 

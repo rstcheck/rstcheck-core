@@ -45,7 +45,7 @@ def test_default_values_for_config() -> None:
     result = config.RstcheckConfig()
 
     assert result.report_level is None
-    assert result.ignore_directives is None  # type: ignore[unreachable]
+    assert result.ignore_directives is None
     assert result.ignore_roles is None
     assert result.ignore_substitutions is None
     assert result.ignore_languages is None
