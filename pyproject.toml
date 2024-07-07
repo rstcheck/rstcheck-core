@@ -97,7 +97,7 @@ warn_untyped_fields = true
 
 # -- RUFF CONFIG ----------------------------------------------------------------------
 [tool.ruff]
-target-version = "py311"
+target-version = "py312"
 line-length = 100
 output-format = "grouped"
 show-fixes = true
