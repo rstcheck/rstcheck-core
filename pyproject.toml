@@ -292,7 +292,6 @@ max-args = 6
 # -- PYTEST CONFIG --------------------------------------------------------------------
 [tool.pytest.ini_options]
 addopts = "-ra --showlocals"
-mock_use_standalone_module = true
 junit_family = "xunit2"
 asyncio_mode = "strict"
 
