@@ -636,8 +636,9 @@ class CodeBlockChecker:
         :return: :py:obj:`None` if language is not supported
         :yield: Found issues
         """
-        checker_function = t.Callable[[str], types.YieldedLintError]
-        checker: checker_function | None = getattr(self, f"check_{language}", None)
+        checker: t.Callable[[str], types.YieldedLintError] | None = getattr(
+            self, f"check_{language}", None
+        )
         if checker is None:
             return None
 
