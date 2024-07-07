@@ -1,9 +1,11 @@
 ---
 minimum_pre_commit_version: "2.17"
 default_stages: [commit]
+default_language_version:
+  python: python3.12
 
 ci:
-  skip: [mypy]
+  skip: [mypy, pylint]
 
 repos:
   # ----------------------------------------------
@@ -25,10 +27,15 @@ repos:
 
   # file checking out-of-the-box hooks
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: c4a0b883114b00d8d76b479c820ce7950211c99b # frozen: v4.5.0
+    rev: 2c9f875913ee60ca25ce70243dc24d5b6415598c # frozen: v4.6.0
     hooks:
       - id: check-case-conflict
       - id: check-shebang-scripts-are-executable
+        exclude: '^.*\.rs$'
+        stages: [commit]
+      - id: check-symlinks
+      - id: destroyed-symlinks
+      - id: forbid-new-submodules
 
   # ####################################################################################
   #
@@ -42,24 +49,20 @@ repos:
 
   # ruff - python linter with fixing ability
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: c22645f6b45188216151a407c040a9eec1795ab0 # frozen: v0.3.3
+    rev: 1dc9eb131c2ea4816c708e4d85820d2cc8542683 # frozen: v0.5.0
     hooks:
       - id: ruff
         name: ruff (fix)
         args: ["--fix-only", "--exit-non-zero-on-fix", "--config=pyproject.toml"]
-
-  # black - python formatter
-  - repo: https://github.com/psf/black
-    rev: 552baf822992936134cbd31a38f69c8cfe7c0f05 # frozen: 24.3.0
-    hooks:
-      - id: black
-        args: ["--safe"]
+      - id: ruff-format
+        name: ruff (format)
 
   # blacken-docs - black for python code in docs (rst/md/tex)
   - repo: https://github.com/asottile/blacken-docs
-    rev: 960ead214cd1184149d366c6d27ca6c369ce46b6 # frozen: 1.16.0
+    rev: 4c97c4a0d921007af6fefae92d8447cfbf63720b # frozen: 1.18.0
     hooks:
       - id: blacken-docs
+        args: ["--line-length=100", "--target-version=py312"]
         exclude: testing|tests
 
   # ----------------------------------------------
@@ -101,7 +104,7 @@ repos:
 
   # code unspecific out-of-the-box hooks
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: c4a0b883114b00d8d76b479c820ce7950211c99b # frozen: v4.5.0
+    rev: 2c9f875913ee60ca25ce70243dc24d5b6415598c # frozen: v4.6.0
     hooks:
       - id: end-of-file-fixer
         stages: [commit]
@@ -120,18 +123,18 @@ repos:
 
   - repo: local
     hooks:
-      # Find TODO:|FIXME:|BUG: comments in all files
+      # Find TODO:|FIXME: comments in all files
       # Inline skip: `#i#` directly after the colon after the tag-word
       - id: find-todos
-        name: "Find TODO:|FIXME:|BUG: comments"
-        description: "Check for TODO:|FIXME:|BUG: comments in all files"
+        name: "Find TODO:|FIXME: comments"
+        description: "Check for TODO:|FIXME: comments in all files"
         language: pygrep
-        entry: '(^|//!?|#|<!--|;|/\*(\*|!)?|\.\.)\s*(TODO:|FIXME:|BUG:)(?!#i#)'
+        entry: '(^|//!?|#|<!--|;|/\*(\*|!)?|\.\.)\s*(TODO:|FIXME:)(?!\s#i#)'
         exclude: TODO
 
   # code unspecific out-of-the-box hooks
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: c4a0b883114b00d8d76b479c820ce7950211c99b # frozen: v4.5.0
+    rev: 2c9f875913ee60ca25ce70243dc24d5b6415598c # frozen: v4.6.0
     hooks:
       - id: check-merge-conflict
       - id: detect-private-key
@@ -142,30 +145,23 @@ repos:
 
   # ruff - python linter with fixing ability
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: c22645f6b45188216151a407c040a9eec1795ab0 # frozen: v0.3.3
+    rev: 1dc9eb131c2ea4816c708e4d85820d2cc8542683 # frozen: v0.5.0
     hooks:
       - id: ruff
         name: ruff (lint)
         args: ["--config=pyproject.toml"]
+      - id: ruff-format
+        name: ruff (format-check)
+        args: ["--diff"]
 
   # python specific out-of-the-box hooks
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: c4a0b883114b00d8d76b479c820ce7950211c99b # frozen: v4.5.0
+    rev: 2c9f875913ee60ca25ce70243dc24d5b6415598c # frozen: v4.6.0
     hooks:
       - id: debug-statements
       - id: fix-encoding-pragma
         args: ["--remove"]
       - id: name-tests-test
-
-  # several python code regex hooks
-  - repo: https://github.com/pre-commit/pygrep-hooks
-    rev: 3a6eb0fadf60b3cccfd80bad9dbb6fae7e47b316 # frozen: v1.10.0
-    hooks:
-      - id: python-check-blanket-noqa
-      - id: python-check-blanket-type-ignore
-      - id: python-check-mock-methods
-      - id: python-no-eval
-      - id: python-no-log-warn
 
   # Lint hooks managed via tox envs b/c they need the pkg installed
   - repo: local
@@ -181,6 +177,17 @@ repos:
         types: [python]
         pass_filenames: false
         require_serial: true
+
+  # pylint - python linter
+  - repo: https://github.com/PyCQA/pylint/
+    rev: 769ffd20bbf321a6cf23f5e7221a0b8221f51482 # frozen: v3.2.2
+    hooks:
+      - id: pylint
+        name: spell-check (pylint+pyenchant)
+        description: >
+          spell-check in docstrings/comments in py-source via pyenchant and pylint
+        additional_dependencies: [pyenchant]
+        args: ["--disable=all", "--enable=spelling", "--rcfile=.pylintrc.spelling.toml"]
 
   # ----------------------------------------------
   # Shell script
@@ -211,7 +218,7 @@ repos:
 
   # markdownlint - md file checker
   - repo: https://github.com/DavidAnson/markdownlint-cli2
-    rev: 82c791e94c2e2ab2119437d61c722c8e0c20d6c9 # frozen: v0.12.1
+    rev: 24eb4dce508ab81398d14d75179123fca425f12d # frozen: v0.13.0
     hooks:
       - id: markdownlint-cli2
 
@@ -221,7 +228,7 @@ repos:
 
   # JSON specific out-of-the-box hooks
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: c4a0b883114b00d8d76b479c820ce7950211c99b # frozen: v4.5.0
+    rev: 2c9f875913ee60ca25ce70243dc24d5b6415598c # frozen: v4.6.0
     hooks:
       - id: check-toml
       - id: check-yaml

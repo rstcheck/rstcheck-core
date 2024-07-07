@@ -115,7 +115,7 @@ Test
 
 
 def test__replace_ignored_substitutions() -> None:
-    """Test ``_replace_ignored_substitutions`` fucntion replaces substitutions."""
+    """Test ``_replace_ignored_substitutions`` function replaces substitutions."""
     source = "|Substitution1| |Substitution2|"
 
     result = checker._replace_ignored_substitutions(source, ["Substitution1"])
@@ -124,7 +124,7 @@ def test__replace_ignored_substitutions() -> None:
 
 
 def test__create_ignore_dict_from_config() -> None:
-    """Test ``_create_ignore_dict_from_config`` fucntion creates ignore dict."""
+    """Test ``_create_ignore_dict_from_config`` function creates ignore dict."""
     ignore_messages = r"foo/bar"
     ignore_messages_re = re.compile(ignore_messages)
     ignore_languages = ["python", "cpp"]
@@ -153,7 +153,7 @@ def test__create_ignore_dict_from_config() -> None:
 
 
 class TestSourceChecker:
-    """Test ``check_source`` fucntion."""
+    """Test ``check_source`` function."""
 
     @staticmethod
     def test_empty_source() -> None:
@@ -249,7 +249,7 @@ Test
     def test_code_block_lint_error_returned_on_default_ignore_pre310() -> None:
         """Test code lint error is returned with default ignores.
 
-        In Python version 3.10 the error messag changed.
+        In Python version 3.10 the error message changed.
         """
         source = """
 .. code:: python
@@ -282,7 +282,7 @@ Test
     def test_code_block_no_error_on_set_ignore_pre310() -> None:
         """Test code lint error is skipped with set ignores.
 
-        In Python version 3.10 the error messag changed.
+        In Python version 3.10 the error message changed.
         """
         source = """
 .. code:: python
@@ -446,7 +446,7 @@ Test
     ) -> None:
         """Test code blocks without a language log nothing and do not error without sphinx.
 
-        Conter part to the XFAIL tests ``test_code_block_without_language_is_works_with_sphinx``.
+        Counterpart to the XFAIL tests ``test_code_block_without_language_is_works_with_sphinx``.
         """
         source = f"""
 .. {code_block_directive}::
@@ -479,7 +479,7 @@ Test
     ) -> None:
         """Test code blocks without a language log critical and do not error with sphinx.
 
-        Conter part to the XFAIL tests ``test_code_block_without_language_is_works_with_sphinx``.
+        Counterpart to the XFAIL tests ``test_code_block_without_language_is_works_with_sphinx``.
         """
         source = f"""
 .. {code_block_directive}::
@@ -640,7 +640,7 @@ print("rstcheck")
     def test_check_returns_error_on_bad_code_block_for_supported_lang_pre310() -> None:
         """Test ``check`` returns error on bad code block for supported language.
 
-        In Python version 3.10 the error messag changed.
+        In Python version 3.10 the error message changed.
         """
         source = """
 print(
@@ -683,7 +683,7 @@ print("rstcheck")
     def test_check_python_returns_error_on_bad_code_block_pre310() -> None:
         """Test ``check_python`` returns error on bad code block.
 
-        In Python version 3.10 the error messag changed.
+        In Python version 3.10 the error message changed.
         """
         source = """
 print(
@@ -1027,7 +1027,10 @@ int main()
         result = list(cb_checker.check_c(source))
 
         assert len(result) > 0
-        assert "error: use of undeclared identifier 'x'" in result[0]["message"]
+        assert ("error: use of undeclared identifier 'x'" in result[0]["message"]) or (
+            "warning: a function declaration without a prototype is deprecated in all versions of C"
+            in result[0]["message"]
+        )
 
     @staticmethod
     @pytest.mark.skipif(sys.platform != "win32", reason="Windows specific error message")

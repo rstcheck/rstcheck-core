@@ -150,7 +150,7 @@ class TestRstcheckMainRunnerFileListUpdater:
 
     @staticmethod
     def test_directory_without_recursive(tmp_path: pathlib.Path) -> None:
-        """Test directory without recusrive results in empty file list."""
+        """Test directory without recursive results in empty file list."""
         test_file = tmp_path / "rst.rst"
         test_file.touch()
         file_list = [tmp_path]
@@ -163,7 +163,7 @@ class TestRstcheckMainRunnerFileListUpdater:
 
     @staticmethod
     def test_directory_with_recursive(tmp_path: pathlib.Path) -> None:
-        """Test directory with recusrive results in directories files in file list."""
+        """Test directory with recursive results in directories files in file list."""
         test_file1 = tmp_path / "rst.rst"
         test_file1.touch()
         test_file2 = tmp_path / "rst2.rst"
@@ -273,7 +273,7 @@ class TestRstcheckMainRunnerFileListFilter:
 
     @staticmethod
     def test_directory_without_recursive(tmp_path: pathlib.Path) -> None:
-        """Test directory without recusrive results in empty file list."""
+        """Test directory without recursive results in empty file list."""
         test_file = tmp_path / "rst.rst"
         test_file.touch()
         file_list = [tmp_path]
@@ -287,7 +287,7 @@ class TestRstcheckMainRunnerFileListFilter:
 
     @staticmethod
     def test_directory_with_recursive(tmp_path: pathlib.Path) -> None:
-        """Test directory with recusrive results in directories files in file list."""
+        """Test directory with recursive results in directories files in file list."""
         test_file1 = tmp_path / "rst.rst"
         test_file1.touch()
         test_file2 = tmp_path / "rst2.rst"
@@ -358,12 +358,12 @@ def test__run_checks_parallel_method(
         """Mocked instance of ``multiprocessing.Pool``."""
 
         @staticmethod
-        def starmap(_0, _1) -> list[list[types.LintError]]:
+        def starmap(_0: t.Any, _1: t.Any) -> list[list[types.LintError]]:  # noqa: ANN401
             """Mock for ``multiprocessing.Pool.starmap`` method."""
             return [lint_errors, lint_errors]
 
     @contextlib.contextmanager
-    def mock_pool(_) -> t.Generator[MockedPool, None, None]:
+    def mock_pool(_: t.Any) -> t.Generator[MockedPool, None, None]:  # noqa: ANN401
         """Mock context manager for ``multiprocessing.Pool``."""
         yield MockedPool()
 
@@ -439,7 +439,7 @@ class TestRstcheckMainRunnerResultPrinter:
 
     @staticmethod
     def test_exit_code_on_success() -> None:
-        """Test exit code 0 is returned on no erros."""
+        """Test exit code 0 is returned on no errors."""
         init_config = config.RstcheckConfig()
         _runner = runner.RstcheckMainRunner([], init_config)
 
@@ -487,7 +487,7 @@ class TestRstcheckMainRunnerResultPrinter:
 
     @staticmethod
     def test_exit_code_on_error() -> None:
-        """Test exit code 1 is returned when erros were found."""
+        """Test exit code 1 is returned when errors were found."""
         init_config = config.RstcheckConfig()
         _runner = runner.RstcheckMainRunner([], init_config)
         _runner.errors = [
@@ -500,7 +500,7 @@ class TestRstcheckMainRunnerResultPrinter:
 
     @staticmethod
     def test_no_success_message_on_error(capsys: pytest.CaptureFixture[str]) -> None:
-        """Test no succuess message is printed when erros were found."""
+        """Test no success message is printed when errors were found."""
         init_config = config.RstcheckConfig()
         _runner = runner.RstcheckMainRunner([], init_config)
         _runner.errors = [

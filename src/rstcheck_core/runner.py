@@ -141,7 +141,7 @@ class RstcheckMainRunner:
                 self._files_to_check.append(path)
 
     def _filter_nonexisting_paths(self, paths: list[pathlib.Path]) -> list[pathlib.Path]:
-        """Filter nonexisting paths out.
+        """Filter non-existing paths out.
 
         If recursive is not active only files are allowed, else directories are also allowed.
 
@@ -178,7 +178,7 @@ class RstcheckMainRunner:
         return _paths
 
     def _run_checks_sync(self) -> list[list[types.LintError]]:
-        """Check all files from the file list syncronously and return the errors.
+        """Check all files from the file list synchronously and return the errors.
 
         :return: List of lists of errors found per file
         """

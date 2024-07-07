@@ -105,7 +105,7 @@ class TestRegisterCodeRirective:
     @pytest.mark.skipif(_extras.SPHINX_INSTALLED, reason="Test without sphinx extra.")
     @pytest.mark.usefixtures("patch_docutils_directives_and_roles_dict")
     def test_install_only_code_when_others_are_ignored() -> None:
-        """Test function installes only code directive when others are ignored."""
+        """Test function installs only code directive when others are ignored."""
         _docutils.register_code_directive(  # act
             ignore_codeblock_directive=True, ignore_sourcecode_directive=True
         )
@@ -118,7 +118,7 @@ class TestRegisterCodeRirective:
     @pytest.mark.skipif(_extras.SPHINX_INSTALLED, reason="Test without sphinx extra.")
     @pytest.mark.usefixtures("patch_docutils_directives_and_roles_dict")
     def test_install_only_code_block_when_others_are_ignored() -> None:
-        """Test function installes only code-block directive when others are ignored."""
+        """Test function installs only code-block directive when others are ignored."""
         _docutils.register_code_directive(  # act
             ignore_code_directive=True, ignore_sourcecode_directive=True
         )
@@ -131,7 +131,7 @@ class TestRegisterCodeRirective:
     @pytest.mark.skipif(_extras.SPHINX_INSTALLED, reason="Test without sphinx extra.")
     @pytest.mark.usefixtures("patch_docutils_directives_and_roles_dict")
     def test_install_only_sourcecode_when_others_are_ignored() -> None:
-        """Test function installes only sourcecode directive when others are ignored."""
+        """Test function installs only sourcecode directive when others are ignored."""
         _docutils.register_code_directive(  # act
             ignore_code_directive=True, ignore_codeblock_directive=True
         )

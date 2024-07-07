@@ -444,7 +444,7 @@ class TestSphinx:
 
     @staticmethod
     @pytest.mark.skipif(_extras.SPHINX_INSTALLED, reason="Test without sphinx extra.")
-    def test_sphinx_role_erros_without_sphinx(capsys: pytest.CaptureFixture[str]) -> None:
+    def test_sphinx_role_errors_without_sphinx(capsys: pytest.CaptureFixture[str]) -> None:
         """Test sphinx example errors without sphinx."""
         test_file = EXAMPLES_DIR / "sphinx" / "good.rst"
         init_config = config.RstcheckConfig()
