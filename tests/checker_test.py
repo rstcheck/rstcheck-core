@@ -1027,7 +1027,10 @@ int main()
         result = list(cb_checker.check_c(source))
 
         assert len(result) > 0
-        assert "error: use of undeclared identifier 'x'" in result[0]["message"]
+        assert ("error: use of undeclared identifier 'x'" in result[0]["message"]) or (
+            "warning: a function declaration without a prototype is deprecated in all versions of C"
+            in result[0]["message"]
+        )
 
     @staticmethod
     @pytest.mark.skipif(sys.platform != "win32", reason="Windows specific error message")
