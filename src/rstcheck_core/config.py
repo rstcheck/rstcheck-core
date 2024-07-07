@@ -272,9 +272,7 @@ def _load_config_from_ini_file(
     return RstcheckConfigFile(**config_values_checked.model_dump())
 
 
-class _RstcheckConfigTOMLFile(
-    pydantic.BaseModel,
-):
+class _RstcheckConfigTOMLFile(pydantic.BaseModel):
     """Type for [tool.rstcheck] section in TOML file.
 
     The types apply to the file's data before the parsing by :py:class:`RstcheckConfig` is done.
