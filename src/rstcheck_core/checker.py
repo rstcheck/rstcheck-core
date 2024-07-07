@@ -308,7 +308,7 @@ def _parse_and_filter_rst_errors(
             )
 
 
-class _CheckWriter(docutils.writers.Writer):
+class _CheckWriter(docutils.writers.Writer):  # type: ignore[misc]
     """Runs CheckTranslator on code blocks."""
 
     def __init__(
