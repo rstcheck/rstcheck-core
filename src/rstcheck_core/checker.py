@@ -24,6 +24,7 @@ import docutils.core
 import docutils.io
 import docutils.nodes
 import docutils.utils
+import docutils.writers
 
 from . import _docutils, _extras, _sphinx, config, inline_config, types
 
