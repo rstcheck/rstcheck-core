@@ -46,7 +46,9 @@ def load_sphinx_if_available() -> t.Generator[sphinx.application.Sphinx | None, 
         create_dummy_sphinx_app()
         # NOTE: Hack to prevent sphinx warnings for overwriting registered nodes; see #113
         sphinx.application.builtin_extensions = [
-            e for e in sphinx.application.builtin_extensions if e != "sphinx.addnodes"  # type: ignore[assignment]
+            e
+            for e in sphinx.application.builtin_extensions
+            if e != "sphinx.addnodes"  # type: ignore[assignment]
         ]
 
     yield None

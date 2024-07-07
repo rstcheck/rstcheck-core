@@ -887,7 +887,7 @@ class CodeBlockChecker:
             temporary_file.close()
 
             subprocess.run(
-                [*arguments, temporary_file.name],  # noqa: S603
+                [*arguments, temporary_file.name],
                 capture_output=True,
                 cwd=source_origin_path.parent,
                 check=True,
