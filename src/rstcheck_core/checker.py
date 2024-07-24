@@ -356,7 +356,7 @@ class _CheckWriter(docutils.writers.Writer):  # type: ignore[misc]
 class _CheckTranslator(docutils.nodes.NodeVisitor):
     """Visits code blocks and checks for syntax errors in code."""
 
-    def __init__(  # noqa: PLR0913
+    def __init__(
         self,
         document: docutils.nodes.document,
         source: str,
