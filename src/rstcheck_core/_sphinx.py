@@ -2,11 +2,9 @@
 
 from __future__ import annotations
 
-import contextlib
 import logging
 import pathlib
 import tempfile
-import typing as t
 
 from . import _docutils, _extras
 
@@ -22,36 +20,17 @@ if _extras.SPHINX_INSTALLED:
 
 logger = logging.getLogger(__name__)
 
-
-def create_dummy_sphinx_app() -> sphinx.application.Sphinx:
-    """Create a dummy sphinx instance with temp dirs."""
+if _extras.SPHINX_INSTALLED:
     logger.debug("Create dummy sphinx application.")
     with tempfile.TemporaryDirectory() as temp_dir:
         outdir = pathlib.Path(temp_dir) / "_build"
-        return sphinx.application.Sphinx(
+        sphinx_app = sphinx.application.Sphinx(
             srcdir=temp_dir,
             confdir=None,
             outdir=str(outdir),
             doctreedir=str(outdir),
             buildername="dummy",
-            # NOTE: https://github.com/sphinx-doc/sphinx/issues/10483
-            status=None,
         )
-
-
-@contextlib.contextmanager
-def load_sphinx_if_available() -> t.Generator[sphinx.application.Sphinx | None, None, None]:
-    """Contextmanager to register Sphinx directives and roles if sphinx is available."""
-    if _extras.SPHINX_INSTALLED:
-        create_dummy_sphinx_app()
-        # NOTE: Hack to prevent sphinx warnings for overwriting registered nodes; see #113
-        sphinx.application.builtin_extensions = [
-            e
-            for e in sphinx.application.builtin_extensions
-            if e != "sphinx.addnodes"  # type: ignore[assignment]
-        ]
-
-    yield None
 
 
 def get_sphinx_directives_and_roles() -> tuple[list[str], list[str]]:
@@ -85,6 +64,26 @@ def get_sphinx_directives_and_roles() -> tuple[list[str], list[str]]:
     sphinx_roles += list(
         sphinx.util.docutils.roles._roles  # type: ignore[attr-defined]  # noqa: SLF001
     )
+
+    # load the internal docroles for definitions like "file"
+    sphinx_roles += list(sphinx.roles.specific_docroles) + list(sphinx.roles.generic_docroles)
+
+    # manually load the "other" directives since they don't have a nice dictionary we can read
+    sphinx_directives += [
+        "toctree",
+        "sectionauthor",
+        "moduleauthor",
+        "codeauthor",
+        "seealso",
+        "tabularcolumns",
+        "centered",
+        "acks",
+        "hlist",
+        "only",
+        "include",
+        "cssclass",
+        "rst-class",
+    ]
 
     return (sphinx_directives, sphinx_roles)
 

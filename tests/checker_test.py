@@ -15,7 +15,7 @@ import docutils.nodes
 import docutils.utils
 import pytest
 
-from rstcheck_core import _extras, _sphinx, checker, config, types
+from rstcheck_core import _extras, checker, config, types
 
 if t.TYPE_CHECKING:
     import pytest_mock
@@ -378,9 +378,6 @@ Test
     @staticmethod
     @pytest.mark.skipif(not _extras.SPHINX_INSTALLED, reason="Depends on sphinx extra.")
     @pytest.mark.skipif(sys.version_info[0:2] > (3, 9), reason="Requires python3.9 or lower")
-    @pytest.mark.xfail(
-        reason="Sphinx support fails for language-less code blocks. See #3", strict=True
-    )
     @pytest.mark.parametrize("code_block_directive", ["code", "code-block", "sourcecode"])
     def test_code_block_without_language_is_works_with_sphinx_pre310(
         code_block_directive: str,
@@ -397,21 +394,16 @@ Test
 """
         ignores = types.construct_ignore_dict()
         # fmt: off
-        with _sphinx.load_sphinx_if_available():
-
-            result = list(checker.check_source(source, ignores=ignores))
+        result = list(checker.check_source(source, ignores=ignores))
 
         # fmt: on
         assert len(result) == 1
-        assert result[0]["line_number"] == 9
+        assert result[0]["line_number"] == 8
         assert "unexpected EOF while parsing" in result[0]["message"]
 
     @staticmethod
     @pytest.mark.skipif(not _extras.SPHINX_INSTALLED, reason="Depends on sphinx extra.")
     @pytest.mark.skipif(sys.version_info < (3, 10), reason="Requires python3.10 or higher")
-    @pytest.mark.xfail(
-        reason="Sphinx support fails for language-less code blocks. See #3", strict=True
-    )
     @pytest.mark.parametrize("code_block_directive", ["code", "code-block", "sourcecode"])
     def test_code_block_without_language_is_works_with_sphinx(
         code_block_directive: str,
@@ -428,13 +420,11 @@ Test
 """
         ignores = types.construct_ignore_dict()
         # fmt: off
-        with _sphinx.load_sphinx_if_available():
-
-            result = list(checker.check_source(source, ignores=ignores))
+        result = list(checker.check_source(source, ignores=ignores))
 
         # fmt: on
         assert len(result) == 1
-        assert result[0]["line_number"] == 9
+        assert result[0]["line_number"] == 8
         assert "'(' was never closed" in result[0]["message"]
 
     @staticmethod
@@ -459,9 +449,7 @@ Test
 """
         ignores = types.construct_ignore_dict()
         # fmt: off
-        with _sphinx.load_sphinx_if_available():
-
-            result = list(checker.check_source(source, ignores=ignores))
+        result = list(checker.check_source(source, ignores=ignores))
 
         # fmt: on
         assert result
@@ -469,37 +457,6 @@ Test
         assert (
             "directive (code/code-block/sourcecode) without a specified language" not in caplog.text
         )
-
-    @staticmethod
-    @pytest.mark.skipif(not _extras.SPHINX_INSTALLED, reason="Depends on sphinx extra.")
-    @pytest.mark.parametrize("code_block_directive", ["code", "code-block", "sourcecode"])
-    def test_code_block_without_language_logs_critcal_with_sphinx(
-        code_block_directive: str,
-        caplog: pytest.LogCaptureFixture,
-    ) -> None:
-        """Test code blocks without a language log critical and do not error with sphinx.
-
-        Counterpart to the XFAIL tests ``test_code_block_without_language_is_works_with_sphinx``.
-        """
-        source = f"""
-.. {code_block_directive}::
-
-    print(
-
-.. {code_block_directive}:: python
-
-    print(
-"""
-        ignores = types.construct_ignore_dict()
-        # fmt: off
-        with _sphinx.load_sphinx_if_available():
-
-            result = list(checker.check_source(source, ignores=ignores))
-
-        # fmt: on
-        assert not result
-        assert "An `AttributeError` error occured" in caplog.text
-        assert "directive (code/code-block/sourcecode) without a specified language" in caplog.text
 
 
 class TestCodeCheckRunner:

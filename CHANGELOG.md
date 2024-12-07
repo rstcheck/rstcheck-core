@@ -24,6 +24,10 @@ NOTE: please use them in this order.
 - Update configs for dev tooling ([#96](https://github.com/rstcheck/rstcheck-core/pull/96))
 - Bump default python version to 3.12 ([#96](https://github.com/rstcheck/rstcheck-core/pull/96))
 
+### Bugfixes
+
+- Fix attribute errors with code-blocks and include when using sphinx ([#3](https://github.com/rstcheck/rstcheck-core/issues/3))
+
 ## [v1.2.1 (2024-03-23)](https://github.com/rstcheck/rstcheck-core/releases/v1.2.1)
 
 [diff v1.2.0...v1.2.1](https://github.com/rstcheck/rstcheck-core/compare/v1.2.0...v1.2.1)

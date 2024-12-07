@@ -4,47 +4,9 @@ from __future__ import annotations
 
 import typing as t
 
-import docutils.parsers.rst.directives as docutils_directives
-import docutils.parsers.rst.roles as docutils_roles
 import pytest
 
 from rstcheck_core import _extras, _sphinx
-
-if _extras.SPHINX_INSTALLED:
-    import sphinx.application
-
-
-@pytest.mark.skipif(not _extras.SPHINX_INSTALLED, reason="Depends on sphinx extra.")
-def test_dummy_app_creator() -> None:
-    """Test creation of dummy sphinx app."""
-    result = _sphinx.create_dummy_sphinx_app()
-
-    assert isinstance(result, sphinx.application.Sphinx)
-
-
-class TestContextManager:
-    """Test ``load_sphinx_if_available`` context manager."""
-
-    @staticmethod
-    @pytest.mark.skipif(_extras.SPHINX_INSTALLED, reason="Test without sphinx extra.")
-    @pytest.mark.usefixtures("patch_docutils_directives_and_roles_dict")
-    def test_yield_nothing_with_sphinx_missing() -> None:
-        """Test for ``None`` yield and no action when sphinx is missing."""
-        with _sphinx.load_sphinx_if_available() as ctx_manager:
-            assert ctx_manager is None
-            assert not docutils_directives._directives  # type: ignore[attr-defined]
-            assert not docutils_roles._roles  # type: ignore[attr-defined]
-
-    @staticmethod
-    @pytest.mark.skipif(not _extras.SPHINX_INSTALLED, reason="Depends on sphinx extra.")
-    @pytest.mark.usefixtures("patch_docutils_directives_and_roles_dict")
-    def test_yield_nothing_with_sphinx_installed() -> None:
-        """Test for ``None`` yield but action when sphinx is installed."""
-        with _sphinx.load_sphinx_if_available() as ctx_manager:
-            assert ctx_manager is None
-            assert docutils_directives._directives  # type: ignore[attr-defined]
-            assert docutils_roles._roles  # type: ignore[attr-defined]
-            assert "sphinx.addnodes" not in sphinx.application.builtin_extensions
 
 
 class TestSphinxDirectiveAndRoleGetter:

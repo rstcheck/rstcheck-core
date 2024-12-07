@@ -70,16 +70,15 @@ def check_file(
 
     _docutils.clean_docutils_directives_and_roles_cache()
 
-    with _sphinx.load_sphinx_if_available():
-        return list(
-            check_source(
-                source,
-                source_file=source_file,
-                ignores=ignore_dict,
-                report_level=run_config.report_level or config.DEFAULT_REPORT_LEVEL,
-                warn_unknown_settings=run_config.warn_unknown_settings or False,
-            )
+    return list(
+        check_source(
+            source,
+            source_file=source_file,
+            ignores=ignore_dict,
+            report_level=run_config.report_level or config.DEFAULT_REPORT_LEVEL,
+            warn_unknown_settings=run_config.warn_unknown_settings or False,
         )
+    )
 
 
 def _load_run_config(
@@ -231,30 +230,16 @@ def check_source(
         # "self.state.document.settings.env". Ignore this for now until we
         # figure out a better approach.
         # https://github.com/rstcheck/rstcheck-core/issues/3
-        try:
-            docutils.core.publish_string(
-                source,
-                writer=writer,
-                source_path=str(source_origin),
-                settings_overrides={
-                    "halt_level": 5,
-                    "report_level": report_level.value,
-                    "warning_stream": string_io,
-                },
-            )
-        except AttributeError:
-            if not _extras.SPHINX_INSTALLED:
-                raise
-            logger.warning(
-                "An `AttributeError` error occured. This is most probably due to a code block "
-                "directive (code/code-block/sourcecode) without a specified language. "
-                "This may result in a false negative for source: '%s'. "
-                "The reason can also be another directive. "
-                "For more information see the FAQ (https://rstcheck-core.rtfd.io/en/latest/faq) "
-                "or the corresponding github issue: "
-                "https://github.com/rstcheck/rstcheck-core/issues/3.",
-                source_origin,
-            )
+        docutils.core.publish_string(
+            source,
+            writer=writer,
+            source_path=str(source_origin),
+            settings_overrides={
+                "halt_level": 5,
+                "report_level": report_level.value,
+                "warning_stream": string_io,
+            },
+        )
 
     yield from _run_code_checker_and_filter_errors(writer.checkers, ignores["messages"])
 
@@ -574,9 +559,6 @@ def _get_code_block_directive_line(node: docutils.nodes.Element, full_contents: 
     line_number = node.line
     if line_number is None:
         return None
-
-    if _extras.SPHINX_INSTALLED:
-        return line_number
 
     lines = full_contents.splitlines()
     for line_no in range(line_number, 1, -1):
