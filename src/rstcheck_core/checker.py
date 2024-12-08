@@ -549,6 +549,27 @@ def _beginning_of_code_block(
 CODE_BLOCK_RE = re.compile(r"\.\. code::|\.\. code-block::|\.\. sourcecode::")
 
 
+def _generate_directive_line(node: docutils.nodes.Element) -> int | None:
+    """Generate a line number based on the parent rawsource.
+
+    :param node: The code block node
+    :return: Line of code block directive or :py:obj:`None`
+    """
+    parent = node.parent
+    if parent:
+        child_index = parent.index(node)
+        child_grouped_lines = parent.rawsource.split(parent.child_text_separator)
+        preceeding_rawsoruce = parent.child_text_separator.join(
+            child_grouped_lines[: child_index + 2]
+        )
+        parent_line = parent.line if parent.line else _generate_directive_line(parent)
+        if parent_line:
+            node.line = len(preceeding_rawsoruce.splitlines()) + parent_line
+        return node.line
+
+    return None
+
+
 def _get_code_block_directive_line(node: docutils.nodes.Element, full_contents: str) -> int | None:
     """Find line of code block directive.
 
@@ -557,6 +578,12 @@ def _get_code_block_directive_line(node: docutils.nodes.Element, full_contents: 
     :return: Line of code block directive or :py:obj:`None`
     """
     line_number = node.line
+    if line_number is None:
+        try:
+            line_number = _generate_directive_line(node)
+        except IndexError:
+            return None
+
     if line_number is None:
         return None
 

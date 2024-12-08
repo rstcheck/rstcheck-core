@@ -23,6 +23,7 @@ NOTE: please use them in this order.
 
 - Update configs for dev tooling ([#96](https://github.com/rstcheck/rstcheck-core/pull/96))
 - Bump default python version to 3.12 ([#96](https://github.com/rstcheck/rstcheck-core/pull/96))
+- Try to generate a line number for code blocks that don't have one
 
 ### Bugfixes
 
