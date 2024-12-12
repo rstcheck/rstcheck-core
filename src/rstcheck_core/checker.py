@@ -293,6 +293,20 @@ def _parse_and_filter_rst_errors(
             )
 
 
+def _get_source_path(node: docutils.nodes.Element) -> str | None:
+    """Iterate through all parent nodes until we get a valid source path.
+
+    :param node: A docutils node
+    :return: String with rst source path
+    """
+    current_node = node
+    source = current_node.source
+    while current_node and not source:
+        current_node = current_node.parent
+        source = current_node.source
+    return source
+
+
 class _CheckWriter(docutils.writers.Writer):  # type: ignore[misc]
     """Runs CheckTranslator on code blocks."""
 
@@ -396,6 +410,34 @@ class _CheckTranslator(docutils.nodes.NodeVisitor):
             is_code_node=False,
         )
 
+    def _get_code_block_directive_line(self, node: docutils.nodes.Element) -> int | None:
+        """Find line of code block directive.
+
+        :param node: The code block node
+        :return: Line of code block directive or :py:obj:`None`
+        """
+        line_number = node.line
+        if line_number is None:
+            try:
+                line_number = _generate_directive_line(node)
+            except IndexError:
+                return None
+
+        if line_number is None:
+            return None
+
+        node_source = _get_source_path(node)
+        if node_source and node_source != str(self.source_origin):
+            lines = _get_source(pathlib.Path(node_source)).splitlines()
+        else:
+            lines = self.source.splitlines()
+
+        for line_no in range(line_number, 1, -1):
+            if CODE_BLOCK_RE.match(lines[line_no - 2].strip()) is not None:
+                return line_no - 1
+
+        return None
+
     def visit_literal_block(self, node: docutils.nodes.Element) -> None:
         """Add check for syntax of code block.
 
@@ -413,7 +455,7 @@ class _CheckTranslator(docutils.nodes.NodeVisitor):
                 return
             language = classes[-1]
 
-        directive_line = _get_code_block_directive_line(node, self.source)
+        directive_line = self._get_code_block_directive_line(node)
         if directive_line is None:
             logger.warning(
                 "Could not find line for literal block directive. "
@@ -566,31 +608,6 @@ def _generate_directive_line(node: docutils.nodes.Element) -> int | None:
         if parent_line:
             node.line = len(preceeding_rawsoruce.splitlines()) + parent_line
         return node.line
-
-    return None
-
-
-def _get_code_block_directive_line(node: docutils.nodes.Element, full_contents: str) -> int | None:
-    """Find line of code block directive.
-
-    :param node: The code block node
-    :param full_contents: The node's contents
-    :return: Line of code block directive or :py:obj:`None`
-    """
-    line_number = node.line
-    if line_number is None:
-        try:
-            line_number = _generate_directive_line(node)
-        except IndexError:
-            return None
-
-    if line_number is None:
-        return None
-
-    lines = full_contents.splitlines()
-    for line_no in range(line_number, 1, -1):
-        if CODE_BLOCK_RE.match(lines[line_no - 2].strip()) is not None:
-            return line_no - 1
 
     return None
 
