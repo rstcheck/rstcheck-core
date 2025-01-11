@@ -342,7 +342,8 @@ class _CheckWriter(docutils.writers.Writer):  # type: ignore[type-arg]
     def translate(self) -> None:
         """Run CheckTranslator."""
         if self.document is None:
-            raise AssertionError("No document to check.")
+            err_msg = "No document to check."
+            raise AssertionError(err_msg)
 
         visitor = _CheckTranslator(
             self.document,
