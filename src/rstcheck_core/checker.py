@@ -18,7 +18,7 @@ import sys
 import tempfile
 import typing as t
 import warnings
-import xml.etree.ElementTree
+import xml.etree.ElementTree as ET
 
 import docutils.core
 import docutils.io
@@ -715,8 +715,8 @@ class CodeBlockChecker:
         """
         logger.debug("Check XML source.")
         try:
-            xml.etree.ElementTree.fromstring(source_code)  # noqa: S314
-        except xml.etree.ElementTree.ParseError as exception:
+            ET.fromstring(source_code)  # noqa: S314
+        except ET.ParseError as exception:
             message = f"{exception}"
             found = EXCEPTION_LINE_NO_REGEX.search(message)
             line_number = int(found.group(1)) if found else 0
