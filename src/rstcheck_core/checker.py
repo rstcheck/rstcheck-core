@@ -879,27 +879,25 @@ class CodeBlockChecker:
 
         # NOTE: On windows a file cannot be opened twice.
         # Therefore close it before using it in subprocess.
-        temporary_file = tempfile.NamedTemporaryFile(
+        with tempfile.NamedTemporaryFile(
             mode="wb", suffix=filename_suffix, delete=False
-        )
-        temporary_file_path = pathlib.Path(temporary_file.name)
-        try:
-            temporary_file.write(code.encode("utf-8"))
-            temporary_file.flush()
-            temporary_file.close()
+        ) as temporary_file:
+            temporary_file_path = pathlib.Path(temporary_file.name)
+            try:
+                temporary_file.write(code.encode("utf-8"))
+                temporary_file.flush()
+                temporary_file.close()
 
-            subprocess.run(  # noqa: S603
-                [*arguments, temporary_file.name],
-                capture_output=True,
-                cwd=source_origin_path.parent,
-                check=True,
-            )
-        except subprocess.CalledProcessError as exc:
-            return (exc.stderr.decode(encoding), temporary_file_path)
-        else:
-            return None
-        finally:
-            temporary_file_path.unlink()
+                subprocess.run(  # noqa: S603
+                    [*arguments, temporary_file.name],
+                    capture_output=True,
+                    cwd=source_origin_path.parent,
+                    check=True,
+                )
+            except subprocess.CalledProcessError as exc:
+                return (exc.stderr.decode(encoding), temporary_file_path)
+
+        return None
 
 
 def _parse_gcc_style_error_message(
