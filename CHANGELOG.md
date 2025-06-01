@@ -26,6 +26,7 @@ NOTE: please use them in this order.
 - Dropped support for python 3.8
 - Added python 3.13 to tox config as preparation for adding the version to the test pool. ([#109](https://github.com/rstcheck/rstcheck/issues/109))
 - Dropped support for sphinx 5 ([#110](https://github.com/rstcheck/rstcheck-core/pull/110))
+- Added python 3.13 to CI test pool ([#110](https://github.com/rstcheck/rstcheck-core/pull/110))
 
 ## [v1.2.1 (2024-03-23)](https://github.com/rstcheck/rstcheck-core/releases/v1.2.1)
 
