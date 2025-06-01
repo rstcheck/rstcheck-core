@@ -159,3 +159,5 @@ Run more tests for checking performance.
 
     # ¬∆˚ß∂ƒß∂ƒ˚¬∆
     print(1)
+
+.. include:: _include.rst

@@ -10,7 +10,7 @@ import re
 import sys
 import typing as t
 
-from . import _sphinx, checker, config, types
+from . import checker, config, types
 
 logger = logging.getLogger(__name__)
 
@@ -183,11 +183,10 @@ class RstcheckMainRunner:
         :return: List of lists of errors found per file
         """
         logger.debug("Runnning checks synchronically.")
-        with _sphinx.load_sphinx_if_available():
-            return [
-                checker.check_file(file, self.config, self.overwrite_config)
-                for file in self._files_to_check
-            ]
+        return [
+            checker.check_file(file, self.config, self.overwrite_config)
+            for file in self._files_to_check
+        ]
 
     def _run_checks_parallel(self) -> list[list[types.LintError]]:
         """Check all files from the file list in parallel and return the errors.
@@ -198,7 +197,7 @@ class RstcheckMainRunner:
             "Runnning checks in parallel with pool size of %s.",
             self._pool_size,
         )
-        with _sphinx.load_sphinx_if_available(), multiprocessing.Pool(self._pool_size) as pool:
+        with multiprocessing.Pool(self._pool_size) as pool:
             return pool.starmap(
                 checker.check_file,
                 [(file, self.config, self.overwrite_config) for file in self._files_to_check],

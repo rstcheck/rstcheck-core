@@ -70,16 +70,15 @@ def check_file(
 
     _docutils.clean_docutils_directives_and_roles_cache()
 
-    with _sphinx.load_sphinx_if_available():
-        return list(
-            check_source(
-                source,
-                source_file=source_file,
-                ignores=ignore_dict,
-                report_level=run_config.report_level or config.DEFAULT_REPORT_LEVEL,
-                warn_unknown_settings=run_config.warn_unknown_settings or False,
-            )
+    return list(
+        check_source(
+            source,
+            source_file=source_file,
+            ignores=ignore_dict,
+            report_level=run_config.report_level or config.DEFAULT_REPORT_LEVEL,
+            warn_unknown_settings=run_config.warn_unknown_settings or False,
         )
+    )
 
 
 def _load_run_config(
@@ -231,30 +230,16 @@ def check_source(
         # "self.state.document.settings.env". Ignore this for now until we
         # figure out a better approach.
         # https://github.com/rstcheck/rstcheck-core/issues/3
-        try:
-            docutils.core.publish_string(
-                source,
-                writer=writer,
-                source_path=str(source_origin),
-                settings_overrides={
-                    "halt_level": 5,
-                    "report_level": report_level.value,
-                    "warning_stream": string_io,
-                },
-            )
-        except AttributeError:
-            if not _extras.SPHINX_INSTALLED:
-                raise
-            logger.warning(
-                "An `AttributeError` error occured. This is most probably due to a code block "
-                "directive (code/code-block/sourcecode) without a specified language. "
-                "This may result in a false negative for source: '%s'. "
-                "The reason can also be another directive. "
-                "For more information see the FAQ (https://rstcheck-core.rtfd.io/en/latest/faq) "
-                "or the corresponding github issue: "
-                "https://github.com/rstcheck/rstcheck-core/issues/3.",
-                source_origin,
-            )
+        docutils.core.publish_string(
+            source,
+            writer=writer,
+            source_path=str(source_origin),
+            settings_overrides={
+                "halt_level": 5,
+                "report_level": report_level.value,
+                "warning_stream": string_io,
+            },
+        )
 
     yield from _run_code_checker_and_filter_errors(writer.checkers, ignores["messages"])
 
@@ -306,6 +291,20 @@ def _parse_and_filter_rst_errors(
             yield _parse_gcc_style_error_message(
                 message, source_origin=source_origin, has_column=False
             )
+
+
+def _get_source_path(node: docutils.nodes.Element) -> str | None:
+    """Iterate through all parent nodes until we get a valid source path.
+
+    :param node: A docutils node
+    :return: String with rst source path
+    """
+    current_node = node
+    source = current_node.source
+    while current_node and not source:
+        current_node = current_node.parent
+        source = current_node.source
+    return source
 
 
 class _CheckWriter(docutils.writers.Writer):  # type: ignore[type-arg]
@@ -415,6 +414,34 @@ class _CheckTranslator(docutils.nodes.NodeVisitor):
             is_code_node=False,
         )
 
+    def _get_code_block_directive_line(self, node: docutils.nodes.Element) -> int | None:
+        """Find line of code block directive.
+
+        :param node: The code block node
+        :return: Line of code block directive or :py:obj:`None`
+        """
+        line_number = node.line
+        if line_number is None:
+            try:
+                line_number = _generate_directive_line(node)
+            except IndexError:
+                return None
+
+        if line_number is None:
+            return None
+
+        node_source = _get_source_path(node)
+        if node_source and node_source != str(self.source_origin):
+            lines = _get_source(pathlib.Path(node_source)).splitlines()
+        else:
+            lines = self.source.splitlines()
+
+        for line_no in range(line_number, 1, -1):
+            if CODE_BLOCK_RE.match(lines[line_no - 2].strip()) is not None:
+                return line_no - 1
+
+        return None
+
     def visit_literal_block(self, node: docutils.nodes.Element) -> None:
         """Add check for syntax of code block.
 
@@ -432,7 +459,7 @@ class _CheckTranslator(docutils.nodes.NodeVisitor):
                 return
             language = classes[-1]
 
-        directive_line = _get_code_block_directive_line(node, self.source)
+        directive_line = self._get_code_block_directive_line(node)
         if directive_line is None:
             logger.warning(
                 "Could not find line for literal block directive. "
@@ -568,24 +595,23 @@ def _beginning_of_code_block(
 CODE_BLOCK_RE = re.compile(r"\.\. code::|\.\. code-block::|\.\. sourcecode::")
 
 
-def _get_code_block_directive_line(node: docutils.nodes.Element, full_contents: str) -> int | None:
-    """Find line of code block directive.
+def _generate_directive_line(node: docutils.nodes.Element) -> int | None:
+    """Generate a line number based on the parent rawsource.
 
     :param node: The code block node
-    :param full_contents: The node's contents
     :return: Line of code block directive or :py:obj:`None`
     """
-    line_number = node.line
-    if line_number is None:
-        return None
-
-    if _extras.SPHINX_INSTALLED:
-        return line_number
-
-    lines = full_contents.splitlines()
-    for line_no in range(line_number, 1, -1):
-        if CODE_BLOCK_RE.match(lines[line_no - 2].strip()) is not None:
-            return line_no - 1
+    parent = node.parent
+    if parent:
+        child_index = parent.index(node)
+        child_grouped_lines = parent.rawsource.split(parent.child_text_separator)
+        preceeding_rawsoruce = parent.child_text_separator.join(
+            child_grouped_lines[: child_index + 2]
+        )
+        parent_line = parent.line if parent.line else _generate_directive_line(parent)
+        if parent_line:
+            node.line = len(preceeding_rawsoruce.splitlines()) + parent_line
+        return node.line
 
     return None
 
