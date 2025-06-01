@@ -26,7 +26,7 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
-sphinx = ["sphinx >=5.0"]
+sphinx = ["sphinx >=6.0"]
 toml = ["tomli >=2.0; python_version<='3.10'"]
 yaml = ["pyyaml >= 6.0.0"]
 testing = [
@@ -39,7 +39,7 @@ testing = [
     "pytest-mock >=3.7",
 ]
 docs = [
-    "sphinx >=5.0, !=7.2.5",
+    "sphinx >=6.0, !=7.2.5",
     "myst-parser >=3",
     "sphinx-rtd-theme >=1.2",
     "sphinx-autodoc-typehints >=1.15",
