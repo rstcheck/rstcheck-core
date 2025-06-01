@@ -688,6 +688,35 @@ class CodeBlockChecker:
                 source_origin=self.source_origin, line_number=int(line_number), message=message
             )
 
+    def check_jsonc(self, source_code: str) -> types.YieldedLintError:
+        """Check JSONC (JSON with comments) source for syntax errors.
+
+        :param source: JSONC source code to check
+        :return: :py:obj:`None`
+        :yield: Found issues
+        """
+        logger.debug("Check JSONC source.")
+        # strip comments from JSONc source then pass through the JSON validator;
+        # split and strip full line comments
+        source_lines = [
+            line for line in source_code.splitlines() if not line.strip().startswith("//")
+        ]
+        for ind, line in enumerate(source_lines):
+            if "//" in line:
+                source_lines[ind] = line.split("//")[0].strip()
+        source_code = "\n".join(source_lines)
+
+        try:
+            json.loads(source_code)
+        except ValueError as exception:
+            message = f"{exception}"
+            found = EXCEPTION_LINE_NO_REGEX.search(message)
+            line_number = int(found.group(1)) if found else 0
+
+            yield types.LintError(
+                source_origin=self.source_origin, line_number=int(line_number), message=message
+            )
+
     def check_yaml(self, source_code: str) -> types.YieldedLintError:
         """Check YAML source for syntax errors.
 
