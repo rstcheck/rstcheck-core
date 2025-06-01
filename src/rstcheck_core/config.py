@@ -322,12 +322,12 @@ def _load_config_from_toml_file(
     resolved_file = toml_file.resolve()
 
     if not resolved_file.is_file():
-        logging.error("Config file is not a file: '%s'.", toml_file)
+        logger.error("Config file is not a file: '%s'.", toml_file)
         msg = f"{resolved_file}"
         raise FileNotFoundError(msg)
 
     if resolved_file.suffix.casefold() != ".toml":
-        logging.error("Config file is not a TOML file: '%s'.", toml_file)
+        logger.error("Config file is not a TOML file: '%s'.", toml_file)
         msg = "File is not a TOML file"
         raise ValueError(msg)
 

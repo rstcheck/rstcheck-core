@@ -11,8 +11,6 @@ from importlib.metadata import metadata
 from importlib.util import find_spec
 from pathlib import Path
 
-import sphinx_rtd_theme  # type: ignore[import-untyped]
-
 if t.TYPE_CHECKING:
     import sphinx.ext.autodoc
     from sphinx.application import Sphinx
@@ -184,7 +182,6 @@ else:
 #: needs install: "sphinx-rtd-theme"
 extensions.append("sphinx_rtd_theme")
 html_theme = "sphinx_rtd_theme"
-html_theme_path = [sphinx_rtd_theme.get_html_theme_path()]
 html_theme_options = {"style_external_links": True, "navigation_depth": 5}
 
 

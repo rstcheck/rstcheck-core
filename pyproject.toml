@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "rstcheck-core"
-requires-python = ">=3.8"
+requires-python = ">=3.9"
 authors = [
   { name = "Steven Myint", email = "git@stevenmyint.com" },
 ]
@@ -23,8 +23,6 @@ dynamic = ["version"]
 dependencies = [
   "docutils >=0.7",
   "pydantic >=2",
-  "importlib-metadata >=1.6; python_version<='3.8'",
-  "typing-extensions >=3.7.4; python_version<='3.8'",
 ]
 
 [project.optional-dependencies]
@@ -173,7 +171,7 @@ select = [
   "SLOT",  # flake8-slots
   # "T10",   # flake8-debugger # pre-commit hook does that
   "T20",   # flake8-print
-  "TCH",   # flake8-type-checking
+  "TC",   # flake8-type-checking
   "TD",    # flake8-todos
   "TID",   # flake8-tidy-imports
   "TRY",   # tryceratops
@@ -183,8 +181,6 @@ select = [
 ]
 ignore = [
   # deactivate because unwanted
-  "ANN101",   # type self
-  "ANN102",   # type cls
   "E501",     # line length
   "G00",      # logging uses format strings
   "PT011",    # Use match for specific exceptions in pytest.raises
@@ -204,7 +200,6 @@ ignore = [
   "Q003",     # avoidable-escaped-quote
   "COM812",   # missing-trailing-comma
   "COM819",   # prohibited-trailing-comma
-  "PT011", # Use match for specific exceptions in pytest.raises
   "ISC001",   # single-line-implicit-string-concatenation
   "ISC002",   # multi-line-implicit-string-concatenation
 ]

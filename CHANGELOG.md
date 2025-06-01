@@ -23,6 +23,8 @@ NOTE: please use them in this order.
 
 - Update configs for dev tooling ([#96](https://github.com/rstcheck/rstcheck-core/pull/96))
 - Bump default python version to 3.12 ([#96](https://github.com/rstcheck/rstcheck-core/pull/96))
+- Dropped support for python 3.8
+- Added python 3.13 to tox config as preparation for adding the version to the test pool. ([#109](https://github.com/rstcheck/rstcheck/issues/109))
 - Try to generate a line number for code blocks that don't have one
 
 ### Bugfixes

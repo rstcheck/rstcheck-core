@@ -1,6 +1,6 @@
 ---
 minimum_pre_commit_version: "2.17"
-default_stages: [commit]
+default_stages: [pre-commit]
 default_language_version:
   python: python3.12
 
@@ -15,7 +15,7 @@ repos:
   - repo: meta
     hooks:
       - id: identity
-        stages: [commit, manual]
+        stages: [pre-commit, manual]
       - id: check-hooks-apply
         stages: [manual]
       - id: check-useless-excludes
@@ -27,12 +27,12 @@ repos:
 
   # file checking out-of-the-box hooks
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: 2c9f875913ee60ca25ce70243dc24d5b6415598c # frozen: v4.6.0
+    rev: cef0300fd0fc4d2a87a85fa2093c6b283ea36f4b # frozen: v5.0.0
     hooks:
       - id: check-case-conflict
       - id: check-shebang-scripts-are-executable
         exclude: '^.*\.rs$'
-        stages: [commit]
+        stages: [pre-commit]
       - id: check-symlinks
       - id: destroyed-symlinks
       - id: forbid-new-submodules
@@ -49,7 +49,7 @@ repos:
 
   # ruff - python linter with fixing ability
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: ac97362543353002a47d6cae8918b25444d102df # frozen: v0.5.7
+    rev: 76e47323a83cd9795e4ff9a1de1c0d2eef610f17 # frozen: v0.11.11
     hooks:
       - id: ruff
         name: ruff (fix)
@@ -59,7 +59,7 @@ repos:
 
   # blacken-docs - black for python code in docs (rst/md/tex)
   - repo: https://github.com/asottile/blacken-docs
-    rev: 4c97c4a0d921007af6fefae92d8447cfbf63720b # frozen: 1.18.0
+    rev: 78a9dcbecf4f755f65d1f3dec556bc249d723600 # frozen: 1.19.1
     hooks:
       - id: blacken-docs
         args: ["--line-length=100", "--target-version=py312"]
@@ -104,12 +104,12 @@ repos:
 
   # code unspecific out-of-the-box hooks
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: 2c9f875913ee60ca25ce70243dc24d5b6415598c # frozen: v4.6.0
+    rev: cef0300fd0fc4d2a87a85fa2093c6b283ea36f4b # frozen: v5.0.0
     hooks:
       - id: end-of-file-fixer
-        stages: [commit]
+        stages: [pre-commit]
       - id: trailing-whitespace
-        stages: [commit]
+        stages: [pre-commit]
 
   # ####################################################################################
   #
@@ -134,7 +134,7 @@ repos:
 
   # code unspecific out-of-the-box hooks
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: 2c9f875913ee60ca25ce70243dc24d5b6415598c # frozen: v4.6.0
+    rev: cef0300fd0fc4d2a87a85fa2093c6b283ea36f4b # frozen: v5.0.0
     hooks:
       - id: check-merge-conflict
       - id: detect-private-key
@@ -145,7 +145,7 @@ repos:
 
   # ruff - python linter with fixing ability
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: ac97362543353002a47d6cae8918b25444d102df # frozen: v0.5.7
+    rev: 76e47323a83cd9795e4ff9a1de1c0d2eef610f17 # frozen: v0.11.11
     hooks:
       - id: ruff
         name: ruff (lint)
@@ -156,7 +156,7 @@ repos:
 
   # python specific out-of-the-box hooks
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: 2c9f875913ee60ca25ce70243dc24d5b6415598c # frozen: v4.6.0
+    rev: cef0300fd0fc4d2a87a85fa2093c6b283ea36f4b # frozen: v5.0.0
     hooks:
       - id: debug-statements
       - id: fix-encoding-pragma
@@ -180,7 +180,7 @@ repos:
 
   # pylint - python linter
   - repo: https://github.com/PyCQA/pylint/
-    rev: da1956664d6be3d008a90ad3f72bdd9d8a7ecfaa # frozen: v3.2.6
+    rev: f798a4a3508bcbb8ad0773ae14bf32d28dcfdcbe # frozen: v3.3.7
     hooks:
       - id: pylint
         name: spell-check (pylint+pyenchant)
@@ -218,7 +218,7 @@ repos:
 
   # markdownlint - md file checker
   - repo: https://github.com/DavidAnson/markdownlint-cli2
-    rev: 24eb4dce508ab81398d14d75179123fca425f12d # frozen: v0.13.0
+    rev: d7a4f7cf4914d3bffb9b83bdbc45fd2a00c91ff9 # frozen: v0.18.1
     hooks:
       - id: markdownlint-cli2
 
@@ -228,13 +228,13 @@ repos:
 
   # JSON specific out-of-the-box hooks
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: 2c9f875913ee60ca25ce70243dc24d5b6415598c # frozen: v4.6.0
+    rev: cef0300fd0fc4d2a87a85fa2093c6b283ea36f4b # frozen: v5.0.0
     hooks:
       - id: check-toml
       - id: check-yaml
 
   # yamllint - yaml linter
   - repo: https://github.com/adrienverge/yamllint
-    rev: 81e9f98ffd059efe8aa9c1b1a42e5cce61b640c6 # frozen: v1.35.1
+    rev: 79a6b2b1392eaf49cdd32ac4f14be1a809bbd8f7 # frozen: v1.37.1
     hooks:
       - id: yamllint
