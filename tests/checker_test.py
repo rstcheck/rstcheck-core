@@ -779,6 +779,78 @@ if mystring is "ok":
         assert "Expecting value:" in result[0]["message"]
 
     @staticmethod
+    def test_check_jsonc_returns_error_on_bad_code_block() -> None:
+        """Test ``check_jsonc`` returns error on bad code block."""
+        source = """
+{
+    "key":
+}
+"""
+        cb_checker = checker.CodeBlockChecker("<string>")
+
+        result = list(cb_checker.check_jsonc(source))
+
+        assert len(result) == 1
+        assert "Expecting value:" in result[0]["message"]
+
+    @staticmethod
+    def test_check_jsonc_returns_none_on_ok_code_block() -> None:
+        """Test ``check_jsonc`` returns ``None`` on ok code block."""
+        source = """
+{
+    "key": "value"
+}
+"""
+        cb_checker = checker.CodeBlockChecker("<string>")
+
+        result = list(cb_checker.check_jsonc(source))
+
+        assert not result
+
+    @staticmethod
+    def test_check_jsonc_returns_no_error_on_full_line_comment_block() -> None:
+        """Test ``check_jsonc`` returns error on bad code block."""
+        source = """
+{
+    // this key has an annotation
+    "key": "value"
+}
+"""
+        cb_checker = checker.CodeBlockChecker("<string>")
+
+        result = list(cb_checker.check_jsonc(source))
+
+        assert not result
+
+    @staticmethod
+    def test_check_jsonc_returns_no_error_on_inline_comment_block() -> None:
+        """Test ``check_jsonc`` returns error on bad code block."""
+        source = """
+{
+    "key": "value" // this key has an annotation
+}
+"""
+        cb_checker = checker.CodeBlockChecker("<string>")
+
+        result = list(cb_checker.check_jsonc(source))
+
+        assert not result
+
+    @staticmethod
+    def test_check_jsonc_returns_no_error_in_awkward_inline_comment_block() -> None:
+        """Test ``check_jsonc`` returns error on bad code block."""
+        source = """
+{
+        "key": "value", "next_key": "http://example.org", "//": "another_value", // this key has an annotation
+}
+"""
+        cb_checker = checker.CodeBlockChecker("<string>")
+
+        result = list(cb_checker.check_jsonc(source))
+
+        assert not result
+
+    @staticmethod
     @pytest.mark.skipif(checker.yaml_imported is False, reason="Requires pyyaml to be installed")
     def test_check_yaml_returns_none_on_ok_code_block_no_pyyaml(
         mocker: pytest_mock.MockerFixture,
