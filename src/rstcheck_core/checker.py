@@ -133,10 +133,11 @@ def _get_source(source_file: pathlib.Path) -> str:
 
 def _process_include_directives(
     source: str, source_origin: types.SourceFileOrString
-) -> (str, list[types.LintError]):
+) -> tuple[str, list[types.LintError]]:
     """Strip include directives from source and check existence of included files.
 
-    This is a workaround for Sphinx which raises AttributeError on encountering an include directive.
+    This is a workaround for Sphinx which raises AttributeError on
+    encountering an include directive.
 
     :param source: Source to remove include directives from
     :param source_origin: Origin of the source
