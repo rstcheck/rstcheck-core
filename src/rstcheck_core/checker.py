@@ -131,7 +131,9 @@ def _get_source(source_file: pathlib.Path) -> str:
         return input_file.read()
 
 
-def _process_include_directives(source: str, source_origin: types.SourceFileOrString) -> (str, list[types.LintError]):
+def _process_include_directives(
+    source: str, source_origin: types.SourceFileOrString
+) -> (str, list[types.LintError]):
     """Strip include directives from source and check existence of included files.
 
     This is a workaround for Sphinx which raises AttributeError on encountering an include directive.
@@ -156,10 +158,19 @@ def _process_include_directives(source: str, source_origin: types.SourceFileOrSt
         ):
             target_path = base_dir / target_path
 
-        if not (file_path_str.startswith("<") and file_path_str.endswith(">")) and not target_path.is_file():
+        if (
+            not (file_path_str.startswith("<") and file_path_str.endswith(">"))
+            and not target_path.is_file()
+        ):
             line_number = source[: match.start()].count("\n") + 1
-            message = f'(SEVERE/4) File referenced in "include" directive not found: \'{file_path_str}\'.'
-            found_errors.append(types.LintError(source_origin=source_origin, line_number=line_number, message=message))
+            message = (
+                f"(SEVERE/4) File referenced in \"include\" directive not found: '{file_path_str}'."
+            )
+            found_errors.append(
+                types.LintError(
+                    source_origin=source_origin, line_number=line_number, message=message
+                )
+            )
 
         return ""
 
