@@ -42,6 +42,7 @@ logger = logging.getLogger(__name__)
 EXCEPTION_LINE_NO_REGEX = re.compile(r": line\s+([0-9]+)[^:]*$")
 DOCTEST_LINE_NO_REGEX = re.compile(r"line ([0-9]+)")
 MARKDOWN_LINK_REGEX = re.compile(r"\[[^\]]+\]\([^\)]+\)")
+INCLUDE_REGEX = re.compile(r"^([ \t]*\.\.[ \t]+include::)[ \t]+(.+)$", flags=re.MULTILINE)
 
 
 def check_file(
@@ -130,6 +131,42 @@ def _get_source(source_file: pathlib.Path) -> str:
         return input_file.read()
 
 
+def _process_include_directives(source: str, source_origin: types.SourceFileOrString) -> (str, list[types.LintError]):
+    """Strip include directives from source and check existence of included files.
+
+    This is a workaround for Sphinx which raises AttributeError on encountering an include directive.
+
+    :param source: Source to remove include directives from
+    :param source_origin: Origin of the source
+    :return: Tuple of cleaned source and found errors
+    """
+    found_errors: list[types.LintError] = []
+
+    def replace_include(match: re.Match[str]) -> str:
+        file_path_str = match.group(2).strip()
+
+        if isinstance(source_origin, pathlib.Path) and source_origin.name != "-":
+            base_dir = source_origin.parent
+        else:
+            base_dir = pathlib.Path.cwd()
+
+        target_path = pathlib.Path(file_path_str)
+        if not target_path.is_absolute() and not (
+            file_path_str.startswith("<") and file_path_str.endswith(">")
+        ):
+            target_path = base_dir / target_path
+
+        if not (file_path_str.startswith("<") and file_path_str.endswith(">")) and not target_path.is_file():
+            line_number = source[: match.start()].count("\n") + 1
+            message = f'(SEVERE/4) File referenced in "include" directive not found: \'{file_path_str}\'.'
+            found_errors.append(types.LintError(source_origin=source_origin, line_number=line_number, message=message))
+
+        return ""
+
+    source = INCLUDE_REGEX.sub(replace_include, source)
+    return source, found_errors
+
+
 def _replace_ignored_substitutions(source: str, ignore_substitutions: list[str]) -> str:
     """Replace rst substitutions from the ignore list with a dummy.
 
@@ -202,6 +239,9 @@ def check_source(
             source, source_origin, warn_unknown_settings=warn_unknown_settings
         )
     )
+
+    source, include_errors = _process_include_directives(source, source_origin)
+    yield from include_errors
 
     source = _replace_ignored_substitutions(source, ignores["substitutions"])
 
