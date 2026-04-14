@@ -22,6 +22,7 @@ Additional contributions by (sorted by name)
 - John Vandenberg <jayvdb@gmail.com>
 - Kagami Sascha Rosylight <saschanaz@outlook.com>
 - Keith Maxwell <keith.maxwell@gmail.com>
+- Kristian Glass <git@doismellburning.co.uk>
 - LCD 47 <lcd047@gmail.com>
 - Maël Pedretti <73VW@users.noreply.github.com>
 - Michael Fladischer <FladischerMichael@fladi.at>
