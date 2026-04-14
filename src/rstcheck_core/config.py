@@ -86,12 +86,12 @@ class RstcheckConfigFile(pydantic.BaseModel):
     :raises pydantic.ValidationError: If setting is not parsable into correct type
     """
 
-    report_level: t.Optional[ReportLevel] = None  # noqa: UP007
-    ignore_directives: t.Optional[t.List[str]] = None  # noqa: UP007,UP006
-    ignore_roles: t.Optional[t.List[str]] = None  # noqa: UP007,UP006
-    ignore_substitutions: t.Optional[t.List[str]] = None  # noqa: UP007,UP006
-    ignore_languages: t.Optional[t.List[str]] = None  # noqa: UP007,UP006
-    ignore_messages: t.Optional[t.Pattern[str]] = None  # noqa: UP007
+    report_level: t.Optional[ReportLevel] = None  # noqa: UP045
+    ignore_directives: t.Optional[t.List[str]] = None  # noqa: UP045,UP006
+    ignore_roles: t.Optional[t.List[str]] = None  # noqa: UP045,UP006
+    ignore_substitutions: t.Optional[t.List[str]] = None  # noqa: UP045,UP006
+    ignore_languages: t.Optional[t.List[str]] = None  # noqa: UP045,UP006
+    ignore_messages: t.Optional[t.Pattern[str]] = None  # noqa: UP045
 
     @pydantic.field_validator("report_level", mode="before")
     @classmethod
@@ -189,9 +189,9 @@ class RstcheckConfig(RstcheckConfigFile):
     :raises pydantic.ValidationError: If setting is not parsable into correct type
     """
 
-    config_path: t.Optional[pathlib.Path] = None  # noqa: UP007
-    recursive: t.Optional[bool] = None  # noqa: UP007
-    warn_unknown_settings: t.Optional[bool] = None  # noqa: UP007
+    config_path: t.Optional[pathlib.Path] = None  # noqa: UP045
+    recursive: t.Optional[bool] = None  # noqa: UP045
+    warn_unknown_settings: t.Optional[bool] = None  # noqa: UP045
 
 
 class _RstcheckConfigINIFile(pydantic.BaseModel):
@@ -203,11 +203,11 @@ class _RstcheckConfigINIFile(pydantic.BaseModel):
     """
 
     report_level: t.Union[str, int, None] = None  # noqa: UP007
-    ignore_directives: t.Optional[str] = None  # noqa: UP007
-    ignore_roles: t.Optional[str] = None  # noqa: UP007
-    ignore_substitutions: t.Optional[str] = None  # noqa: UP007
-    ignore_languages: t.Optional[str] = None  # noqa: UP007
-    ignore_messages: t.Optional[str] = None  # noqa: UP007
+    ignore_directives: t.Optional[str] = None  # noqa: UP045
+    ignore_roles: t.Optional[str] = None  # noqa: UP045
+    ignore_substitutions: t.Optional[str] = None  # noqa: UP045
+    ignore_languages: t.Optional[str] = None  # noqa: UP045
+    ignore_messages: t.Optional[str] = None  # noqa: UP045
 
 
 def _load_config_from_ini_file(
@@ -281,10 +281,10 @@ class _RstcheckConfigTOMLFile(pydantic.BaseModel):
     """
 
     report_level: t.Union[str, int, None] = None  # noqa: UP007
-    ignore_directives: t.Optional[t.List[str]] = None  # noqa: UP006, UP007
-    ignore_roles: t.Optional[t.List[str]] = None  # noqa: UP006, UP007
-    ignore_substitutions: t.Optional[t.List[str]] = None  # noqa: UP006, UP007
-    ignore_languages: t.Optional[t.List[str]] = None  # noqa: UP006, UP007
+    ignore_directives: t.Optional[t.List[str]] = None  # noqa: UP006, UP045
+    ignore_roles: t.Optional[t.List[str]] = None  # noqa: UP006, UP045
+    ignore_substitutions: t.Optional[t.List[str]] = None  # noqa: UP006, UP045
+    ignore_languages: t.Optional[t.List[str]] = None  # noqa: UP006, UP045
     ignore_messages: t.Union[t.List[str], str, None] = None  # noqa: UP006, UP007
 
 
@@ -334,7 +334,7 @@ def _load_config_from_toml_file(
     with pathlib.Path(resolved_file).open("rb") as toml_file_handle:
         toml_dict = tomllib.load(toml_file_handle)
 
-    rstcheck_section: t.Optional[dict[str, t.Any]] = toml_dict.get("tool", {}).get(  # noqa: UP007
+    rstcheck_section: t.Optional[dict[str, t.Any]] = toml_dict.get("tool", {}).get(  # noqa: UP045
         "rstcheck"
     )
 
