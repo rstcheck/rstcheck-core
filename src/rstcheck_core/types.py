@@ -5,7 +5,7 @@ from __future__ import annotations
 import pathlib
 import typing as t
 
-SourceFileOrString = t.Union[pathlib.Path, t.Literal["<string>", "<stdin>"]]  # noqa: UP007
+SourceFileOrString = pathlib.Path | t.Literal["<string>", "<stdin>"]
 """Path to source file or if it is a string then '<string>' or '<stdin>'."""
 
 
