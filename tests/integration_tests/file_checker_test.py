@@ -340,23 +340,6 @@ class TestInlineFlowControlComments:
     """Test inline flow control comments to e.g. skip things."""
 
     @staticmethod
-    @pytest.mark.skipif(sys.version_info[0:2] > (3, 9), reason="Requires python3.9 or lower")
-    def test_bad_example_has_only_one_issue_pre310() -> None:
-        """Test only one issue is detected for two same code-blocks.
-
-        One code-block has skip comment.
-        """
-        test_file = EXAMPLES_DIR / "inline_config" / "with_inline_skip_code_block.rst"
-        init_config = config.RstcheckConfig()
-
-        result = checker.check_file(test_file, init_config)
-
-        assert len(result) == 1
-        err_msgs = "  ".join([e["message"] for e in result])
-        assert len(re.findall(r"unexpected EOF while parsing", err_msgs)) == 1
-
-    @staticmethod
-    @pytest.mark.skipif(sys.version_info < (3, 10), reason="Requires python3.10 or higher")
     def test_bad_example_has_only_one_issue() -> None:
         """Test only one issue is detected for two same code-blocks.
 
@@ -372,23 +355,6 @@ class TestInlineFlowControlComments:
         assert len(re.findall(r"'\(' was never closed", err_msgs)) == 1
 
     @staticmethod
-    @pytest.mark.skipif(sys.version_info[0:2] > (3, 9), reason="Requires python3.9 or lower")
-    def test_nested_bad_example_has_only_one_issue_pre310() -> None:
-        """Test only one issue is detected for two same nested code-blocks.
-
-        One code-block has skip comment.
-        """
-        test_file = EXAMPLES_DIR / "inline_config" / "with_nested_inline_skip_code_block.rst"
-        init_config = config.RstcheckConfig()
-
-        result = checker.check_file(test_file, init_config)
-
-        assert len(result) == 1
-        err_msgs = "  ".join([e["message"] for e in result])
-        assert len(re.findall(r"unexpected EOF while parsing", err_msgs)) == 1
-
-    @staticmethod
-    @pytest.mark.skipif(sys.version_info < (3, 10), reason="Requires python3.10 or higher")
     def test_nested_bad_example_has_only_one_issue() -> None:
         """Test only one issue is detected for two same nested code-blocks.
 

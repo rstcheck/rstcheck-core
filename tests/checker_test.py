@@ -245,25 +245,6 @@ Test
         assert not result
 
     @staticmethod
-    @pytest.mark.skipif(sys.version_info[0:2] > (3, 9), reason="Requires python3.9 or lower")
-    def test_code_block_lint_error_returned_on_default_ignore_pre310() -> None:
-        """Test code lint error is returned with default ignores.
-
-        In Python version 3.10 the error message changed.
-        """
-        source = """
-.. code:: python
-
-    print(
-"""
-
-        result = list(checker.check_source(source))
-
-        assert len(result) == 1
-        assert "unexpected EOF while parsing" in result[0]["message"]
-
-    @staticmethod
-    @pytest.mark.skipif(sys.version_info < (3, 10), reason="Requires python3.10 or higher")
     def test_code_block_lint_error_returned_on_default_ignore() -> None:
         """Test code lint error is returned with default ignores."""
         source = """
@@ -278,25 +259,6 @@ Test
         assert "'(' was never closed" in result[0]["message"]
 
     @staticmethod
-    @pytest.mark.skipif(sys.version_info[0:2] > (3, 9), reason="Requires python3.9 or lower")
-    def test_code_block_no_error_on_set_ignore_pre310() -> None:
-        """Test code lint error is skipped with set ignores.
-
-        In Python version 3.10 the error message changed.
-        """
-        source = """
-.. code:: python
-
-    print(
-"""
-        ignores = types.construct_ignore_dict(messages=re.compile(r"unexpected EOF while parsing"))
-
-        result = list(checker.check_source(source, ignores=ignores))
-
-        assert not result
-
-    @staticmethod
-    @pytest.mark.skipif(sys.version_info < (3, 10), reason="Requires python3.10 or higher")
     def test_code_block_no_error_on_set_ignore() -> None:
         """Test code lint error is skipped with set ignores."""
         source = """
@@ -327,32 +289,6 @@ Test
 
     @staticmethod
     @pytest.mark.skipif(_extras.SPHINX_INSTALLED, reason="Test without sphinx extra.")
-    @pytest.mark.skipif(sys.version_info[0:2] > (3, 9), reason="Requires python3.9 or lower")
-    @pytest.mark.parametrize("code_block_directive", ["code", "code-block", "sourcecode"])
-    def test_code_block_without_language_works_without_sphinx_pre310(
-        code_block_directive: str,
-    ) -> None:
-        """Test code blocks without a language are not checked and do not error without sphinx."""
-        source = f"""
-.. {code_block_directive}::
-
-    print(
-
-.. {code_block_directive}:: python
-
-    print(
-"""
-        ignores = types.construct_ignore_dict()
-
-        result = list(checker.check_source(source, ignores=ignores))
-
-        assert len(result) == 1
-        assert result[0]["line_number"] == 8
-        assert "unexpected EOF while parsing" in result[0]["message"]
-
-    @staticmethod
-    @pytest.mark.skipif(_extras.SPHINX_INSTALLED, reason="Test without sphinx extra.")
-    @pytest.mark.skipif(sys.version_info < (3, 10), reason="Requires python3.10 or higher")
     @pytest.mark.parametrize("code_block_directive", ["code", "code-block", "sourcecode"])
     def test_code_block_without_language_works_without_sphinx(
         code_block_directive: str,
@@ -377,38 +313,6 @@ Test
 
     @staticmethod
     @pytest.mark.skipif(not _extras.SPHINX_INSTALLED, reason="Depends on sphinx extra.")
-    @pytest.mark.skipif(sys.version_info[0:2] > (3, 9), reason="Requires python3.9 or lower")
-    @pytest.mark.xfail(
-        reason="Sphinx support fails for language-less code blocks. See #3", strict=True
-    )
-    @pytest.mark.parametrize("code_block_directive", ["code", "code-block", "sourcecode"])
-    def test_code_block_without_language_is_works_with_sphinx_pre310(
-        code_block_directive: str,
-    ) -> None:
-        """Test code blocks without a language are working and do not error with sphinx."""
-        source = f"""
-.. {code_block_directive}::
-
-    print(
-
-.. {code_block_directive}:: python
-
-    print(
-"""
-        ignores = types.construct_ignore_dict()
-        # fmt: off
-        with _sphinx.load_sphinx_if_available():
-
-            result = list(checker.check_source(source, ignores=ignores))
-
-        # fmt: on
-        assert len(result) == 1
-        assert result[0]["line_number"] == 9
-        assert "unexpected EOF while parsing" in result[0]["message"]
-
-    @staticmethod
-    @pytest.mark.skipif(not _extras.SPHINX_INSTALLED, reason="Depends on sphinx extra.")
-    @pytest.mark.skipif(sys.version_info < (3, 10), reason="Requires python3.10 or higher")
     @pytest.mark.xfail(
         reason="Sphinx support fails for language-less code blocks. See #3", strict=True
     )
@@ -636,24 +540,6 @@ print("rstcheck")
         assert not result
 
     @staticmethod
-    @pytest.mark.skipif(sys.version_info[0:2] > (3, 9), reason="Requires python3.9 or lower")
-    def test_check_returns_error_on_bad_code_block_for_supported_lang_pre310() -> None:
-        """Test ``check`` returns error on bad code block for supported language.
-
-        In Python version 3.10 the error message changed.
-        """
-        source = """
-print(
-"""
-        cb_checker = checker.CodeBlockChecker("<string>")
-
-        result = list(cb_checker.check(source, "python"))
-
-        assert len(result) == 1
-        assert "unexpected EOF while parsing" in result[0]["message"]
-
-    @staticmethod
-    @pytest.mark.skipif(sys.version_info < (3, 10), reason="Requires python3.10 or higher")
     def test_check_returns_error_on_bad_code_block_for_supported_lang() -> None:
         """Test ``check`` returns error on bad code block for supported language."""
         source = """
@@ -679,24 +565,6 @@ print("rstcheck")
         assert not result
 
     @staticmethod
-    @pytest.mark.skipif(sys.version_info[0:2] > (3, 9), reason="Requires python3.9 or lower")
-    def test_check_python_returns_error_on_bad_code_block_pre310() -> None:
-        """Test ``check_python`` returns error on bad code block.
-
-        In Python version 3.10 the error message changed.
-        """
-        source = """
-print(
-"""
-        cb_checker = checker.CodeBlockChecker("<string>")
-
-        result = list(cb_checker.check_python(source))
-
-        assert len(result) == 1
-        assert "unexpected EOF while parsing" in result[0]["message"]
-
-    @staticmethod
-    @pytest.mark.skipif(sys.version_info < (3, 10), reason="Requires python3.10 or higher")
     def test_check_python_returns_error_on_bad_code_block() -> None:
         """Test ``check_python`` returns error on bad code block."""
         source = """
