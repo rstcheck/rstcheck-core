@@ -508,23 +508,6 @@ class TestInlineFlowControlComments:
     """Test inline flow control comments to e.g. skip things."""
 
     @staticmethod
-    @pytest.mark.skipif(sys.version_info[0:2] > (3, 9), reason="Requires python3.9 or lower")
-    def test_bad_example_has_only_one_issue_pre310(capsys: pytest.CaptureFixture[str]) -> None:
-        """Test only one issue is detected for two same code-blocks.
-
-        One code-block has skip comment.
-        """
-        test_file = EXAMPLES_DIR / "inline_config" / "with_inline_skip_code_block.rst"
-        init_config = config.RstcheckConfig()
-        _runner = runner.RstcheckMainRunner(check_paths=[test_file], rstcheck_config=init_config)
-
-        result = _runner.run()
-
-        assert result != 0
-        assert len(re.findall(r"unexpected EOF while parsing", capsys.readouterr().err)) == 1
-
-    @staticmethod
-    @pytest.mark.skipif(sys.version_info < (3, 10), reason="Requires python3.10 or higher")
     def test_bad_example_has_only_one_issue(capsys: pytest.CaptureFixture[str]) -> None:
         """Test only one issue is detected for two same code-blocks.
 
@@ -540,25 +523,6 @@ class TestInlineFlowControlComments:
         assert len(re.findall(r"'\(' was never closed", capsys.readouterr().err)) == 1
 
     @staticmethod
-    @pytest.mark.skipif(sys.version_info[0:2] > (3, 9), reason="Requires python3.9 or lower")
-    def test_nested_bad_example_has_only_one_issue_pre310(
-        capsys: pytest.CaptureFixture[str],
-    ) -> None:
-        """Test only one issue is detected for two same nested code-blocks.
-
-        One code-block has skip comment.
-        """
-        test_file = EXAMPLES_DIR / "inline_config" / "with_nested_inline_skip_code_block.rst"
-        init_config = config.RstcheckConfig()
-        _runner = runner.RstcheckMainRunner(check_paths=[test_file], rstcheck_config=init_config)
-
-        result = _runner.run()
-
-        assert result != 0
-        assert len(re.findall(r"unexpected EOF while parsing", capsys.readouterr().err)) == 1
-
-    @staticmethod
-    @pytest.mark.skipif(sys.version_info < (3, 10), reason="Requires python3.10 or higher")
     def test_nested_bad_example_has_only_one_issue(capsys: pytest.CaptureFixture[str]) -> None:
         """Test only one issue is detected for two same nested code-blocks.
 
