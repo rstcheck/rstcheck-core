@@ -15,6 +15,7 @@ build
 Pipfile.lock
 *.bak.*
 objects.*.txt
+objects.*.json
 .coverage_cache/
 .ruff_cache/
 .flakeheaven_cache/
