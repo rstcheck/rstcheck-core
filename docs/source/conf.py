@@ -45,7 +45,10 @@ RELEASE_LEVEL = None if not version_parts else version_parts.group("tag")
 #: -- GENERAL CONFIG -------------------------------------------------------------------
 extensions: list[str] = []
 today_fmt = "%Y-%m-%d"
-exclude_patterns: list[str] = []  #: Files to exclude for source of doc
+exclude_patterns: list[str] = [
+    "objects.*.txt",
+    "objects.*.json",
+]  #: Files to exclude for source of doc
 
 #: Added dirs for static and template files if they exist
 html_static_path = ["_static"] if Path("_static").exists() else []
