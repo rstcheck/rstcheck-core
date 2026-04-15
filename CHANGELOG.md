@@ -34,6 +34,7 @@ NOTE: please use them in this order.
 - Add sphinx 8 to test pool for python version > 3.9 ([#111](https://github.com/rstcheck/rstcheck-core/pull/111))
 - Added python 3.14 to tox config and CI test pool ([#113](https://github.com/rstcheck/rstcheck-core/pull/113))
 - Dropped python 3.9 support ([#115](https://github.com/rstcheck/rstcheck-core/pull/115))
+- Add sphinx v9 to test runner ([#116](https://github.com/rstcheck/rstcheck-core/pull/116))
 
 ## [v1.2.1 (2024-03-23)](https://github.com/rstcheck/rstcheck-core/releases/v1.2.1)
 
