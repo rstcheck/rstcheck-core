@@ -6,6 +6,7 @@ arg
 args
 attr
 autoapidoc
+automations
 bool
 boolean
 bugfixes
