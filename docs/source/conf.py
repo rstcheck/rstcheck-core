@@ -88,7 +88,7 @@ linkcheck_workers = 1
 linkcheck_retries = 5
 linkcheck_timeout = 30
 linkcheck_ignore = [
-    r"https?://docutils\.sourceforge\.io/.*",  # sourceforge blocks automated traffic with 403
+    r"https?://docutils\.sourceforge\.io/.*",  # Sourceforge blocks automated traffic with 403
 ]
 
 
