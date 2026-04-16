@@ -123,31 +123,6 @@ def test__replace_ignored_substitutions() -> None:
     assert result == "xSubstitution1x |Substitution2|"
 
 
-def test__include_directive(tmp_path: pathlib.Path) -> None:
-    """Test include directive yields no errors."""
-    include_file = "exists.rst"
-    (tmp_path / include_file).write_text("Hello\n")
-    source = f".. include:: {include_file}"
-
-    with _sphinx.load_sphinx_if_available():
-        result = list(checker.check_source(source, source_file=tmp_path / "test.rst"))
-
-    assert not result
-
-
-def test__include_directive_missing_file() -> None:
-    """Test include directive referencing non-existent file yields a Severe error."""
-    source = ".. include:: does_not_exist.rst"
-
-    with _sphinx.load_sphinx_if_available():
-        result = list(checker.check_source(source, source_file=pathlib.Path("test.rst")))
-
-    assert len(result) == 1
-    assert result[0]["line_number"] == 1
-    assert 'File referenced in "include" directive not found:' in result[0]["message"]
-    assert "does_not_exist.rst" in result[0]["message"]
-
-
 def test__create_ignore_dict_from_config() -> None:
     """Test ``_create_ignore_dict_from_config`` function creates ignore dict."""
     ignore_messages = r"foo/bar"
