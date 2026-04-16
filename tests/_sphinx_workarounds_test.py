@@ -110,7 +110,10 @@ Some text after.
 """
     result = _sphinx_workarounds.strip_include_directives(source)
 
-    assert result == "\nSome text before.\n\n.. rst-class:: my-class\n\n\n\n    :hello: this is not an include option\n\nSome text after.\n"
+    assert (
+        result
+        == "\nSome text before.\n\n.. rst-class:: my-class\n\n\n\n    :hello: this is not an include option\n\nSome text after.\n"
+    )
 
 
 def test_changing_line_numbers_for_error_cases() -> None:
