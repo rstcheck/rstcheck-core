@@ -204,7 +204,9 @@ def check_source(
     )
 
     if _extras.SPHINX_INSTALLED:
-        yield from _sphinx_workarounds.yield_include_errors(source, source_origin, ignores["messages"])
+        yield from _sphinx_workarounds.yield_include_errors(
+            source, source_origin, ignores["messages"]
+        )
         source = _sphinx_workarounds.strip_include_directives(source)
 
     source = _replace_ignored_substitutions(source, ignores["substitutions"])
