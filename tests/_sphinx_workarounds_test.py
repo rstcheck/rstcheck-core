@@ -80,7 +80,7 @@ def test_strip_include_directives_with_other_content() -> None:
 
 
 def test_strip_include_directives_with_unindented_field_list() -> None:
-    """Test include directive does not swallow unindented field lists after empty lines."""
+    """Test include directive does not swallow trailing field list."""
     source = """
 Bla.
 
