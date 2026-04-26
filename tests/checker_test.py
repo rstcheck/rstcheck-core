@@ -221,7 +221,9 @@ Test
 
     @staticmethod
     @pytest.mark.skipif(_extras.SPHINX_INSTALLED, reason="Test without sphinx extra.")
-    def test_include_directive_without_sphinx(tmp_path: pathlib.Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    def test_include_directive_without_sphinx(
+        tmp_path: pathlib.Path, monkeypatch: pytest.MonkeyPatch
+    ) -> None:
         """Test error on include directive when sphinx is missing."""
         monkeypatch.chdir(tmp_path)
         include_file = "exists.rst"
