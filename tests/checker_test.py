@@ -224,7 +224,7 @@ Test
     def test_include_directive_without_sphinx(
         tmp_path: pathlib.Path, monkeypatch: pytest.MonkeyPatch
     ) -> None:
-        """Test error on include directive when sphinx is missing."""
+        """Test include directive when sphinx is missing."""
         monkeypatch.chdir(tmp_path)
         include_file = "exists.rst"
         (tmp_path / include_file).write_text("Hello\n")
