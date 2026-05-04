@@ -19,6 +19,12 @@ NOTE: please use them in this order.
 
 [diff v1.2.2...main](https://github.com/rstcheck/rstcheck-core/compare/v1.2.2...main)
 
+### Bugfixes
+
+- Stripped `include` directives to prevent `AttributeError` in Sphinx. Included files
+  are checked separately for existence and not just ignored.
+  ([#114](https://github.com/rstcheck/rstcheck-core/pull/114))
+
 ## [v1.2.2 (2025-06-01)](https://github.com/rstcheck/rstcheck-core/releases/v1.2.2)
 
 [diff v1.2.1...v1.2.2](https://github.com/rstcheck/rstcheck-core/compare/v1.2.1...v1.2.2)

@@ -26,7 +26,7 @@ import docutils.nodes
 import docutils.utils
 import docutils.writers
 
-from . import _docutils, _extras, _sphinx, config, inline_config, types
+from . import _docutils, _extras, _sphinx, _sphinx_workarounds, config, inline_config, types
 
 try:
     import yaml
@@ -202,6 +202,12 @@ def check_source(
             source, source_origin, warn_unknown_settings=warn_unknown_settings
         )
     )
+
+    if _extras.SPHINX_INSTALLED:
+        yield from _sphinx_workarounds.yield_include_errors(
+            source, source_origin, ignores["messages"]
+        )
+        source = _sphinx_workarounds.strip_include_directives(source)
 
     source = _replace_ignored_substitutions(source, ignores["substitutions"])
 
