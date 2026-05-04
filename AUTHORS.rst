@@ -9,6 +9,7 @@ Steven Myint <git@stevenmyint.com>
 
 Additional contributions by (sorted by name)
 --------------------------------------------
+- Brecht Machiels <brecht@mos6581.org>
 - Changxu Wang <Changxu.mail@gmail.com>
 - Christian Riedel <cannotguessit+github@protonmail.com>
 - Christian Riedel <christian.riedel@siegwerk.com>
