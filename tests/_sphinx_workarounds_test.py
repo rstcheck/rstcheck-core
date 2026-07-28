@@ -165,3 +165,56 @@ def test_yield_include_errors_with_ignore_messages() -> None:
     )
 
     assert not result
+
+
+@pytest.mark.skipif(not _extras.SPHINX_INSTALLED, reason="Depends on sphinx extra.")
+def test_yield_include_errors_abs_path_with_source_dir_auto_discovery_failing() -> None:
+    """Test source dir auto-discovery failing for included absolute path file."""
+    source = ".. include:: /absolute.rst"
+
+    result = list(
+        _sphinx_workarounds.yield_include_errors(source, source_origin=pathlib.Path("test.rst"))
+    )
+
+    assert len(result) == 1
+    assert result[0]["line_number"] == 1
+    assert 'File referenced in "include" directive not found:' in result[0]["message"]
+    assert "Could not find sphinx 'source' directory" in result[0]["message"]
+
+
+@pytest.mark.skipif(not _extras.SPHINX_INSTALLED, reason="Depends on sphinx extra.")
+def test_yield_include_errors_abs_path_with_source_dir_auto_discovery_working(
+    tmp_path: pathlib.Path,
+) -> None:
+    """Test source dir auto-discovery working for included absolute path file."""
+    source_dir = tmp_path / "source"
+    source_dir.mkdir(parents=True)
+    include_file = source_dir / "absolute.rst"
+    include_file.write_text("Hello\n")
+    source = ".. include:: /absolute.rst"
+
+    result = list(
+        _sphinx_workarounds.yield_include_errors(source, source_origin=source_dir / "test.rst")
+    )
+
+    assert not result
+
+
+@pytest.mark.skipif(not _extras.SPHINX_INSTALLED, reason="Depends on sphinx extra.")
+def test_yield_include_errors_abs_path_with_passed_sphinx_source_dir(
+    tmp_path: pathlib.Path,
+) -> None:
+    """Test source dir auto-discovery working for included absolute path file."""
+    source_dir = tmp_path / "source"
+    source_dir.mkdir(parents=True)
+    include_file = source_dir / "absolute.rst"
+    include_file.write_text("Hello\n")
+    source = ".. include:: /absolute.rst"
+
+    result = list(
+        _sphinx_workarounds.yield_include_errors(
+            source, source_origin=pathlib.Path("test.rst"), sphinx_source_dir=source_dir
+        )
+    )
+
+    assert not result
