@@ -77,8 +77,8 @@ def check_file(
                 source_file=source_file,
                 ignores=ignore_dict,
                 report_level=run_config.report_level or config.DEFAULT_REPORT_LEVEL,
-                warn_unknown_settings=run_config.warn_unknown_settings or False,
                 sphinx_source_dir=run_config.sphinx_source_dir,
+                warn_unknown_settings=run_config.warn_unknown_settings or False,
             )
         )
 
@@ -763,8 +763,8 @@ class CodeBlockChecker:
             source_file=self.source_origin,
             ignores=self.ignores,
             report_level=self.report_level,
-            warn_unknown_settings=self.warn_unknown_settings,
             sphinx_source_dir=self.sphinx_source_dir,
+            warn_unknown_settings=self.warn_unknown_settings,
         )
 
     def check_doctest(self, source_code: str) -> types.YieldedLintError:
