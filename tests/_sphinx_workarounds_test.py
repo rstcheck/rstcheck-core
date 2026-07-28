@@ -5,9 +5,12 @@ from __future__ import annotations
 import pathlib
 import re
 
-from rstcheck_core import _sphinx_workarounds
+import pytest
+
+from rstcheck_core import _extras, _sphinx_workarounds
 
 
+@pytest.mark.skipif(not _extras.SPHINX_INSTALLED, reason="Depends on sphinx extra.")
 def test_yield_include_errors_no_errors(tmp_path: pathlib.Path) -> None:
     """Test include directive yields no errors when file exists."""
     include_file = "exists.rst"
@@ -21,6 +24,7 @@ def test_yield_include_errors_no_errors(tmp_path: pathlib.Path) -> None:
     assert not result
 
 
+@pytest.mark.skipif(not _extras.SPHINX_INSTALLED, reason="Depends on sphinx extra.")
 def test_yield_include_errors_missing_file() -> None:
     """Test include directive referencing non-existent file yields an error."""
     source = ".. include:: does_not_exist.rst"
@@ -35,6 +39,7 @@ def test_yield_include_errors_missing_file() -> None:
     assert "does_not_exist.rst" in result[0]["message"]
 
 
+@pytest.mark.skipif(not _extras.SPHINX_INSTALLED, reason="Depends on sphinx extra.")
 def test_strip_include_directives_no_options() -> None:
     """Test include directive without options is stripped."""
     source = """
@@ -49,6 +54,7 @@ Some text after.
     assert result == "\nSome text before.\n\n\n\nSome text after.\n"
 
 
+@pytest.mark.skipif(not _extras.SPHINX_INSTALLED, reason="Depends on sphinx extra.")
 def test_strip_include_directives_with_options() -> None:
     """Test include directive with options is stripped correctly and line count is preserved."""
     source = """
@@ -65,6 +71,7 @@ Some text after.
     assert result == "\nSome text before.\n\n\n\n\n\nSome text after.\n"
 
 
+@pytest.mark.skipif(not _extras.SPHINX_INSTALLED, reason="Depends on sphinx extra.")
 def test_strip_include_directives_with_other_content() -> None:
     """Test with other indented content after."""
     source = """
@@ -79,6 +86,7 @@ def test_strip_include_directives_with_other_content() -> None:
     assert result == "\n\n\n\n\n  Some blockquote after.\n"
 
 
+@pytest.mark.skipif(not _extras.SPHINX_INSTALLED, reason="Depends on sphinx extra.")
 def test_strip_include_directives_with_unindented_field_list() -> None:
     """Test include directive does not swallow trailing field list."""
     source = """
@@ -95,6 +103,7 @@ Another paragraph.
     assert result == "\nBla.\n\n\n\n:hello: this is not an include option\n\nAnother paragraph.\n"
 
 
+@pytest.mark.skipif(not _extras.SPHINX_INSTALLED, reason="Depends on sphinx extra.")
 def test_strip_include_directives_with_indented_unrelated_content() -> None:
     """Test indented include directive doesn't swallow unrelated same-level indented content."""
     source = """
@@ -116,6 +125,7 @@ Some text after.
     )
 
 
+@pytest.mark.skipif(not _extras.SPHINX_INSTALLED, reason="Depends on sphinx extra.")
 def test_changing_line_numbers_for_error_cases() -> None:
     """Check that line numbers for errors match the source BEFORE AND AFTER stripping happens."""
     source = """
@@ -141,6 +151,7 @@ Some text.
     assert stripped_source == "\nSome text.\n\n\n\n\n\n"
 
 
+@pytest.mark.skipif(not _extras.SPHINX_INSTALLED, reason="Depends on sphinx extra.")
 def test_yield_include_errors_with_ignore_messages() -> None:
     """Test include directive respects ignore_messages."""
     source = ".. include:: does_not_exist.rst"
@@ -150,6 +161,59 @@ def test_yield_include_errors_with_ignore_messages() -> None:
     result = list(
         _sphinx_workarounds.yield_include_errors(
             source, source_origin=pathlib.Path("test.rst"), ignore_messages=ignore_pattern
+        )
+    )
+
+    assert not result
+
+
+@pytest.mark.skipif(not _extras.SPHINX_INSTALLED, reason="Depends on sphinx extra.")
+def test_yield_include_errors_abs_path_with_source_dir_auto_discovery_failing() -> None:
+    """Test source dir auto-discovery failing for included absolute path file."""
+    source = ".. include:: /absolute.rst"
+
+    result = list(
+        _sphinx_workarounds.yield_include_errors(source, source_origin=pathlib.Path("test.rst"))
+    )
+
+    assert len(result) == 1
+    assert result[0]["line_number"] == 1
+    assert 'File referenced in "include" directive not found:' in result[0]["message"]
+    assert "Could not find sphinx 'source' directory" in result[0]["message"]
+
+
+@pytest.mark.skipif(not _extras.SPHINX_INSTALLED, reason="Depends on sphinx extra.")
+def test_yield_include_errors_abs_path_with_source_dir_auto_discovery_working(
+    tmp_path: pathlib.Path,
+) -> None:
+    """Test source dir auto-discovery working for included absolute path file."""
+    source_dir = tmp_path / "source"
+    source_dir.mkdir(parents=True)
+    include_file = source_dir / "absolute.rst"
+    include_file.write_text("Hello\n")
+    source = ".. include:: /absolute.rst"
+
+    result = list(
+        _sphinx_workarounds.yield_include_errors(source, source_origin=source_dir / "test.rst")
+    )
+
+    assert not result
+
+
+@pytest.mark.skipif(not _extras.SPHINX_INSTALLED, reason="Depends on sphinx extra.")
+def test_yield_include_errors_abs_path_with_passed_sphinx_source_dir(
+    tmp_path: pathlib.Path,
+) -> None:
+    """Test source dir auto-discovery working for included absolute path file."""
+    source_dir = tmp_path / "source"
+    source_dir.mkdir(parents=True)
+    include_file = source_dir / "absolute.rst"
+    include_file.write_text("Hello\n")
+    source = ".. include:: /absolute.rst"
+
+    result = list(
+        _sphinx_workarounds.yield_include_errors(
+            source, source_origin=pathlib.Path("test.rst"), sphinx_source_dir=source_dir
         )
     )
 

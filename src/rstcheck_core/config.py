@@ -92,6 +92,7 @@ class RstcheckConfigFile(pydantic.BaseModel):
     ignore_substitutions: list[str] | None = None
     ignore_languages: list[str] | None = None
     ignore_messages: t.Pattern[str] | None = None
+    sphinx_source_dir: pathlib.Path | None = None
 
     @pydantic.field_validator("report_level", mode="before")
     @classmethod
@@ -208,6 +209,7 @@ class _RstcheckConfigINIFile(pydantic.BaseModel):
     ignore_substitutions: str | None = None
     ignore_languages: str | None = None
     ignore_messages: str | None = None
+    sphinx_source_dir: pathlib.Path | None = None
 
 
 def _load_config_from_ini_file(
@@ -269,6 +271,14 @@ def _load_config_from_ini_file(
             )
 
     config_values_checked = _RstcheckConfigINIFile(**config_values_raw)
+    if (
+        config_values_checked.sphinx_source_dir is not None
+        and not config_values_checked.sphinx_source_dir.is_absolute()
+    ):
+        config_values_checked.sphinx_source_dir = ini_file / config_values_checked.sphinx_source_dir
+        logger.info(
+            f"Relative sphinx 'source' dir path resolved to: {config_values_checked.sphinx_source_dir}"
+        )
     return RstcheckConfigFile(**config_values_checked.model_dump())
 
 
@@ -286,6 +296,7 @@ class _RstcheckConfigTOMLFile(pydantic.BaseModel):
     ignore_substitutions: list[str] | None = None
     ignore_languages: list[str] | None = None
     ignore_messages: list[str] | str | None = None
+    sphinx_source_dir: pathlib.Path | None = None
 
 
 def _load_config_from_toml_file(
@@ -360,6 +371,16 @@ def _load_config_from_toml_file(
             )
 
     config_values_checked = _RstcheckConfigTOMLFile(**rstcheck_section)
+    if (
+        config_values_checked.sphinx_source_dir is not None
+        and not config_values_checked.sphinx_source_dir.is_absolute()
+    ):
+        config_values_checked.sphinx_source_dir = (
+            toml_file / config_values_checked.sphinx_source_dir
+        )
+        logger.info(
+            f"Relative sphinx 'source' dir path resolved to: {config_values_checked.sphinx_source_dir}"
+        )
     return RstcheckConfigFile(**config_values_checked.model_dump())
 
 
