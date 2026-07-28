@@ -54,10 +54,10 @@ def yield_include_errors(
 
         base_err_message = '(SEVERE/4) File referenced in "include" directive not found:'
 
-        if not include_file_path.is_absolute():
+        if not str(include_file_path).startswith("/"):
             include_file_path = base_dir / include_file_path
         elif sphinx_source_dir is not None:
-            include_file_path = sphinx_source_dir.absolute() / include_file_path.relative_to("/")
+            include_file_path = sphinx_source_dir.absolute() / str(include_file_path).lstrip("/")
         else:
             found_source_dir = base_dir
             while len(found_source_dir.parents) > 0:
@@ -72,7 +72,7 @@ def yield_include_errors(
                     source_origin=source_origin, line_number=line_number, message=message
                 )
                 continue
-            include_file_path = found_source_dir / include_file_path.relative_to("/")
+            include_file_path = found_source_dir / str(include_file_path).lstrip("/")
 
         if not include_file_path.is_file():
             line_number = source[: match.start()].count("\n") + 1
