@@ -247,7 +247,7 @@ Test
         result = list(checker.check_source(source))
 
         assert len(result) > 0
-        assert '(SEVERE/4) Problems with "include" directive path:' in result[0]["message"]
+        assert '(ERROR/3) Problems with "include" directive path:' in result[0]["message"]
 
     @staticmethod
     @pytest.mark.skipif(_extras.SPHINX_INSTALLED, reason="Test without sphinx extra.")
