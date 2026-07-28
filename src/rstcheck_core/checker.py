@@ -205,7 +205,6 @@ def check_source(
         )
     )
 
-    logger.error(f"{_extras.SPHINX_INSTALLED=}")  # TODO: remove
     if _extras.SPHINX_INSTALLED:
         yield from _sphinx_workarounds.yield_include_errors(
             source, source_origin, ignores["messages"], sphinx_source_dir=sphinx_source_dir
