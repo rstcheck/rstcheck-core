@@ -31,7 +31,9 @@ def test_check_file(monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setattr(
         checker,
         "check_source",
-        lambda _, source_file, ignores, report_level, warn_unknown_settings: (e for e in errors),
+        lambda _, source_file, ignores, report_level, sphinx_source_dir, warn_unknown_settings: (
+            e for e in errors
+        ),
     )
     test_config = config.RstcheckConfig(config_path=pathlib.Path())
 
@@ -247,7 +249,7 @@ Test
         result = list(checker.check_source(source))
 
         assert len(result) > 0
-        assert '(SEVERE/4) Problems with "include" directive path:' in result[0]["message"]
+        assert '(ERROR/3) Problems with "include" directive path:' in result[0]["message"]
 
     @staticmethod
     @pytest.mark.skipif(_extras.SPHINX_INSTALLED, reason="Test without sphinx extra.")

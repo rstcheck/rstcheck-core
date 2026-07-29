@@ -122,6 +122,7 @@ Here is an example:
         python,
         cpp
     ignore_messages=(Document or section may not begin with a transition\.$)
+    sphinx_source_dir=docs/source
 
 
 TOML format
@@ -159,6 +160,7 @@ Here is an example:
         "cpp"
     ]
     ignore_messages = "(Document or section may not begin with a transition\.$)"
+    sphinx_source_dir = "docs/source"
 
 
 Configuration options
@@ -319,6 +321,25 @@ A list of linting issue messages to ignore while checking rst source and code bl
 
     In TOML format a list of strings is also valid. The list's entries will be
     concatenated with the OR operator "|" between each entry.
+
+
+Sphinx 'source' directory path
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Supported sources:
+
+- CLI (``--sphinx-source-dir PATH``)
+- File (key: ``sphinx_source_dir``, value: path)
+
+Path to the Sphinx 'source' directory, may be relative or absolute. This is relevant if
+``rstcheck``'s auto-discovery fails or you want to be on the safe side.
+
+If set via CLI, relative paths will be interpreted based on the CWD (current working directory).
+If set via config file, relative paths will be interpreted based on the config file's location.
+
+.. note::
+
+    Only applicable if you are using Sphinx, otherwise it will do nothing.
 
 
 Control Flow instructions

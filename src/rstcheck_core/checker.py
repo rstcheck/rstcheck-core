@@ -77,6 +77,7 @@ def check_file(
                 source_file=source_file,
                 ignores=ignore_dict,
                 report_level=run_config.report_level or config.DEFAULT_REPORT_LEVEL,
+                sphinx_source_dir=run_config.sphinx_source_dir,
                 warn_unknown_settings=run_config.warn_unknown_settings or False,
             )
         )
@@ -162,6 +163,7 @@ def check_source(
     source_file: types.SourceFileOrString | None = None,
     ignores: types.IgnoreDict | None = None,
     report_level: config.ReportLevel = config.DEFAULT_REPORT_LEVEL,
+    sphinx_source_dir: pathlib.Path | None = None,
     *,
     warn_unknown_settings: bool = False,
 ) -> types.YieldedLintError:
@@ -205,7 +207,7 @@ def check_source(
 
     if _extras.SPHINX_INSTALLED:
         yield from _sphinx_workarounds.yield_include_errors(
-            source, source_origin, ignores["messages"]
+            source, source_origin, ignores["messages"], sphinx_source_dir=sphinx_source_dir
         )
         source = _sphinx_workarounds.strip_include_directives(source)
 
@@ -222,7 +224,9 @@ def check_source(
     if _extras.SPHINX_INSTALLED:
         _sphinx.load_sphinx_ignores()
 
-    writer = _CheckWriter(source, source_origin, ignores, report_level)
+    writer = _CheckWriter(
+        source, source_origin, ignores, report_level, sphinx_source_dir=sphinx_source_dir
+    )
 
     string_io = io.StringIO()
 
@@ -323,6 +327,7 @@ class _CheckWriter(docutils.writers.Writer):  # type: ignore[type-arg]
         source_origin: types.SourceFileOrString,
         ignores: types.IgnoreDict | None = None,
         report_level: config.ReportLevel = config.DEFAULT_REPORT_LEVEL,
+        sphinx_source_dir: pathlib.Path | None = None,
         *,
         warn_unknown_settings: bool = False,
     ) -> None:
@@ -344,6 +349,7 @@ class _CheckWriter(docutils.writers.Writer):  # type: ignore[type-arg]
         self.ignores = ignores
         self.report_level = report_level
         self.warn_unknown_settings = warn_unknown_settings
+        self.sphinx_source_dir = sphinx_source_dir
 
     def translate(self) -> None:
         """Run CheckTranslator."""
@@ -358,6 +364,7 @@ class _CheckWriter(docutils.writers.Writer):  # type: ignore[type-arg]
             ignores=self.ignores,
             report_level=self.report_level,
             warn_unknown_settings=self.warn_unknown_settings,
+            sphinx_source_dir=self.sphinx_source_dir,
         )
         self.document.walkabout(visitor)
         self.checkers += visitor.checkers
@@ -366,13 +373,14 @@ class _CheckWriter(docutils.writers.Writer):  # type: ignore[type-arg]
 class _CheckTranslator(docutils.nodes.NodeVisitor):
     """Visits code blocks and checks for syntax errors in code."""
 
-    def __init__(
+    def __init__(  # noqa: PLR0913
         self,
         document: docutils.nodes.document,
         source: str,
         source_origin: types.SourceFileOrString,
         ignores: types.IgnoreDict | None = None,
         report_level: config.ReportLevel = config.DEFAULT_REPORT_LEVEL,
+        sphinx_source_dir: pathlib.Path | None = None,
         *,
         warn_unknown_settings: bool = False,
     ) -> None:
@@ -396,7 +404,11 @@ class _CheckTranslator(docutils.nodes.NodeVisitor):
         self.report_level = report_level
         self.warn_unknown_settings = warn_unknown_settings
         self.code_block_checker = CodeBlockChecker(
-            source_origin, ignores, report_level, warn_unknown_settings=warn_unknown_settings
+            source_origin,
+            ignores,
+            report_level,
+            warn_unknown_settings=warn_unknown_settings,
+            sphinx_source_dir=sphinx_source_dir,
         )
         self.code_block_ignore_lines = list(
             inline_config.find_code_block_ignore_lines(
@@ -604,6 +616,7 @@ class CodeBlockChecker:
         source_origin: types.SourceFileOrString,
         ignores: types.IgnoreDict | None = None,
         report_level: config.ReportLevel = config.DEFAULT_REPORT_LEVEL,
+        sphinx_source_dir: pathlib.Path | None = None,
         *,
         warn_unknown_settings: bool = False,
     ) -> None:
@@ -621,6 +634,7 @@ class CodeBlockChecker:
         self.ignores = ignores
         self.report_level = report_level
         self.warn_unknown_settings = warn_unknown_settings
+        self.sphinx_source_dir = sphinx_source_dir
 
     def language_is_supported(self, language: str) -> bool:
         """Check if given language can be checked.
@@ -748,6 +762,7 @@ class CodeBlockChecker:
             source_file=self.source_origin,
             ignores=self.ignores,
             report_level=self.report_level,
+            sphinx_source_dir=self.sphinx_source_dir,
             warn_unknown_settings=self.warn_unknown_settings,
         )
 
