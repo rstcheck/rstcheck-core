@@ -26,7 +26,7 @@ class IgnoredDirective(docutils.parsers.rst.Directive):  # pragma: no cover
         return []
 
 
-def ignore_role(  # noqa: PLR0913
+def ignore_role(  # noqa: PLR0913, PLR0917
     name: str,  # noqa: ARG001
     rawtext: str,  # noqa: ARG001
     text: str,  # noqa: ARG001
