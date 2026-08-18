@@ -1004,6 +1004,7 @@ class TestConfigFileLoader:
 
         assert result.sphinx_source_dir == tmp_path / "custom-location" / "docs"
 
+
 class TestConfigDirLoader:
     """Test ``load_config_file_from_dir``."""
 

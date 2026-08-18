@@ -275,7 +275,9 @@ def _load_config_from_ini_file(
         config_values_checked.sphinx_source_dir is not None
         and not config_values_checked.sphinx_source_dir.is_absolute()
     ):
-        config_values_checked.sphinx_source_dir = ini_file.parent / config_values_checked.sphinx_source_dir
+        config_values_checked.sphinx_source_dir = (
+            ini_file.parent / config_values_checked.sphinx_source_dir
+        )
         logger.info(
             f"Relative sphinx 'source' dir path resolved to: {config_values_checked.sphinx_source_dir}"
         )
