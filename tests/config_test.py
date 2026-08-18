@@ -1157,7 +1157,6 @@ class TestConfigDirLoader:
         assert result.report_level == config.ReportLevel.ERROR
 
     @staticmethod
-    @pytest.mark.skipif(not _extras.TOMLI_INSTALLED, reason="Depends on toml extra.")
     def test_info_is_logged_on_no_config_found(
         tmp_path: pathlib.Path, caplog: pytest.LogCaptureFixture
     ) -> None:
@@ -1174,7 +1173,6 @@ class TestConfigDirLoader:
         )
 
     @staticmethod
-    @pytest.mark.skipif(not _extras.TOMLI_INSTALLED, reason="Depends on toml extra.")
     def test_warning_is_logged_on_no_config_section_in_rstcheck_file(
         tmp_path: pathlib.Path, caplog: pytest.LogCaptureFixture
     ) -> None:
@@ -1190,6 +1188,7 @@ class TestConfigDirLoader:
         assert f"Config file has no [rstcheck] section: '{conf_file}'." in caplog.text
 
     @staticmethod
+    @pytest.mark.skipif(not _extras.TOMLI_INSTALLED, reason="Depends on toml extra.")
     def test_sphinx_source_dir_relative_path(tmp_path: pathlib.Path) -> None:
         """Test relative paths for 'sphinx_source_dir' are handled correctly."""
         setup_conf_file = tmp_path / "setup.cfg"
@@ -1203,6 +1202,7 @@ class TestConfigDirLoader:
         assert result.sphinx_source_dir == tmp_path / "custom-location" / "docs"
 
     @staticmethod
+    @pytest.mark.skipif(not _extras.TOMLI_INSTALLED, reason="Depends on toml extra.")
     def test_sphinx_source_dir_absolute_path(tmp_path: pathlib.Path) -> None:
         """Test absolute paths for 'sphinx_source_dir' are handled correctly."""
         setup_conf_file = tmp_path / "setup.cfg"
