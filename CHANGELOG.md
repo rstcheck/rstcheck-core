@@ -19,6 +19,11 @@ NOTE: please use them in this order.
 
 [diff v1.3.1...main](https://github.com/rstcheck/rstcheck-core/compare/v1.3.1...main)
 
+### Bugfixes
+
+- Fixed incorrect path handling for `sphinx_source_dir` from config files
+  ([#123](https://github.com/rstcheck/rstcheck-core/issues/123))
+
 ## [v1.3.1 (2026-07-28)](https://github.com/rstcheck/rstcheck-core/releases/v1.3.1)
 
 [diff v1.3.0...v1.3.1](https://github.com/rstcheck/rstcheck-core/compare/v1.3.0...v1.3.1)
