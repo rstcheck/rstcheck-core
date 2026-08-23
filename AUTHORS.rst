@@ -19,6 +19,8 @@ Additional contributions by (sorted by name)
 - Dmitry <root@uralbash.ru>
 - Doyle Rowland <doyle.rowland@reliaqual.com>
 - Eugene Lorman <eugene.lorman@gmail.com>
+- James Lamb <jaylamb20@gmail.com>
+- James Lamb <jlamb@nvidia.com>
 - Jochen Sprickerhof <git@jochen.sprickerhof.de>
 - John Vandenberg <jayvdb@gmail.com>
 - Kagami Sascha Rosylight <saschanaz@outlook.com>
