@@ -27,7 +27,7 @@ NOTE: please use them in this order.
 
 - Fixed handling of absolute paths in sphinx workaround introduced in 1.3.0.
   Also added `sphinx_source_dir` as optional config value.
-  ([#114](https://github.com/rstcheck/rstcheck-core/issues/120))
+  ([#120](https://github.com/rstcheck/rstcheck-core/issues/120))
 
 ## [v1.3.0 (2026-05-04)](https://github.com/rstcheck/rstcheck-core/releases/v1.3.0)
 
