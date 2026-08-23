@@ -990,6 +990,7 @@ class TestConfigFileLoader:
 
         result = config._load_config_from_toml_file(conf_file)
 
+        assert result is not None
         assert result.sphinx_source_dir == tmp_path / "custom-location" / "docs"
 
     @staticmethod
@@ -1004,6 +1005,7 @@ class TestConfigFileLoader:
 
         result = config._load_config_from_toml_file(conf_file)
 
+        assert result is not None
         assert result.sphinx_source_dir == tmp_path / "custom-location" / "docs"
 
 
@@ -1200,6 +1202,7 @@ class TestConfigDirLoader:
 
         result = config.load_config_file_from_dir(tmp_path)
 
+        assert result is not None
         assert result.sphinx_source_dir == tmp_path / "custom-location" / "docs"
 
     @staticmethod
@@ -1213,6 +1216,7 @@ class TestConfigDirLoader:
 
         result = config.load_config_file_from_dir(tmp_path)
 
+        assert result is not None
         assert result.sphinx_source_dir == tmp_path / "custom-location" / "docs"
 
 
