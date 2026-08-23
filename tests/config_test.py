@@ -978,6 +978,36 @@ class TestConfigFileLoader:
         assert result is not None
         assert result.report_level == config.ReportLevel.ERROR
 
+    @staticmethod
+    @pytest.mark.skipif(not _extras.TOMLI_INSTALLED, reason="Depends on toml extra.")
+    def test_sphinx_source_dir_relative_path(tmp_path: pathlib.Path) -> None:
+        """Test relative paths for 'sphinx_source_dir' are handled correctly."""
+        conf_file = tmp_path / "config.toml"
+        file_content = """[tool.rstcheck]
+        sphinx_source_dir = 'custom-location/docs'
+        """
+        conf_file.write_text(file_content)
+
+        result = config._load_config_from_toml_file(conf_file)
+
+        assert result is not None
+        assert result.sphinx_source_dir == tmp_path / "custom-location" / "docs"
+
+    @staticmethod
+    @pytest.mark.skipif(not _extras.TOMLI_INSTALLED, reason="Depends on toml extra.")
+    def test_sphinx_source_dir_absolute_path(tmp_path: pathlib.Path) -> None:
+        """Test absolute paths for 'sphinx_source_dir' are handled correctly."""
+        conf_file = tmp_path / "config.toml"
+        file_content = f"""[tool.rstcheck]
+        sphinx_source_dir = '{tmp_path}/custom-location/docs'
+        """
+        conf_file.write_text(file_content)
+
+        result = config._load_config_from_toml_file(conf_file)
+
+        assert result is not None
+        assert result.sphinx_source_dir == tmp_path / "custom-location" / "docs"
+
 
 class TestConfigDirLoader:
     """Test ``load_config_file_from_dir``."""
@@ -1160,6 +1190,34 @@ class TestConfigDirLoader:
 
         assert result is None
         assert f"Config file has no [rstcheck] section: '{conf_file}'." in caplog.text
+
+    @staticmethod
+    def test_sphinx_source_dir_relative_path(tmp_path: pathlib.Path) -> None:
+        """Test relative paths for 'sphinx_source_dir' are handled correctly."""
+        setup_conf_file = tmp_path / "setup.cfg"
+        setup_file_content = """[rstcheck]
+        sphinx_source_dir = custom-location/docs
+        """
+        setup_conf_file.write_text(setup_file_content)
+
+        result = config.load_config_file_from_dir(tmp_path)
+
+        assert result is not None
+        assert result.sphinx_source_dir == tmp_path / "custom-location" / "docs"
+
+    @staticmethod
+    def test_sphinx_source_dir_absolute_path(tmp_path: pathlib.Path) -> None:
+        """Test absolute paths for 'sphinx_source_dir' are handled correctly."""
+        setup_conf_file = tmp_path / "setup.cfg"
+        setup_file_content = f"""[rstcheck]
+        sphinx_source_dir = {tmp_path}/custom-location/docs
+        """
+        setup_conf_file.write_text(setup_file_content)
+
+        result = config.load_config_file_from_dir(tmp_path)
+
+        assert result is not None
+        assert result.sphinx_source_dir == tmp_path / "custom-location" / "docs"
 
 
 class TestConfigDirTreeLoader:
